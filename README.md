@@ -26,9 +26,7 @@ __Modalités d'évaluation__
 * examen sur table
 
 __Emploi du temps__
-* mercredi 22/04 
- * 11h-12h30 : cours — Introduction 
- * mercredi 22/04 14h-15h30 : cours — Notions de statistiques
+* __22/04 11h-12h30__ : cours — Introduction + __14h-15h30__ : cours — Notions de statistiques
 
 * mercredi 29/04 11h-12h30 : cours -- Tests d'hypothèse
 * mercredi 29/04 14h-15h30 : cours -- Estimation de densités
