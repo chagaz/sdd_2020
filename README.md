@@ -1,4 +1,4 @@
-# sdd_2020
+# UE 21 EC Science des données
 Cours « science des données » à Mines ParisTech (2019-2020).
 
 __Équipe pédagogique__
@@ -6,6 +6,7 @@ __Équipe pédagogique__
 * Chargés d'enseignement : Nicolas Desassis, Arthur Imbert, Tristan Lazard, Thibaud Martinez, et Matthieu Najm.
 
 __Objectifs du cours__
+L’EC de Sciences des données sera une introduction générale à l’analyse des données telles qu’elles peuvent apparaître dans de nombreux domaines de l’ingénierie. Il présentera des concepts d’analyse statistique des données et d’apprentissage automatique, en se concentrant sur les aspects de classification et de régression. 
 Comprendre quelques enjeux majeurs de la modélisation statistique des données : estimation, tests, apprentissage (_machine learning_), validation et bonnes pratiques. 
 
 __Compétences__
@@ -22,8 +23,8 @@ __Modalités pédagogiques__
 * 7x1h30 de petites classes (2 séances de TD + 5 séances de TP sur machine)
 
 __Modalités d'évaluation__
-* mini-projet numérique
-* examen sur table
+* mini-projet numérique (50%)
+* examen sur table (50%)
 
 __Emploi du temps__
 * __22/04 11h-12h30__ : cours — Introduction + __14h-15h30__ : cours — Notions de statistiques
