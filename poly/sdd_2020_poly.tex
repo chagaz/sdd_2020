@@ -1,0 +1,193 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{book}
+\usepackage{babel}
+
+% Font
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+% \usepackage{structure}
+
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+
+\usepackage[sectionbib]{natbib}
+%\newcommand{\mycite}[1]{\cite{#1}\footnote{\printbibliography}}
+
+\let\cleardoublepage\clearpage
+
+
+% % Math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+
+% Side-by-side figures
+\usepackage{subcaption}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+\usepackage{graphicx}
+
+\usepackage[colorlinks=true,allcolors=black]{hyperref}
+
+% Math symbols
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Bcal}{\mathcal{B}}
+\newcommand{\Ccal}{\mathcal{C}}
+\newcommand{\Ecal}{\mathcal{E}}
+\newcommand{\Gcal}{\mathcal{G}}
+\newcommand{\Kcal}{\mathcal{K}}
+\newcommand{\Ncal}{\mathcal{N}}
+\newcommand{\Pcal}{\mathcal{P}}
+\newcommand{\Qcal}{\mathcal{Q}}
+\newcommand{\Rcal}{\mathcal{R}}
+\newcommand{\Scal}{\mathcal{S}}
+\newcommand{\Tcal}{\mathcal{T}}
+
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\MM}{\mathcal{M}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\TT}{\mathcal{T}}
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\VV}{\mathcal{V}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\YY}{\mathcal{Y}}
+\newcommand{\ZZ}{\mathcal{Z}}
+
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\RR}{\mathbb{R}}
+
+
+% Vectors
+\makeatletter
+\newcommand{\avec}{\vec{a}\@ifnextchar{^}{\,}{}}
+\newcommand{\bb}{\vec{b}\@ifnextchar{^}{\,}{}}
+\newcommand{\cvec}{\vec{c}\@ifnextchar{^}{\,}{}}
+\newcommand{\gvec}{\vec{g}\@ifnextchar{^}{\,}{}}
+\newcommand{\hh}{\vec{h}\@ifnextchar{^}{\,}{}}
+\newcommand{\mm}{\vec{m}\@ifnextchar{^}{\,}{}}
+\newcommand{\oo}{\vec{o}\@ifnextchar{^}{\,}{}}
+\newcommand{\pp}{\vec{p}\@ifnextchar{^}{\,}{}}
+\newcommand{\rr}{\vec{r}\@ifnextchar{^}{\,}{}}
+\newcommand{\tvec}{\vec{t}\@ifnextchar{^}{\,}{}}
+\newcommand{\uu}{\vec{u}\@ifnextchar{^}{\,}{}}
+\newcommand{\uprime}{\vec{u'}\@ifnextchar{^}{\,}{}}
+\newcommand{\vv}{\vec{v}\@ifnextchar{^}{\,}{}}
+\newcommand{\vprime}{\vec{v'}\@ifnextchar{^}{\,}{}}
+\newcommand{\ww}{\vec{w}\@ifnextchar{^}{\,}{}}
+\newcommand{\xx}{\vec{x}\@ifnextchar{^}{\,}{}}
+\newcommand{\yy}{\vec{y}\@ifnextchar{^}{\,}{}}
+\newcommand{\zz}{\vec{z}\@ifnextchar{^}{\,}{}}
+\newcommand{\aalpha}{\vec{\alpha}\@ifnextchar{^}{\,}{}}
+\newcommand{\bbeta}{\vec{\beta}\@ifnextchar{^}{\,}{}}
+\newcommand{\ttheta}{\vec{\theta}\@ifnextchar{^}{\,}{}}
+\newcommand{\mmu}{\vec{\mu}\@ifnextchar{^}{\,}{}}
+\newcommand{\xxi}{\vec{\xi}\@ifnextchar{^}{\,}{}}
+\makeatother
+
+\newcommand{\thetamle}{{\hat \theta_{\text{MLE}}}}
+\newcommand{\thetabayes}{{\hat \theta_{\text{Bayes}}}}
+\newcommand{\thetahat}{{\hat \theta}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\lzeronorm}[1]{\left|\left|#1\right|\right|_0}
+\newcommand{\lonenorm}[1]{\left|\left|#1\right|\right|_1}
+\newcommand{\ltwonorm}[1]{\left|\left|#1\right|\right|_2}
+
+
+% TODO
+\usepackage[dvipsnames]{xcolor}
+\newcommand{\todo}[1]{{\color{BrickRed}{TODO~#1}}}
+\newcommand{\rewrite}[1]{{\color{RoyalBlue}{#1}}}
+
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+
+\begin{document}
+
+\renewcommand{\bibname}{}
+
+
+\begin{center}
+  
+  \hfill
+
+  \vfill
+  
+  \LARGE
+  ECUE2.1 Science des données \\ 
+  
+  \Large
+  Chloé-Agathe Azencott (CBIO) \\
+
+  Printemps 2020 -- Mines ParisTech
+
+  \vfill
+
+  \large
+  \textbf{Compétences}
+  \begin{tabular}[h]{|c|l|}
+    \hline
+    C1 & Maîtriser des méthodes statistiques usuelles permettant de traiter convenablement des cas simples d'analyse de données \\ \hline
+    C2 & Maîtriser des méthodes usuelles d'exploration des données \\ \hline
+    C3 &  Connaître les limites d'applications des méthodes vues en cours \\ \hline
+    C4 & Pouvoir se référer à un cas d'application avec des données réelles en lien avec une discipline autre que celle de l'analyse des données \\ \hline
+    C5 & Savoir évaluer la complexité numérique de quelques algorithmes \\ \hline
+    C6 & Connaître des méthodes d'apprentissage statistique (machine learning) supervisé et des méthodes d'apprentissage statistique non supervisé \\ \hline
+    C7 & Savoir valider et sélectionner un modèle statistique \\ \hline
+  \end{tabular}
+
+  \vfill
+
+\end{center}
+
+
+
+\chapter{Intro}
+\input{intro}
+
+\part{Estimation statistique}
+\chapter{Notions de statistiques}
+%\input{stats}
+
+\chapter{Tests d'hypothèse}
+%\input{tests}
+
+\chapter{Estimation de densité}
+%\input{estimation}
+
+\part{Analyse exploratoire}
+\chapter{Réduction de dimension}
+%\input{dimred}
+
+\chapter{Bonnes pratiques}
+%\input{pratiques}
+
+\part{Apprentissage supervisé}
+\chapter{Minimisation du risque empirique}
+\input{erm}
+
+\chapter{Généralisation}
+\input{generalisation}
+
+\chapter{Modèles non-linéaires}
+%\input{nonlin}
+
+
+\end{document}

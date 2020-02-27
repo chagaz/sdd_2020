@@ -1,0 +1,390 @@
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% On charge au minimum les macros de l'AMS
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %
+% % Empagement le plus compatible possible avec 170x240
+% %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %
+% %% GEOMETRY.STY : Permet de spécifier simplmement les empagements
+% %
+% \RequirePackage{geometry}
+% \geometry{reset,
+% papersize={170mm,240mm}, 
+% headheight=4mm,
+% headsep=10mm,
+% hmargin={20mm,20mm},
+% vmargin={15mm,20mm},
+% twoside,
+% nofoot
+% }
+% %
+% %% CROP : Permet de matérialiser le cadre de page : 
+% %
+% %    option "frame" : affiche un cadre de page, 
+% %    option "cam"   : affiche des traits de coupe
+% %
+% \RequirePackage[frame,a4,center]{crop}
+
+
+% Pour pouvoir ignorer les exercices avec NewEnviron
+\usepackage{environ}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Les titres de chapitre et de section contribuent au haut de page
+%
+%      Les commande qui suivent ne sont généralement pas appelées par l'utilisateur car : 
+%           \chaptermark est automatiquement invoqué à chaque commande \chapter
+%           \sectionmark est automatiquement invoqué à chaque commande \section
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\renewcommand{\chaptermark}[1]{%
+      \markboth {%
+        \ifnum \c@secnumdepth >\m@ne
+          \if@mainmatter
+            \@chapapp\ \thechapter. \ %
+          \fi
+        \fi
+        #1}{}}%
+
+\renewcommand{\sectionmark}[1]{%
+      \markright {%
+        \ifnum \c@secnumdepth >\z@
+          \thesection. \ %
+        \fi
+        #1}}
+
+%\def\sectionmark#1{\markright{\thesection.~~#1}}
+%\def\chaptermark#1{\markboth{\thechapter.~~#1}{\thechapter.~#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Macros structurelles pour la Collection ManiManuel (Dunod)
+%
+%            Inclusion :
+%
+%            \usepackage{StructureMiniManuel}
+%
+%            juste avant le \begin{document}
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+
+%%% Permet de pemettre \`a coup s\^ur la d\'efinition (que l'environnement soit d\'ej\`a d\'efini ou pas)
+%
+\def\forcedefenv#1{%%
+\global\expandafter\let\csname#1\endcsname\relax
+\global\expandafter\let\csname end#1\endcsname\relax
+}
+
+% Environnement "cours". 
+%
+\forcedefenv{cours}
+\newenvironment{cours}{
+\bigskip
+}{\bigskip}
+
+% Environnement "introduction". 
+%
+\forcedefenv{introduction}
+\newenvironment{introduction}{
+\bigskip
+}{\bigskip}
+
+%%% Les objectifs du chapitre.  Chaque objectif doir d\'ebuter par \item 
+%
+\forcedefenv{objectifs}
+\newenvironment{objectifs}{\section*{Objectifs}
+\begin{itemize}
+\setlength{\itemsep}{1ex}}{\end{itemize}\bigbreak\bigbreak}
+
+%%% Les Points Clefs du chapitre.  Chaque point clef doir d\'ebuter par \item 
+%
+\forcedefenv{pointsclefs}
+\newenvironment{pointsclefs}{\section*{Points clefs}
+\begin{itemize}
+\setlength{\itemsep}{1ex}}{\end{itemize}\bigbreak\bigbreak}
+
+% Environnement "exemple". 
+%
+\forcedefenv{exemple}
+% \newenvironment{exemple}[1][Exemple~:]{\par\medbreak\textit{#1}~\ignorespaces}{\par\bigbreak}
+\newenvironment{exemple}[1][\relax]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Exemple\quad\hrulefill}\par\nobreak
+\ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill}\nobreak\bigbreak}
+
+
+% Environnement "remarque". 
+%
+% \forcedefenv{remarque}
+% \newenvironment{remarque}[1][Remarque~:]{\par\medbreak\textbf{#1}~\ignorespaces}{\par\bigbreak}
+\forcedefenv{remarque}
+\newenvironment{remarque}[1][\relax]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Remarque\quad\hrulefill}\par\nobreak
+\ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+\@afterheading 
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin Encart\quad\hrulefill
+}\nobreak\bigbreak}
+
+
+% Environnement "encart". 
+%
+\forcedefenv{encart}
+\newenvironment{encart}[1][\relax]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Encart\quad\hrulefill}\par\nobreak
+\ifx#1\relax\else{\centering\bfseries\large
+  \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi \@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin Encart\quad\hrulefill
+}\nobreak\bigbreak}
+
+% Environnement "conseils". 
+%
+\forcedefenv{conseils}
+\newenvironment{conseils}{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Conseils\quad\hrulefill}\par\nobreak\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin  Conseils\quad\hrulefill
+}\nobreak\bigbreak}
+
+% Environnement "methode". 
+%
+\forcedefenv{methode}
+\newenvironment{methode}{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad M\'ethode\quad\hrulefill}\par\nobreak\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin  M\'ethode\quad\hrulefill}\nobreak\bigbreak}
+
+% Environnement "lessentiel". 
+%
+\forcedefenv{lessentiel}
+\newenvironment{lessentiel}{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad L'essentiel\quad\hrulefill}\par\nobreak\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin  L'essentiel\quad\hrulefill}\nobreak\bigbreak}
+
+% Environnement "application". 
+%
+\forcedefenv{application}
+\newenvironment{application}{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Exercice d'application\quad\hrulefill}\par\nobreak\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin  Exercice d'application\quad\hrulefill}\nobreak\bigbreak}
+
+% Environnement "attention". 
+%
+\forcedefenv{attention}
+\newenvironment{attention}{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Attention\quad\hrulefill}\par\nobreak\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin  Attention\quad\hrulefill
+}\nobreak\bigbreak}
+
+% Environnement "encadre". 
+%
+\forcedefenv{encadre}
+\newenvironment{encadre}[1][\relax]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Encadr\'e\quad\hrulefill}\par\nobreak
+\ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin  Encadr\'e\quad\hrulefill}\nobreak\bigbreak}
+
+
+
+% Environnement "definition". 
+%
+\forcedefenv{definition}
+\newcounter{deficpt}[chapter]
+\def\thedeficpt{\arabic{chapter}.\arabic{deficpt}}
+\newenvironment{definition}[1][\relax]{\refstepcounter{deficpt}\par\medbreak
+\textbf{D\'efinition~\thedeficpt~#1}~~\ignorespaces}{\hfill$\blacksquare$\par\bigbreak}
+
+
+
+\forcedefenv{definition*}
+\newenvironment{definition*}[1][D\'efinition]{\par\medbreak
+\textbf{#1.}~~\ignorespaces}{\hfill$\blacksquare$\par\bigbreak}%{\par\bigbreak}
+
+% Environnement "theoreme". 
+%
+\forcedefenv{theoreme}
+\newcounter{theocpt}[chapter]
+\def\thetheocpt{\arabic{chapter}.\arabic{theocpt}}
+\newenvironment{theoreme}[1][\relax]{\refstepcounter{theocpt}\par\medbreak
+\textbf{Th\'eor\`eme~\thetheocpt~#1}~~\itshape\ignorespaces}{\hfill$\blacksquare$\par\bigbreak}%{\par\bigbreak}
+
+\forcedefenv{theoreme*}
+\newenvironment{theoreme*}[1][Th'eor\`eme]{\par\medbreak
+\textbf{#1.}~~\itshape\ignorespaces}{\hfill$\blacksquare$\par\bigbreak}%{\par\bigbreak}
+
+% Environnement "Démonstration". 
+%
+\forcedefenv{demo}
+\newenvironment{demo}[1][D\'emonstration]{\par\medbreak
+\textbf{#1.}~~\ignorespaces}{\hfill\ensuremath{\square}\bigbreak}
+
+
+
+% Environnement "Corollaire". 
+%
+\forcedefenv{corollaire}
+\newcounter{corocpt}[chapter]
+\def\thecorocpt{\arabic{chapter}.\arabic{corocpt}}
+\newenvironment{corollaire}[1][\relax]{\refstepcounter{corocpt}\par\medbreak
+\textbf{Corollaire~\thecorocpt~#1}~~\itshape\ignorespaces}{\par\bigbreak}
+
+\forcedefenv{corollaire*}
+\newenvironment{corollaire*}[1][Corollaire]{\par\medbreak
+\textbf{#1.}~~\itshape\ignorespaces}{\par\bigbreak}
+
+% Environnement  "exercices" (conteneur d'\'enonc\'es d'execices). 
+%
+\newcounter{exo}[chapter]
+\def\theexo{\arabic{chapter}.\arabic{exo}}
+%\forcedefenv{exercices}
+\NewEnviron{exercices}{}
+\renewenvironment{exercices}{%\clearpage
+\renewenvironment{exo}[1][A]{%%
+\refstepcounter{exo}
+\par\bigbreak
+\parindent0pt
+\ifx##1A%
+{\textbf{Exercice~\theexo}.~~}%
+\else%
+{\textbf{Exercice~\theexo.}~~\textbf{##1}}\\*[4pt]%
+\fi\ignorespaces}
+{\par\nobreak\@afterheading\bigskip}
+\bigbreak
+\section*{Exercices}
+%{\Large\bfseries Exercices}
+%\bigskip
+}
+{\clearpage}
+
+% Environnement  "solutions"
+%
+\newcounter{sol}[chapter]
+\forcedefenv{solutions}
+\NewEnviron{solutions}{}
+\renewenvironment{solutions}{\clearpage
+\def\thesol{\arabic{chapter}.\arabic{sol}}
+\renewenvironment{sol}[1][A]{%%
+\refstepcounter{sol}
+\par\bigbreak
+\parindent0pt
+\ifx##1A%
+{\textbf{Solution~\thesol.}~~}%
+\else%
+{\textbf{Solution~\thesol.}~~\textbf{##1}}\\*[4pt]%
+\fi\ignorespaces}
+{\par\nobreak\@afterheading\bigskip}
+\bigbreak
+\section*{Solutions}
+%\begin{center}\Huge\bfseries Solutions\end{center}
+\bigskip
+}
+{\clearpage}
+
+\newenvironment{testezsols}{%
+\begin{center}\vspace*{-12mm}\huge\bfseries (Testez-vous)\end{center}}{\setcounter{sol}{0}\par}
+
+\newenvironment{entrainezsols}{\setcounter{sol}{0}\bigskip}{\par}
+
+% Environnement  "exo" (\'enonc\'es individuel d'execice). 
+%
+% Cet environnement est red\'efini par "exercices".
+% Cela permet de diff\'erencier les exercices dans le cours et les exercices dans les parties d'exercices
+%
+\forcedefenv{exo}
+\newenvironment{exo}[1][A]{\par\bigbreak\parindent0pt
+\ifx#1A%
+\textsf{\textbf{Exercice}\mbox{~~}}%
+\else%
+\textsf{\textbf{#1}\mbox{~~}}%
+\fi\ignorespaces}
+{\par\bigskip}
+
+% Environnement  "sol" (solution individuelle d'execice). 
+%
+%
+% Cet environnement est red\'efini par "solutions".
+% Cela permet de diff\'erencier les solutions dans le cours et les solutions dans les parties de soluytions d'exercices
+%
+\forcedefenv{sol}
+\newenvironment{sol}[1][A]{\par\bigbreak\parindent0pt
+\ifx#1A
+\textsf{\textbf{Solution}\mbox{~~}}%
+\else
+\textsf{\textbf{#1}\mbox{~~}}%
+\fi\ignorespaces}
+{\par\bigskip}
+
+% Pour les questions d'exercices ou de solutions
+%
+\def\q#1{\par\smallbreak\textsf{\textbf{#1}}~\ignorespaces}
+
+% Environnement "plusloin".
+%
+\forcedefenv{plusloin}
+\newenvironment{plusloin}[1][Pour aller plus loin]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad#1\quad\hrulefill}\par\nobreak
+\@afterheading
+\def\labelitemi{\textbullet}
+\begin{itemize}
+\setlength{\itemsep}{1ex}}{\end{itemize}\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin  Pour aller plus loin\quad\hrulefill
+}\nobreak\bigbreak}
+
+% Environnement "plusloin".
+%
+\forcedefenv{consultezleweb}
+\newenvironment{consultezleweb}[1][Consultez sur le web]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad#1\quad\hrulefill}\par\nobreak
+\@afterheading
+\begin{itemize}
+\setlength{\itemsep}{1ex}}{\end{itemize}\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin  Consultez sur le web\quad\hrulefill}\nobreak\bigbreak}
+
+% Environnement  "testezvous"
+%
+\newcounter{test}[chapter]
+\def\thetest{\arabic{chapter}.\arabic{test}}
+
+\newenvironment{test}[1][A]{%%
+\refstepcounter{test}
+\par\bigbreak
+\parindent0pt
+\ifx#1A%
+\textsf{\textbf{\thetest}.~~}%
+\else%
+\textsf{\textbf{\thetest.}~\textbf{#1}~~}\\*[4pt]%
+\fi\ignorespaces}
+{\par\nobreak\@afterheading\bigskip}
+
+\forcedefenv{testezvous}
+\newenvironment{testezvous}{\clearpage
+\bigbreak
+\begin{center}\Huge\bfseries Testez-vous\end{center}
+\bigskip
+}
+{\clearpage}
+
+% Environnement "glossaire".
+%
+\forcedefenv{glossaire}
+\newenvironment{glossaire}[1][Glossaire]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad#1\quad\hrulefill}\par\nobreak
+\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin Glossaire\quad\hrulefill}\nobreak\bigbreak\clearpage}
+
+
+\makeatother
+
+
