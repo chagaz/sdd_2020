@@ -1,3 +1,226 @@
-%-*- coding: iso-latin-1 -*-
-\label{chap:}
+% \documentclass[a4paper,12pt]{article}
 
+% \usepackage[T1]{fontenc}
+% \usepackage{gentium}
+
+% \usepackage[colorlinks=true,urlcolor=Aubergine,citecolor=MyDarkGrey]{hyperref}
+
+% \usepackage[margin=2cm]{geometry}
+
+% \usepackage{amsmath}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{amsthm}
+% \usepackage{bm}
+% \usepackage{graphicx}
+% \usepackage{multirow}
+% \usepackage{parskip} % adjust skip between paragraphs
+% \usepackage{textcomp}
+% \usepackage{xcolor}
+
+% \usepackage[frenchb]{babel} % pour les caractères français
+% \usepackage[utf8]{inputenc} % pour les caractères français
+% \usepackage[T1]{fontenc} % meilleur rendu de certains caractères spéciaux 
+
+% \usepackage{enumitem}
+% \setlist[itemize]{label=\textendash}
+
+% \begin{document}
+
+
+%-*- coding: iso-latin-1 -*-
+\label{chap:stat}
+\paragraph{Notions :} population, échantillon, estimation, biais, convergence
+d'un estimateur, variance, covariance, compromis biais-variance.
+
+\paragraph{Objectifs pédagogiques :}
+\begin{itemize}
+\item Définir, évaluer et caractériser un estimateur statistique.
+\end{itemize}
+
+\section{Qu'est-ce que la statistique ?}
+
+Le terme de « statistique » est dérivé du latin « \textit{status} » (signifiant
+« état »). Historiquement, \textbf{les statistiques} concernent l'étude
+méthodique, par des procédés numériques (inventaires, recensements, etc.) des
+faits sociaux qui définissent un état. Elles sont désormais utilisées dans tous
+les secteurs où l'on dispose de données : sciences sociales mais aussi santé,
+environnement, industrie, économie, recherche scientifique, etc.
+
+Par contraste, \textbf{la statistique} est un ensemble de méthodes des
+mathématiques appliquées permettant de décrire et d'analyser des phénomènes
+dont la nature rend une étude exhaustive de tous leurs facteurs impossible. Ces
+méthodes permettent d'étudier des données, ou observations, consistant en la
+mesure d'une ou plusieurs caractéristiques d'un ensemble de personnes ou objets
+équivalents.
+
+\subsection{Vocabulaire}
+
+L'ensemble de personnes ou d'objets équivalents étudiés est appelé \textbf{la
+  population.} Il peut s'agir d'une population au sens « courant » du terme
+(par exemple, l'ensemble de la population française, ou l'ensemble des
+individus d'une espèce animale sur un territoire) mais aussi plus largement
+d'un ensemble plus générique d'objets que l'on cherche à étudier (par exemple,
+l'ensemble des pièces produites par une chaîne de montage, un ensemble de
+particules en physique, etc.)
+
+Chacun des éléments de la population est appelé \textbf{individu.} 
+
+Les caractérisiques que l'on mesure pour chacun de ces individus sont appelées
+les \textbf{variables} ; les individus pour lesquels ces caractéristiques ont
+été mesurées sont apelées des \textbf{observations}.
+
+Par exemple, si j'étudie les données climatiques pour la station météo de
+Paris-Montsouris en 2019 (cf. table~\ref{tab:meteo_data}), il s'agit d'une
+population de 365 individus. Cette population peut contenir 8 variables :
+températures minimale, maximale et moyenne ; vitesse maximale du vent ;
+ensoleillement ; précipitations totales ; pressions atmosphériques minimale et
+maximale.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}[h]{|c|c|c|c|c|c|c|c|} \hline
+    T min & T max & T moy & Vent & Ensoleillement & Précipitations & P min & P max \\
+    \textdegree C & \textdegree C & \textdegree C & km/h & min & mm & hPa & hPa \\ \hline
+    7.6 & 9.6 & 8.4 & 22.2 & 0 & 0 & 1034 & 1036.6 \\ \hline
+    5.6 & 7.2 & 6.3 & 24.1 & 0 & 0 & 1037.3 & 1041.3 \\ \hline
+    4.1 & 6.6 & 5.4 & 16.7 & 0 & 0 & 1040.2 & 1041.8 \\ \hline
+    3.1 & 6 & 4.7 & 20.4 & 0 & 0 & 1039.5 & 1041.7 \\ \hline
+    4.2 & 5.9 & 5 & 20.4 & 0 & 0 & 1037.5 & 1039.6 \\ \hline
+    4.3 & 6.8 & 5.6 & 16.7 & 0 & 0 & 1036.5 & 1038 \\ \hline
+    6.8 & 8.6 & 7.4 & 20.4 & 0 & 0.6 & 1030.5 & 1037.2\\ \hline
+    7.4 & 9.7 & 8.5 & 24.1 & 120 & 0 & 1025.9 & 1029.7 \\ \hline
+    4 & 7.7 & 5.2 & 29.6 & 42 & 0.8 & 1024.1 & 1026.4 \\ \hline 
+    2.1 & 5.5 & 4 & 18.5 & 30 & 0 & 1026.6 & 1029.5 \\ \hline
+    4.2 & 8.3 & 6.2 & 14.8 & 0 & 1.2 & 1028.1 & 1030.5 \\ \hline
+    6.7 & 9.1 & 8 & 22.2 & 0 & 0.8 & 1021.7 & 1030.6 \\ \hline
+    8.8 & 11.9 & 10.5 & 31.5 & 30 & 0.8 & 1014 & 1021.1 \\ \hline
+    8.5 & 10.9 & 8.8 & 29.6 & 0 & 0 & 1014 & 1024.8 \\ \hline
+    6.9 & 8.6 & 7.6 & 16.7 & 0 & 0 & 1020.3 & 1025.3 \\ \hline
+    1.9 & 7.8 & 5.2 & 27.8 & 276 & 3 & 1007.9 & 1019.6 \\ \hline
+    4 & 8.5 & 5.4 & 27.8 & 0 & 0 & 1007.5 & 1019.7 \\ \hline
+    0.9 & 6.1 & 2.4 & 18.5 & 342 & 0 & 1017.2 & 1021 \\ \hline
+    -1.7 & 2.8 & 0.3 & 14.8 & 78 & 4 & 1009.7 & 1016.8 \\ \hline
+    1.9 & 3 & 2.5 & 20.4 & 0 & 0.8 & 1010.1 & 1021.8 \\ \hline
+    -2.2 & 3.6 & 0.1 & 13 & 480 & 0 & 1019.2 & 1024.9 \\ \hline
+    -2.4 & 1.7 & -0.1 & 20.4 & 0 & 7.4 & 998.4 & 1018.3 \\ \hline
+    0.6 & 2.1 & 1.3 & 24.1 & 6 & 1 & 995.6 & 1007.4 \\ \hline
+    -0.4 & 2.5 & 1.2 & 20.4 & 0 & 1 & 1008.4 & 1015.5 \\ \hline
+    1.7 & 5.5 & 3.9 & 13 & 0 & 1.2 & 1015.2 & 1018.4 \\ \hline
+    5.5 & 9.6 & 8.4 & 29.6 & 24 & 1.6 & 998.1 & 1016.9 \\ \hline
+    4.4 & 8.2 & 6.4 & 37 & 6 & 4.4 & 989.8 & 1001.4 \\ \hline
+    2.7 & 6.9 & 4.4 & 25.9 & 216 & 0 & 1001.7 & 1011.7 \\ \hline
+    -0.8 & 5.2 & 1.7 & 24.1 & 18 & 19.6 & 989.5 & 1011.7 \\ \hline
+    0.5 & 5.2 & 2.3 & 33.3 & 252 & 0.4 & 990 & 998.9 \\ \hline 
+    -1 & 2.5 & 1.3 & 25.9 & 24 & 1.2 & 983.5 & 998 \\ \hline
+  \end{tabular}
+  \caption{Exemple de 8 variables pour 31 observations (celles du mois de janvier) de la population des données climatiques pour la station mété de Paris-Montsouris en 2019.}
+  \label{tab:meteo_data}
+\end{table}
+
+Lorsque la population à étudier est trop grande pour qu'il soit possible
+d'observer chacun de ses individus, on étudie alors une partie seulement de la
+population. Cette partie est appelée \textbf{échantillon}. On parle alors de
+\textbf{sondage}, par opposition à un \textbf{recensement}, qui consiste à
+étudier tous les individus d'une population. Nous parlerons plus en détails de
+la construction d'un échantillon dans la section~\ref{ref:echantilonnage}.
+
+Par exemple, la population des élèves de première année des Mines est
+composée de 125 individus. Si je recueille l'âge, le département de naissance
+et le nombre de frères et s\oe{}urs de 20 de ces élèves, j'aurai mesuré 3 variables
+sur un échantillon de 20 observations. 
+
+On distinguera plusieurs types de variables :
+\begin{itemize}
+\item les \textbf{variables quantitatives} : des caractéristiques numériques
+  qui s'expriment naturellement à l'aide de nombres réels. Ces variables
+  peuvent être \textbf{discrètes} si le nombre de valeurs qu'elles peuvent
+  prendre est fini ou dénombrable (ex : âge, nombre de frères et s\oe{}urs) ou
+  \textbf{continues} (ex : températures, taille, pression atmosphérique)
+\item les \textbf{variables qualitatives} : des caractéristiques qui, bien
+  qu'elles puissent être encodées numériquement (ex : département de
+  naissance), relèvent plutôt de catégories et sur lesquelles les opérations
+  arithmétiques de base (somme, moyenne) n'ont aucun sens. On parle de
+  variables \textbf{nominales} s'il n'y a pas d'ordre total sur l'ensemble de
+  ces catégories (ex : département de naissance) ou \textbf{ordinales} s'il y
+  en a (ex : entièrement d'accord, assez d'accord, pas vraiment d'accord, pas
+  du tout d'accord).
+\end{itemize}
+
+Remarque : seuiller des variables quantitatives permet de les transformer en
+variables qualitatives ordinales. Par exemple, une variable d'âge peut être
+transformée en catégories (< 18, 18 -- 20, 20 -- 35, etc.)
+
+\subsection{Types de questions statistiques}
+
+\paragraph{La statistique descriptive:} Aussi appelée \textbf{statistique
+  exploratoire,} elle consiste à caractériser une population par la
+détermination d'un certain nombre de grandeurs qui la décrivent. Son objectif
+est de synthétiser l'information contenue dans un ensemble d'observations et de
+mettre en évidence des propriétés de cet ensemble. Elle permet aussi de
+suggérer des hypothèses relatives à la population dont sont issues les
+observations. Il s'agit principalement de calculer des indicateurs (par exemple
+des moyennes) et de visualiser les données par des graphiques. La visualisation
+peut être enrichie par des techniques de réduction de dimension (voir chapitre
+TODO REF), qui permettent de créer un petit nombre de variables qui résument
+les mesures prises sur les observations, et des techniques de partitionnement,
+ou clustering, qui permettent de réduire la taille d'un échantillon en
+regroupant les individus présentant des caractéristiques homogènes (ce sujet
+sera abordé plus en détail dans TODO nom cours ML avancé. Nous détaillons la
+statistique descriptive dans la section~\ref{sec:stat_descr}.
+
+\paragraph{La statistique inférentielle:} Aussi appellée \textbf{statistique
+  décisionnaire,} ou encore \textbf{inférence statistique,} elle consiste à
+tirer des conclusions sur une population à partir de l'étude d'un échantillon
+de celle-ci. Les données observées sont considérées comme un échantillon d'une
+population. Il s'agit alors d'étendre des propriétés constatées sur
+l'échantillon à la population. L'inférence statistique repose beaucoup sur les
+probabilités : on considèrera les observations comme les réalisations de
+variables aléatoires, ce qui permettra d'approcher les caractéristiques
+probabilistes de ces variables aléatoires à l'aide d'indicateurs calculées sur
+l'échantillon.  Nous détaillons la statistique inférentielle dans la
+section~\ref{sec:inference} ainsi qu'aux chapitres TODO et TODO.
+
+\paragraph{L'apprentissage statistique} TODO
+
+\section{Statistique descriptive}
+\label{sec:stat_descr}
+Le rôle de la statistique descriptive est de caractériser une population par la
+détermination d'un certain nombre de grandeurs qui la décrivent.
+
+\begin{itemize}
+\item cf cours Laure Reboul.
+\item Utiliser http://iml.univ-mrs.fr/~reboul/enseignement.html pour proposer des exercices ?
+\end{itemize}
+
+\section{Inférence statistique}
+L'inférence statistique a pour but de tirer des conclusions sur une population
+à partir de l'étude d'un échantillon de celle-ci. Pour cela, il est nécessaire
+de s'intéresser :
+\begin{itemize}
+\item aux techniques d'\textbf{échantillonnage} (cf section~\ref{sec:echantilonnage})
+  permettant de construire des échantillons d'une population ;
+\item à la \textbf{modélisation} permettant de supposer un modèle probabiliste
+  sur la population ;
+\item aux techniques d'\textbf{estimation} (cf section~\ref{sec:estimation})
+  permettant de déterminer (approximativement) un paramètre d'une population à
+  partir d'un échantillon de celle-ci ;
+\item aux \textbf{tests d'hypothèse} (cf chapitre TODO) permettant de valider
+  ou d'infirmer des hypothèses sur la population.
+\end{itemize}
+
+\subsection{Échantillonnage}
+\label{ref:echantilonnage}
+
+\subsection{Estimation ponctuelle}
+\begin{itemize}
+\item cf cours Joseph
+\item cf ProbaAgreg p5-13 onwards
+\end{itemize}
+
+\subsection{Estimation par intervalle}
+\begin{itemize}
+\item intervalle de confiance
+\item cf ProbaAgreg p13 onwards
+\end{itemize}
+% \end{document}
