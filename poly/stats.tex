@@ -68,7 +68,9 @@ Chacun des éléments de la population est appelé \textbf{individu.}
 
 Les caractérisiques que l'on mesure pour chacun de ces individus sont appelées
 les \textbf{variables} ; les individus pour lesquels ces caractéristiques ont
-été mesurées sont apelées des \textbf{observations}.
+été mesurées sont apelées des \textbf{observations}. Un ensemble de $n$
+observations $(x_1, x_2, \dots, x_n)$ d'une variable est appelée \textbf{série
+  statistique.}
 
 Par exemple, si j'étudie les données climatiques pour la station météo de
 Paris-Montsouris en 2019 (cf. table~\ref{tab:meteo_data}), il s'agit d'une
@@ -77,7 +79,7 @@ températures minimale, maximale et moyenne ; vitesse maximale du vent ;
 ensoleillement ; précipitations totales ; pressions atmosphériques minimale et
 maximale.
 
-\begin{table}[h]
+\begin{table}
   \centering
   \begin{tabular}[h]{|c|c|c|c|c|c|c|c|} \hline
     T min & T max & T moy & Vent & Ensoleillement & Précipitations & P min & P max \\
@@ -114,7 +116,7 @@ maximale.
     0.5 & 5.2 & 2.3 & 33.3 & 252 & 0.4 & 990 & 998.9 \\ \hline 
     -1 & 2.5 & 1.3 & 25.9 & 24 & 1.2 & 983.5 & 998 \\ \hline
   \end{tabular}
-  \caption{Exemple de 8 variables pour 31 observations (celles du mois de janvier) de la population des données climatiques pour la station mété de Paris-Montsouris en 2019.}
+  \caption{Exemple de 8 variables pour 31 observations (celles du mois de janvier 2019) de la population des données climatiques pour la station météo de Paris-Montsouris.}
   \label{tab:meteo_data}
 \end{table}
 
@@ -150,6 +152,67 @@ On distinguera plusieurs types de variables :
 Remarque : seuiller des variables quantitatives permet de les transformer en
 variables qualitatives ordinales. Par exemple, une variable d'âge peut être
 transformée en catégories (< 18, 18 -- 20, 20 -- 35, etc.)
+
+Le tableau~\ref{tab:remboursement_data} montre un exemple d'un échantillon de
+20 individus d'une population de données de remboursements d'un acte biologique
+bien précis : le dosage de l'antigène tumoral 125. Ces données sont issues de
+la base de dépenses de biologie médicale en France mise à disposition par
+l'Assurance
+Maladie\footnote{\url{http://open-data-assurance-maladie.ameli.fr/biologie/index.php}}. La
+population complète, de 604 individus, est disponible dans le fichier
+\texttt{data/OPEN\_BIO\_2018\_7325.csv}.
+
+Chaque individu de cette population (i.e. ligne du tableau) correspond à un
+ensemble de dosages et est décrit par 5 variables : la tranche d'âge des
+patients et patientes ; leur région ; le nombre de dosages ; et enfin les
+montants remboursés et remboursables. Dans ce tableau, l'âge est une variable
+qualitative ordinale ; la région une variable qualitative ; et les nombres et
+montants des variables quantitatives. On pourra choisir de traiter le nombre de
+remboursements comme une variable discrète ou continue.
+
+\begin{table}
+  \centering
+  \begin{tabular}{|r|r|r|r|r|r|} \hline
+    \multirow{2}{*}{Âge} & \multirow{2}{*}{Région} & Nombre & Montants & Montants  \\ 
+    & & d'actes & remboursés & remboursables \\ 
+    ans & & & (EUR) & (EUR) \\\hline 
+    $>$ 60 & 76 & 26 & 377,96 & 402,80\\  \hline
+    $>$ 60 & 75 & 1\,401 & 14\,054,37 & 21\,332,15\\  \hline
+    $>$ 60 & 44 & 5\,299 & 65\,928,93 & 80\,447,00\\  \hline
+    $>$ 60 & 32 & 1\,706 & 25\,137,65 & 26\,032,65\\  \hline
+    $>$ 60 & 32 & 2\,596 & 37\,877,02 & 39\,336,15\\  \hline
+    $>$ 60 & 27 & 14 & 159,85 & 211,35\\  \hline
+    $>$ 60 & 24 & 3\,565 & 50\,770,46 & 54\,076,15\\  \hline
+    $>$ 60 & 11 & 396 & 5\,226,55 & 6\,060,05\\  \hline
+    $>$ 60 & 5 & 260 & 4\,496,91 & 4\,676,40\\  \hline
+    $>$ 60 & 93 & 162 & 2\,303,56 & 2\,466,10\\  \hline
+    $>$ 60 & 76 & 578 & 8\,499,53 & 8\,793,10\\  \hline
+    40-59 & 76 & 13 & 172,26 & 199,80\\  \hline
+    40-59 & 44 & 102 & 1\,204,93 & 1\,557,20\\  \hline
+    40-59 & 11 & 48 & 555,39 & 733,05\\  \hline
+    40-59 & 84 & 14 & 190,21 & 217,85\\  \hline
+    40-59 & 32 & 126 & 1\,350,06 & 1\,912,15\\  \hline
+    20--39 & 32 & 749 & 7\,941,69 & 11\,362,40\\  \hline
+    20--39 & 32 & 24 & 289,35 & 365,25\\  \hline
+    20--39 & 5 & 918 & 9\,704,10 & 16\,550,40\\  \hline
+    20--39 & 11 & 106 & 1\,073,32 & 1\,618,35\\  \hline
+  \end{tabular}
+  \caption{Population de remboursements du dosage de l'antigène 125 dans le sang en 2018, 
+    composée de 20 individus décrits par 5 variables et extraite du fichier \texttt{data/OPEN\_BIO\_2018\_7325.csv}. \\
+    Région : 5 = Régions et Départements d'outre-mer. 
+    11 = Ile-de-France. 
+    24 = Centre-Val de Loire.
+    27 = Bourgogne-Franche-Comté.
+    32 = Hauts-de-France.
+    44 = Grand-Est.
+    75 = Nouvelle-Aquitaine.
+    76 = Occitanie.
+    84 = Auvergne-Rhône-Alpes.
+    93 = Provence-Alpes-Côte d'Azur et Corse.}
+  \label{tab:remboursement_data}
+\end{table}
+
+
 
 \subsection{Types de questions statistiques}
 
@@ -188,10 +251,502 @@ section~\ref{sec:inference} ainsi qu'aux chapitres TODO et TODO.
 Le rôle de la statistique descriptive est de caractériser une population par la
 détermination d'un certain nombre de grandeurs qui la décrivent.
 
+\subsection{Statistique descriptive unidimensionelle}
+Il s'agit ici de mettre en évidence les principales caractéristiques d'une
+unique variable statistique $x$ observée sur $n$ individus, à travers la série
+statistique $(x_1, x_2, \dots, x_n).$
+
+\subsubsection{Fréquences}
+Prenons par exemple, 31 observation de la température minimale (en \textdegree
+C) pour la station météo de Paris-Montsouris, telles que relevées dans la
+première colonne de la table~\ref{tab:meteo_data}. 
+
+L'étude d'une telle série statistique passe par la construction d'une
+\textbf{table des fréquences,} soit des valeurs elles-mêmes dans le cas d'une
+variable qualitative ou discrète, soit d'intervalles de ces valeurs. La
+construction de ces intervalles permet de transformer la série statistique en
+\textbf{série classée.}
+
+Prenons l'exemple des données dont une partie est donnée dans le
+tableau~\ref{tab:remboursement_data}. La \textbf{table des fréquences} des âges
+est donnée dans le tableau~\ref{tab:remboursement_age_freq}.
+
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}[h]{|l|c|c|c|c|c|} \hline 
+%     Tranche d'âge (ans) & 20 -- 39 & 40 -- 59 & $>$ 60 \\ \hline     
+%     Fréquence & 20\% & 25\% & 55\% \\ \hline
+%   \end{tabular}
+%   \caption{Table des fréquences des âges parmi les 20 individus du tableau~\ref{tab:remboursement_data}.}
+%   \label{tab:remboursement_age_freq_subset}
+% \end{table}
+\begin{table}[h]
+  \centering
+  \begin{tabular}[h]{|l|c|c|c|c|c|c|} \hline 
+    Tranche d'âge (ans) 0 -- 19 & 20 -- 39 & 40 -- 59 & $>$ 60 \\ \hline     
+    Fréquence 7\% & 18\% & 31\% & 43\% \\ \hline
+  \end{tabular}
+  \caption{Table des fréquences des âges parmi les 604 individus de \texttt{data/OPEN\_BIO\_2018\_7325.csv} 
+    dont sont extraits les 20 individus du tableau~\ref{tab:remboursement_data}.}
+  \label{tab:remboursement_age_freq}
+\end{table}
+
+Ce tableau peut aussi être visualisé grâce à un \textbf{diagramme en bâtons,}
+comme illustré sur la figure~\ref{fig:remboursement_age_bars}.
+% \begin{figure}[h]
+%   \centering
+%     \includegraphics[width=.5\textwidth]{figures/stats/remboursement_age_bars}
+%   \caption{Diagramme en bâtons de la fréquence des tranches d'âges dans les
+%     données du tableau~\ref{tab:remboursement_data}.}
+%   \label{fig:remboursement_age_bars}
+% \end{figure}
+\begin{figure}[h]
+  \centering
+    \includegraphics[width=.5\textwidth]{figures/stats/remboursement_age_bars}
+  \caption{Diagramme en bâtons de la fréquence des tranches d'âges dans les
+    données de remboursement.}
+  \label{fig:remboursement_age_bars}
+\end{figure}
+
+La constitution des classes de valeurs d'une série statistique est une étape
+importante. La règle de Sturges propose de découper les valeurs observées en
+$\lfloor 1 + \log_2(n)\rfloor$ intervalles de même taille
+$\frac{\max(x_i) - \min(x_i)}{k}$. Cependant, cette règle suppose que la
+variable analysée suive une distribution gaussienne ; elle n'est pas
+appropriée, par exemple, si les valeurs s'étalent sur plusieurs échelles de
+grandeur, auquel cas une transformation logarithmique s'imposera.
+
+Cela nous permet ensuite de construire une \textbf{table des fréquences} qui
+associe à chaque classe de valeurs la fréquence de cette valeur dans la
+population observée.
+
+Dans l'exemple des températures minimales, nous disposons de $n=31$
+observations, qu'il s'agit donc de grouper en 5 intervalles d'amplitude
+2,24\textdegree C. La table des fréquences des températures minimales est
+donnée dans le tableau~\ref{tab:meteo_tmin_freq}.
+\begin{table}[h]
+  \centering
+  \begin{tabular}[h]{|l|c|c|c|c|c|} \hline T min (\textdegree C) & < - 0.16 &
+    0.16 -- 2.08 & 2.08 -- 4.32 & 4.32 -- 6.56 & > 6.56 \\ \hline Fréquence &
+    0.19 & 0.19 & 0.29 & 0.10 & 0.23 \\ \hline
+  \end{tabular}
+\caption{Table des fréquences des températures minimales du tableau~\ref{tab:meteo_data}.}
+\label{tab:meteo_tmin_freq}
+\end{table}
+
+Cette table des fréquences peut directement être traduite en
+\textbf{histogramme,} comme illustré sur la figure~\ref{fig:meteo_tmin_hist}.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.5\textwidth]{figures/stats/meteo_tmin_hist}
+  \caption{Histogramme des températures minimales dans le
+    tableau~\ref{tab:meteo_data}.}
+  \label{fig:meteo_tmin_hist}
+\end{figure}
+Utiliser des fréquences plutôt que des comptes permet de comparer des
+échantillons de taille différente. De plus, la distribution des fréquences
+d'une série statistique de la variable $x$, représentée visuellement par un
+histogramme, peut être considéré comme une approximation de la distribution de
+la probabilité de cette variable dans la population.
+
+\paragraph{Fréquences cumulées} 
+On peut aussi choisir de représenter plutôt les \textbf{fréquences cumulées} :
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}[h]{|l|c|c|c|c|c|} \hline 
+    T min (\textdegree C) & < 0.16 & < 2.08 & < 4.32 & < 6.56 & < 8.80 \\ \hline 
+    Fréquence & 0.19 & 0.38 & 0.67 & 0.77 & 1.0 \\ \hline
+    T min (\textdegree C) & > 2.40 & > 0.16 & > 2.08 & > 4.32 & > 6.56 \\ \hline 
+    Fréquence & 1.0 & 0.81 & 0.62 & 0.33 & 0.23 \\ \hline
+  \end{tabular}
+  \caption{Table des fréquences cumulées pour les températures minimales 
+    du tableau~\ref{tab:meteo_data}.}
+  \label{tab:meteo_tmin_cumul_freq}
+\end{table}
+
+Cette table des fréquences cumulées croissantes et décroissantes peut
+directement être traduite en \textbf{courbes des fréquences cumulées,} comme
+illustré sur la figure~\ref{fig:meteo_tmin_cumul_freq}.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.8\textwidth]{figures/stats/meteo_tmin_cumul_freq}
+  \caption{Courbes des fréquences cumulées pour les températures minimales du
+    tableau~\ref{tab:meteo_data}.}
+  \label{fig:meteo_tmin_cumul_freq}
+\end{figure}
+
+\subsubsection{Indicateurs numériques}
+Enfin, des \textbf{indicateurs numériques} permettent de compléter cette
+description. On distinguera les \textbf{indicateurs de tendance centrale} qui
+indiquent l'ordre de grandeur des valeurs de la série statistique et où ces
+valeurs se rassemblent, des \textbf{indicateurs de dispersion} qui indiquent
+l'étalement de ces valeurs.
+
+\paragraph{Indicateurs de tendance centrale} Les indicateurs de tendance centrale comportent :
 \begin{itemize}
-\item cf cours Laure Reboul.
-\item Utiliser http://iml.univ-mrs.fr/~reboul/enseignement.html pour proposer des exercices ?
+\item la \textbf{moyenne arithmétique} 
+\[\bar x = \frac1n \sum_{i=1}^n x_i,\]
+La  moyenne arithmétique peut être très sensible à la présente de valeurs aberrantes.
+\item la \textbf{médiane,} qui correspond à une fréquence cumulée de 50\%, 
+\item le \textbf{mode,} qui est la valeur la plus fréquente dans la série
+  statistique. Le mode n'a réellement de sens que pour une variable discrète ;
+  dans le cas d'une variable continue, on parlera plutôt, lorsque la série est
+  classée, de \textbf{classe modale} qui est la classe la plus fréquente.
 \end{itemize}
+
+Pour notre température minimale, 
+\begin{itemize}
+\item la moyenne arithmétique vaut 3,2 \textdegree C ;
+\item la médiane vaut 4 \textdegree C ;
+\item la classe modale est 2.1 -- 4.4 \textdegree C.
+\end{itemize}
+
+
+\paragraph{Indicateurs de dispersion} Les indicateurs de dispersion comportent : 
+\begin{itemize}
+\item la \textbf{variance de la série statistique} 
+\[ s^2(x_1, x_2, \dots, x_n) = \frac1n \sum_{i=1}^n (x_i - \bar x)^2,\]
+\item la \textbf{variance d'échantillonage} 
+  \[ s^{*2}(x_1, x_2, \dots, x_n) = \frac1{n-1} \sum_{i=1}^n (x_i - \bar
+    x)^2,\]
+  La variance d'échantillonage est d'autant plus proche de la variance que le
+  nombre d'observations est grand. Nous verrons dans la section TODO qu'il
+  s'agit d'un estimateur \textbf{non-biaisé} de la variance de la population.
+\item l'\textbf{écart-type} qui est la racine carrée de la variance, 
+\item le \textbf{coefficient de variation} 
+  \[ \text{CV}(x_1, x_2, \dots, x_n) = \frac{s^2(x_1, x_2, \dots, x_n)}{\bar
+      x}\]
+  Le coefficient de variation permet d'apprécier la variabilité d'une variable
+  en fonction de sa valeur moyenne, et n'a de sens que pour une variable donnée
+  sur une échelle dotée d'un zéro absolu, c'est-à-dire dans laquelle une valeur
+  de $2z$ peut effectivement être considérée comme deux fois plus qu'une valeur
+  de $z$ (ce n'est pas le cas pour une température en degrés Celsius :
+  10\textdegree C n'est pas « deux fois plus chaud » que 5 \textdegree C). De
+  plus, il est numériquement instable quand $\bar x$ est proche de 0.
+\end{itemize}
+
+La variance de notre température minimale vaut 10.02, tandis que la variance
+d'échantillonage vaut 10.36. Les écarts-types correspondants valent tous les
+deux 3.2 \textdegree C. Le coefficient de variation n'a pas de sens en degrés
+Celsius.
+
+De plus, les \textbf{quantiles} permettent aussi de déterminer la dispersion
+d'une variable. Les $q$-quantiles divisent les valeurs prises par la variable
+en $q$ intervales de mêmes fréquences. Le $p$-ème $q$-quantile de
+$(x_1, x_2, \dots, x_n)$ est défini comme la valeur $Q_p^q$ telle que 
+\[\text{Freq}(x \leq Q_p) = \frac{p}{q}.\]
+
+Lorsque $q=4,$ on parle de \textbf{quartiles.} Lorsque $q=10,$ on parle de
+\textbf{déciles.}
+
+Les trois quartiles de notre température minimale sont 0.8 \textdegree C, 4.0
+\textdegree C et 5.6 \textdegree C : 25\% des valeurs observées sont
+inférieures à 0.8 \textdegree C, 50\% sont inférieures à 4.0 \textdegree C et
+75\% sont inférieures à 5.6 \textdegree C. Le deuxième quartile correspond bien
+à la médiane.
+
+Une \textbf{boîte à moustaches} (ou \textit{boxplot}) permet de résumer
+visuellement ces indicateurs, comme illustré sur la
+figure~\ref{fig:meteo_tmin_boxplot}. La boîte à moustaches est composée d'un
+rectangle, d'une largeur arbitraire et délimité en bas par la valeur du premier
+quartile et en haut par la valeur du troisième quartile ; d'une barre
+horizontale au niveau de la médiane ; et de deux segments joignant chacun les
+extrémités du rectangle aux valeurs les plus extrêmes. Représenter les valeurs
+prises par la variable par un nuage de points superposé à ce rectangle permet
+d'en faciliter l'interprétation.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.5\textwidth]{figures/stats/meteo_tmin_boxplot}
+  \caption{Boîte à moustaches des températures minimales du
+    tableau~\ref{tab:meteo_data}.}
+  \label{fig:meteo_tmin_boxplot}
+\end{figure}
+
+\subsection{Statistique descriptive bidimensionelle}
+Il s'agit ici de mettre en évidence une éventuelle \textbf{liaison,}
+c'est-à-dire une variabilité simultanée, entre deux variables statistiques $x$
+et $y$, observées sur $n$ individus, à travers les séries statistiques
+$(x_1, x_2, \dots, x_n)$ et $(y_1, y_2, \dots, y_n).$
+
+Cette liaison peut être causale ou non. Mettre en évidence une causalité est
+délicat, et dépasse le cadre de ce cours.
+
+\subsubsection{Liaison entre deux variables quantitatives}
+
+\paragraph{Nuage de points}
+Pour visualiser la liaison entre deux variables quantitatives, on utilise
+généralement un \textbf{nuage de points}. Si $x$ et $y$ sont homogènes,
+c'est-à-dire exprimées dans la même unité, on utilisera la même échelle sur les
+deux axes, comme sur la figure~\ref{fig:meteo_tmin_tmax}. Sinon, on préfèrera
+généralement centrer et réduire les variables au préalable, comme sur la
+figure~\ref{fig:meteo_tmin_vent} : 
+\[
+  x_i \leftarrow \frac{x_i - \bar x}{\sigma_x} \qquad \text{avec } \bar x = \sum_{i=1}^n x_i 
+  \text{ et } \sigma_x = \sqrt{\sum_{i-1}^n(x_i - \bar x)^2}.
+\]
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[t]{0.49\textwidth}
+    \centering
+    \includegraphics[width=.8\textwidth]{figures/stats/meteo_tmin_tmax}
+    \caption{Nuage de points des températures maximales vs minimales du
+      tableau~\ref{tab:meteo_data}.}
+    \label{fig:meteo_tmin_tmax}
+  \end{subfigure} \hfill
+  \begin{subfigure}[t]{0.49\textwidth}
+    \centering
+    \includegraphics[width=.8\textwidth]{figures/stats/meteo_tmin_vent}
+    \caption{Nuage de points du vent vs les températures minimales du
+      tableau~\ref{tab:meteo_data}.}
+    \label{fig:meteo_tmin_vent}
+  \end{subfigure}
+\end{figure}
+
+
+\paragraph{Indicateurs de liaison entre deux variables quantitatives}
+Pour quantifier la liaison entre deux variables quantitatives, on utilise
+principalement
+\begin{itemize}
+\item \textbf{la covariance}
+\[s(x, y) = \frac1n \sum_{i=1}^n (x_i - \bar x) (y_i - \bar y).\]
+\item \textbf{le coefficient de corrélation de Pearson,} qui est égal à la
+  covariance entre les variables centrées réduites, et compris entre $-1$ et $1$ :
+\[r(x, y) = \frac1n \frac{\sum_{i=1}^n (x_i - \bar x) (y_i - \bar y)}{\sigma_x, \sigma_y.}\]
+\end{itemize}
+
+À noter que la covariance et le coefficient de corrélation de Pearson mesurent
+des liaisons \textit{linéaires} entre deux variables. Une corrélation de
+Pearson proche de 1 ou de -1 indique une relation linéaire ; une corrélation de
+Pearson proche de 0 indique une absence de corrélation. D'autres mesures, comme
+l'information mutuelle (hors cadre de ce cours), permettent de mesurer des
+liaisons \textit{non-linéaires}.
+
+Pour les données du tableau~\ref{tab:meteo_data}, la covariance entre la
+température minimale et la température maximale vaut 7.69 ; leur corrélation de
+Pearson vaut 0.91. La corrélation de Pearson entre vent et température minimale
+vaut 0.28. La figure~\ref{fig:pearson} illustre le rapport entre corrélation de
+Pearson et nuage de points.
+
+\begin{figure}[h]
+  \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_3}
+      \caption{r(x, y) = -1.00.}
+    \end{subfigure} \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_0}
+      \caption{r(x, y) = -0.02.}
+    \end{subfigure} 
+
+    \begin{subfigure}[t]{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_2}
+      \caption{r(x, y) = 0.52.}
+    \end{subfigure} \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_1}
+      \caption{r(x, y) = 1.00.}
+    \end{subfigure} \hfill
+  \caption{Nuages de points entre deux variables simulées et leur corrélation de Pearson.}
+  \label{fig:pearson}
+\end{figure}
+
+\paragraph{Indicateurs de liaison entre une variable qualitative et une variable quantitative}
+Pour étudier la liaison entre une variable qualitative $x$, ayant $K$ modes (ou
+valeurs différentes) dans la série statistique $(x_1, x_2, \dots, x_n),$ et une
+variable quantitative $y,$ on considère que la variable $x$ permet de définir
+$p$ sous-populations. Il s'agit alors d'évaluer s'il existe des différences,
+pour la variable $y$, entre ces sous-populations.
+
+Visuellement, on utilisera une série de boîtes à moustaches, comme illustré sur
+la figure~\ref{fig:remboursement_rembourses_age}.
+
+% \begin{figure}[h]
+%   \centering
+%   \includegraphics[width=.5\textwidth]{figures/stats/remboursement_rembourses_age}
+%   \caption{Montants remboursés par acte, par tranche d'âge, pour les données du
+%     tableau~\ref{tab:remboursement_data}.}
+%   \label{fig:remboursement_rembourses_age}
+% \end{figure}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.5\textwidth]{figures/stats/remboursement_rembourses_age}
+  \caption{Montants remboursés par acte, par tranche d'âge, pour les données de
+    remboursement.}
+  \label{fig:remboursement_rembourses_age}
+\end{figure}
+
+La \textbf{variance expliquée} par $x$ de $y$ la moyenne des carrés des écarts
+entre la moyenne de $y$ dans chaque sous-population et la moyenne de $y$ dans
+toute la population, pondérée par la taille des sous-populations :
+\[
+  \sigma_E^2 = \frac1n \sum_{k=1}^K n_k (\bar{y}_k - \bar{y})^2,
+\]
+où $\bar{y}_k$ est la moyenne de $y$ dans la sous-population $k$ et $\bar{y}$
+la moyenne de $y$ dans la population totale.
+
+La \textbf{variance résiduelle} est la moyenne des variances des
+sous-populations, pondérées par leur taille :
+\[
+  \sigma_R^2 = \frac1n \sum_{k=1}^K n_k \sigma_k^2, 
+\]
+où $n_k$ est le nombre d'individus dans la sous-population $k$ et $\sigma_k^2$
+est la variance de $y$ dans cette sous-population.
+
+
+On peut montrer que $\sigma_y^2 = \sigma_R^2 + \sigma_E^2.$
+
+Le \textbf{rapport de corrélation} est la part de variation de $y$ expliquée
+par $x$. Compris entre 0 et 1, il est d'autant plus élevé que la liaison entre
+les deux variables est forte :
+\[
+e^2  = \frac{\sigma_E^2}{\sigma_y^2}.
+\]
+
+% Pour les montants remboursés par acte du tableau~\ref{tab:remboursement_data},
+% la variance de ces montants est de 3,65, tandis que la variance expliquée par
+% l'âge est de 1,37 (en euros au carré), ce qui donne un rapport de corrélation
+% de 0,38.
+Pour les montants remboursés par acte de nos données de remboursement,
+la variance de ces montants est de 3,30, tandis que la variance expliquée par
+l'âge est de 1,09 (en euros au carré), ce qui donne un rapport de corrélation
+de 0,33 : les montants remboursés semblent dépendre de la tranche d'âge.
+
+\paragraph{Indicateurs de liaison entre deux variables qualitatives}
+Pour étudier la liaison entre une variable qualitative $x$, ayant $K$ modes (ou
+valeurs différentes) dans la série statistique $(x_1, x_2, \dots, x_n),$ et une
+variable qualitative $y$, ayant $L$ modes dans la série statistique
+$(y_1, y_2, \dots, y_n),$ on utilise généralement une \textbf{table de
+  contingence} $A$ de taille $K \times L.$ Il s'agit de compter, pour chaque
+mode de $x$ et chaque mode de $y$, combien d'individus présentent ces deux
+modes : $A_{ij}$ est le nombre d'invididus pour lesquels $x = i$ et $y = j$.
+
+Si l'on appelle $N = \sum_{k=1}^K \sum_{l=1}^L A_{kl}$ le nombre total
+d'individus, $N_{i.} = \sum_{l=1}^L A_{il}$ le nombre d'individus dans la ligne
+$i$ et $N_{.j} = \sum_{k=1}^K A_{kj}$ le nombre d'individus dans la colonne $j$,
+alors l'absence de liaison entre $x$ et $y$ se traduit par 
+\[
+  \frac{N_{ij}}{N} = \frac{N_{i.}}{N}
+  \frac{N_{.j}}{N} \text{ pour tout } 
+  1 \leq i \leq K, 1 \leq j \leq L.
+\]
+L'écart entre les valeurs prises de part et d'autre de cette égalité se mesure
+grâce à la \textbf{distance du chi2}, définie par 
+\[
+d_{\chi^2} = \sum_{i=1}^K \sum_{j=1}^L  \frac{\left( A_{ij} - 
+    \frac{N_{i.}N_{.j}}{N} \right)^2}{\frac{N_{i.}N_{.j}}{N}}
+\]
+
+
+La table de contingence pour les variables « âge » et « région » des données de
+remboursement est donnée dans le tableau~\ref{tab:remboursement_age_region}. La
+distance du chi2 pour cette table de contingence est de 11.21, ce qui suggère
+une dépendance entre les variables « âge » et « région » dans les données. Nous
+verrons au chapitre TODO comment transformer cette distance en un test
+statistique de dépendance.
+
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}[h]{|c|c|c|c|c|c|c|c|c|c|c|}
+%     \hline
+%     & \multicolumn{10}{|c|}{Région} \\ \hline
+%     {Âge} & 5 & 11 & 24 & 27 & 32 & 44 & 75 & 76 & 84 & 93 \\ \hline
+%     20--39 & 1 & 1 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 \\ \hline
+%     40--59 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 \\ \hline
+%     $>$ 60 & 1 & 1 & 1 & 1 & 2 & 1 & 1 & 2 & 0 & 1 \\ \hline
+%   \end{tabular}
+%   \caption{Table de contingence pour l'âge et la région des données 
+%     du tableau~\ref{tab:remboursement_data}.}
+%   \label{tab:remboursement_age_region}
+% \end{table}
+\begin{table}[h]
+  \centering
+  \begin{tabular}[h]{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    & \multicolumn{13}{|c|}{Région} \\ \hline
+    {Âge} & 5 & 11 & 24 & 27 & 28 & 32 & 44 & 52 & 53 & 75 & 76 & 84 & 93 \\ \hline
+    0--19 & 3 & 5 & 3 & 3 & 3 & 3 & 4 & 3 & 2 & 3 & 3 & 4 & 4 \\ \hline
+    20--39 & 8 & 18 & 4 & 7 & 4 & 9 & 11 & 6 & 4 & 7 & 8 & 10 & 11 \\ \hline
+    40--59 & 11 & 26 & 11 & 13 & 13 & 16 & 15 & 10 & 8 & 12 & 17 & 15 & 19 \\ \hline
+    $>$ 60 & 15 & 31 & 18 & 16 & 21 & 21 & 22 & 12 & 12 & 19 & 24 & 23 & 26 \\ \hline
+  \end{tabular}
+  \caption{Table de contingence pour l'âge et la région des données 
+    de remboursement.}
+  \label{tab:remboursement_age_region}
+\end{table}
+
+La table de contingence peut être visualisée grâce à deux \textbf{diagrammes en
+  barres empilées} : on peut choisir de visualiser, pour chaque mode de $x$, la
+proportion relative des modes de $y$, ou inversement, pour chaque mode de $y$,
+la proportion relative des modes de $x$. Ces deux choix sont illustrés sur les
+figures~\ref{fig:remboursement_age_region_lines}
+et~\ref{fig:remboursement_age_region_cols} respectivement.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/stats/remboursement_age_region_lines}
+  \caption{Diagramme en barres représentant, pour chaque tranche d'âges, la
+    proportion relative d'individus de chaque région dans la table de
+    contingence du tableau~\ref{tab:remboursement_age_region}.}
+  \label{fig:remboursement_age_region_lines}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/stats/remboursement_age_region_cols}
+  \caption{Diagramme en barres représentant, pour chaque région, la proportion
+    relative d'individus de chaque tranche d'âge dans la table de contingence du
+    tableau~\ref{tab:remboursement_age_region}.}
+  \label{fig:remboursement_age_region_cols}
+\end{figure}
+
+TODO Interprétation
+
+% Pour étudier la table de contingence, on pourra en calculer les \textbf{profils
+%   lignes} et les \textbf{profils colonnes} : il s'agit de normaliser les
+% entrées par le nombre d'individus par ligne ou, respectivement, par colonne.
+
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}[h]{|c|c|c|c|c|c|c|c|c|c|c|}
+%     \hline
+%     & \multicolumn{10}{|c|}{Région} \\ \hline
+%     {Âge} & 5 & 11 & 24 & 27 & 32 & 44 & 75 & 76 & 84 & 93 \\ \hline
+%     20--39 & 0.25 & 0.25 & 0 & 0 & 0.50 & 0 & 0 & 0 & 0 & 0 \\ \hline
+%     40--59 & 0 & 0.20 & 0 & 0 & 0.20 & 0.20 & 0 & 0.20 & 0.20 & 0 \\ \hline
+%     $>$ 60 & 0.09 & 0.09 & 0.09 & 0.09 & 0.18 & 0.09 & 0.09 & 0.18 & 0 & 0.09 \\ \hline
+%   \end{tabular}
+%   \caption{Profils lignes (c'est-a-dire par âge) pour la table de contingence 
+%     donnée dans le tableau~\ref{tab:remboursement_age_region}.}
+%   \label{tab:remboursement_age_region_ligne}
+% \end{table}
+
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}[h]{|c|c|c|c|c|c|c|c|c|c|c|}
+%     \hline
+%     & \multicolumn{10}{|c|}{Région} \\ \hline
+%     {Âge} & 5 & 11 & 24 & 27 & 32 & 44 & 75 & 76 & 84 & 93 \\ \hline
+%     20--39 & 0.50 & 0.33 & 0 & 0 & 0.40 & 0    & 0 & 0    & 0 & 0 \\ \hline
+%     40--59 & 0    & 0.33 & 0 & 0 & 0.20 & 0.50 & 0 & 0.33 & 1 & 0 \\ \hline
+%     $>$ 60 & 0.50 & 0.33 & 1 & 1 & 0.40 & 0.50 & 1 & 0.67 & 0 & 1 \\ \hline
+%   \end{tabular}
+%   \caption{Profils colonnes (c'est-a-dire par région) pour la table de contingence 
+%     donnée dans le tableau~\ref{tab:remboursement_age_region}.}
+%   \label{tab:remboursement_age_region_colonne}
+% \end{table}
+
+
+% \begin{itemize}
+% \item cf cours Laure Reboul.
+% \item Utiliser http://iml.univ-mrs.fr/~reboul/enseignement.html pour proposer des exercices ?
+% \end{itemize}
 
 \section{Inférence statistique}
 L'inférence statistique a pour but de tirer des conclusions sur une population
@@ -211,6 +766,25 @@ de s'intéresser :
 
 \subsection{Échantillonnage}
 \label{ref:echantilonnage}
+
+Les données du tableau~\ref{tab:remboursement_data} ont été extraites parmi les
+604 individus constituant la population totale. La \textbf{table des
+  fréquences} des âges dans la population totale est donnée dans le
+tableau~\ref{tab:remboursement_age_freq_total}.
+\begin{table}[h]
+  \centering
+  \begin{tabular}[h]{|l|c|c|c|c|c|} \hline 
+    Tranche d'âge (ans) & 20 -- 39 & 40 -- 59 & $>$ 60 \\ \hline     
+    Fréquence & 19\% & 31\% & 43\% \\ \hline
+  \end{tabular}
+  \caption{Table des fréquences des âges parmi les 604 individus 
+    parmi lesquels ceux du tableau~\ref{tab:remboursement_data} 
+    ont été échantillonnés.}
+  \label{tab:remboursement_age_freq_total}
+\end{table}
+
+
+Ces valeurs sont assez éloignées de celles du tableau~\ref{tab:remboursement_age_freq}.
 
 \subsection{Estimation ponctuelle}
 \begin{itemize}
