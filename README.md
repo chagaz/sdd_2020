@@ -27,29 +27,36 @@ __Modalités d'évaluation__
 * examen sur table (50%)
 
 __Emploi du temps__
-* __22/04 :__ 
-  * __11h-12h30__ : cours — Introduction 
-  * __14h-15h30__ : cours — Notions de statistiques
+* __mercredi 22/04 :__ 
+  * __11h-12h30 :__  cours — Introduction 
+  * __14h-15h30 :__ : cours — Statistique descriptive
 
-* mercredi 29/04 11h-12h30 : cours -- Tests d'hypothèse
-* mercredi 29/04 14h-15h30 : cours -- Estimation de densités
+* __mercredi 29/04 :__
+  * __11h-12h30 :__ cours — Estimation
+  * __14h-15h30 :__ cours — Tests statistiques
 
-* mercredi 6/05 11h-12h30 : PC -- Estimation de densités
-* mercredi 6/05 14h-15h30 : cours -- Réduction de dimension
+* __mercredi 6/05 :__
+  * __11h-12h30 :__ PC — Estimation de densités
+  * __14h-15h30 :__ cours — Réduction de dimension
 
-* mercredi 13/05 11h-12h30 : PC -- Réduction de dimension 
-* mercredi 13/05 14h-15h30 : cours -- Bonnes pratiques 
+* __mercredi 13/05 :__
+  * __11h-12h30 :__ PC — Réduction de dimension 
+  * __14h-15h30 :__ cours — Bonnes pratiques 
 
-* mercredi 20/05 11h-12h30 : PC -- Visualisation
-* mercredi 20/05 14h-15h30 : PC -- Pré-traitement & introduction au mini-projet numérique
+* __mercredi 20/05 :__
+  * __11h-12h30 :__ PC — Visualisation
+  * __14h-15h30 :__ PC — Pré-traitement & introduction au mini-projet numérique
 
-* mercredi 3/06 11h-12h30 : cours -- Introduction à l'apprentissage supervisé
-* mercredi 3/06 14h-15h30 : cours -- Régularisation
+* __mercredi 3/06 :__
+  * __11h-12h30 :__ cours — Introduction à l'apprentissage supervisé
+  * __14h-15h30 :__ cours — Régularisation
 
-* mercredi 10/06 11h-12h30 : PC -- Sélection de modèles 
-* mercredi 10/06 14h-15h30 : PC -- Modèles linéaires pour la classification
+* __mercredi 10/06 :__
+  * __11h-12h30 :__ PC — Sélection de modèles 
+  * __14h-15h30 :__ PC — Modèles linéaires pour la classification
 
-* mercredi 17/06 11h-12h30 : cours -- Modèles d'apprentissage supervisé non-linéaires 
-* mercredi 17/06 14h-15h30 : PC -- mini-projet numérique
+* __mercredi 17/06 :__
+  * __11h-12h30 :__ cours — Modèles d'apprentissage supervisé non-linéaires 
+  * __14h-15h30 :__ PC — mini-projet numérique
 
-* mercredi 1/07 9h-12h : examen écrit.
+* __mercredi 1/07 9h-12h : examen écrit.__
