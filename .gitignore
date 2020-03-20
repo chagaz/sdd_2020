@@ -1,8 +1,11 @@
 *.~
 *.aux
+*.bbl
+*.blg
 *.log
 *.out
 
-
 poly/sdd_2020_poly.pdf
+
+notebooks/.ipynb_checkpoints/
 
