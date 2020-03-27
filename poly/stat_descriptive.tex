@@ -1,262 +1,22 @@
-% \documentclass[a4paper,12pt]{article}
-
-% \usepackage[T1]{fontenc}
-% \usepackage{gentium}
-
-% \usepackage[colorlinks=true,urlcolor=Aubergine,citecolor=MyDarkGrey]{hyperref}
-
-% \usepackage[margin=2cm]{geometry}
-
-% \usepackage{amsmath}
-% \usepackage{amsfonts}
-% \usepackage{amssymb}
-% \usepackage{amsthm}
-% \usepackage{bm}
-% \usepackage{graphicx}
-% \usepackage{multirow}
-% \usepackage{parskip} % adjust skip between paragraphs
-% \usepackage{textcomp}
-% \usepackage{xcolor}
-
-% \usepackage[frenchb]{babel} % pour les caractères français
-% \usepackage[utf8]{inputenc} % pour les caractères français
-% \usepackage[T1]{fontenc} % meilleur rendu de certains caractères spéciaux 
-
-% \usepackage{enumitem}
-% \setlist[itemize]{label=\textendash}
-
-% \begin{document}
-
-
 %-*- coding: iso-latin-1 -*-
-\label{chap:stat}
-\paragraph{Notions :} population, échantillon, estimation, biais, convergence
+\label{chap:stat_descr}
+\paragraph{Notions :} TODO UPDATE population, échantillon, estimation, biais, convergence
 d'un estimateur, variance, covariance, compromis biais-variance.
 
 \paragraph{Objectifs pédagogiques :}
 \begin{itemize}
-\item Définir, évaluer et caractériser un estimateur statistique.
+\item TODO
 \end{itemize}
 
-\section{Qu'est-ce que la statistique ?}
-
-Le terme de « statistique » est dérivé du latin « \textit{status} » (signifiant
-« état »). Historiquement, \textbf{les statistiques} concernent l'étude
-méthodique, par des procédés numériques (inventaires, recensements, etc.) des
-faits sociaux qui définissent un état. Elles sont désormais utilisées dans tous
-les secteurs où l'on dispose de données : sciences sociales mais aussi santé,
-environnement, industrie, économie, recherche scientifique, etc.
-
-Par contraste, \textbf{la statistique} est un ensemble de méthodes des
-mathématiques appliquées permettant de décrire et d'analyser des phénomènes
-dont la nature rend une étude exhaustive de tous leurs facteurs impossible. Ces
-méthodes permettent d'étudier des données, ou observations, consistant en la
-mesure d'une ou plusieurs caractéristiques d'un ensemble de personnes ou objets
-équivalents.
-
-\subsection{Vocabulaire}
-
-L'ensemble de personnes ou d'objets équivalents étudiés est appelé \textbf{la
-  population.} Il peut s'agir d'une population au sens « courant » du terme
-(par exemple, l'ensemble de la population française, ou l'ensemble des
-individus d'une espèce animale sur un territoire) mais aussi plus largement
-d'un ensemble plus générique d'objets que l'on cherche à étudier (par exemple,
-l'ensemble des pièces produites par une chaîne de montage, un ensemble de
-particules en physique, etc.)
-
-Chacun des éléments de la population est appelé \textbf{individu.} 
-
-Les caractérisiques que l'on mesure pour chacun de ces individus sont appelées
-les \textbf{variables} ; les individus pour lesquels ces caractéristiques ont
-été mesurées sont apelées des \textbf{observations}. Un ensemble de $n$
-observations $(x_1, x_2, \dots, x_n)$ d'une variable est appelée \textbf{série
-  statistique.}
-
-Par exemple, si j'étudie les données climatiques pour la station météo de
-Paris-Montsouris en 2019 (cf. table~\ref{tab:meteo_data}), il s'agit d'une
-population de 365 individus. Cette population peut contenir 8 variables :
-températures minimale, maximale et moyenne ; vitesse maximale du vent ;
-ensoleillement ; précipitations totales ; pressions atmosphériques minimale et
-maximale.
-
-\begin{table}
-  \centering
-  \begin{tabular}[h]{|c|c|c|c|c|c|c|c|} \hline
-    T min & T max & T moy & Vent & Ensoleillement & Précipitations & P min & P max \\
-    \textdegree C & \textdegree C & \textdegree C & km/h & min & mm & hPa & hPa \\ \hline
-    7.6 & 9.6 & 8.4 & 22.2 & 0 & 0 & 1034 & 1036.6 \\ \hline
-    5.6 & 7.2 & 6.3 & 24.1 & 0 & 0 & 1037.3 & 1041.3 \\ \hline
-    4.1 & 6.6 & 5.4 & 16.7 & 0 & 0 & 1040.2 & 1041.8 \\ \hline
-    3.1 & 6 & 4.7 & 20.4 & 0 & 0 & 1039.5 & 1041.7 \\ \hline
-    4.2 & 5.9 & 5 & 20.4 & 0 & 0 & 1037.5 & 1039.6 \\ \hline
-    4.3 & 6.8 & 5.6 & 16.7 & 0 & 0 & 1036.5 & 1038 \\ \hline
-    6.8 & 8.6 & 7.4 & 20.4 & 0 & 0.6 & 1030.5 & 1037.2\\ \hline
-    7.4 & 9.7 & 8.5 & 24.1 & 120 & 0 & 1025.9 & 1029.7 \\ \hline
-    4 & 7.7 & 5.2 & 29.6 & 42 & 0.8 & 1024.1 & 1026.4 \\ \hline 
-    2.1 & 5.5 & 4 & 18.5 & 30 & 0 & 1026.6 & 1029.5 \\ \hline
-    4.2 & 8.3 & 6.2 & 14.8 & 0 & 1.2 & 1028.1 & 1030.5 \\ \hline
-    6.7 & 9.1 & 8 & 22.2 & 0 & 0.8 & 1021.7 & 1030.6 \\ \hline
-    8.8 & 11.9 & 10.5 & 31.5 & 30 & 0.8 & 1014 & 1021.1 \\ \hline
-    8.5 & 10.9 & 8.8 & 29.6 & 0 & 0 & 1014 & 1024.8 \\ \hline
-    6.9 & 8.6 & 7.6 & 16.7 & 0 & 0 & 1020.3 & 1025.3 \\ \hline
-    1.9 & 7.8 & 5.2 & 27.8 & 276 & 3 & 1007.9 & 1019.6 \\ \hline
-    4 & 8.5 & 5.4 & 27.8 & 0 & 0 & 1007.5 & 1019.7 \\ \hline
-    0.9 & 6.1 & 2.4 & 18.5 & 342 & 0 & 1017.2 & 1021 \\ \hline
-    -1.7 & 2.8 & 0.3 & 14.8 & 78 & 4 & 1009.7 & 1016.8 \\ \hline
-    1.9 & 3 & 2.5 & 20.4 & 0 & 0.8 & 1010.1 & 1021.8 \\ \hline
-    -2.2 & 3.6 & 0.1 & 13 & 480 & 0 & 1019.2 & 1024.9 \\ \hline
-    -2.4 & 1.7 & -0.1 & 20.4 & 0 & 7.4 & 998.4 & 1018.3 \\ \hline
-    0.6 & 2.1 & 1.3 & 24.1 & 6 & 1 & 995.6 & 1007.4 \\ \hline
-    -0.4 & 2.5 & 1.2 & 20.4 & 0 & 1 & 1008.4 & 1015.5 \\ \hline
-    1.7 & 5.5 & 3.9 & 13 & 0 & 1.2 & 1015.2 & 1018.4 \\ \hline
-    5.5 & 9.6 & 8.4 & 29.6 & 24 & 1.6 & 998.1 & 1016.9 \\ \hline
-    4.4 & 8.2 & 6.4 & 37 & 6 & 4.4 & 989.8 & 1001.4 \\ \hline
-    2.7 & 6.9 & 4.4 & 25.9 & 216 & 0 & 1001.7 & 1011.7 \\ \hline
-    -0.8 & 5.2 & 1.7 & 24.1 & 18 & 19.6 & 989.5 & 1011.7 \\ \hline
-    0.5 & 5.2 & 2.3 & 33.3 & 252 & 0.4 & 990 & 998.9 \\ \hline 
-    -1 & 2.5 & 1.3 & 25.9 & 24 & 1.2 & 983.5 & 998 \\ \hline
-  \end{tabular}
-  \caption{Exemple de 8 variables pour 31 observations (celles du mois de janvier 2019) de la population des données climatiques pour la station météo de Paris-Montsouris.}
-  \label{tab:meteo_data}
-\end{table}
-
-Lorsque la population à étudier est trop grande pour qu'il soit possible
-d'observer chacun de ses individus, on étudie alors une partie seulement de la
-population. Cette partie est appelée \textbf{échantillon}. On parle alors de
-\textbf{sondage}, par opposition à un \textbf{recensement}, qui consiste à
-étudier tous les individus d'une population. Nous parlerons plus en détails de
-la construction d'un échantillon dans la section~\ref{ref:echantilonnage}.
-
-Par exemple, la population des élèves de première année des Mines est
-composée de 125 individus. Si je recueille l'âge, le département de naissance
-et le nombre de frères et s\oe{}urs de 20 de ces élèves, j'aurai mesuré 3 variables
-sur un échantillon de 20 observations. 
-
-On distinguera plusieurs types de variables :
-\begin{itemize}
-\item les \textbf{variables quantitatives} : des caractéristiques numériques
-  qui s'expriment naturellement à l'aide de nombres réels. Ces variables
-  peuvent être \textbf{discrètes} si le nombre de valeurs qu'elles peuvent
-  prendre est fini ou dénombrable (ex : âge, nombre de frères et s\oe{}urs) ou
-  \textbf{continues} (ex : températures, taille, pression atmosphérique)
-\item les \textbf{variables qualitatives} : des caractéristiques qui, bien
-  qu'elles puissent être encodées numériquement (ex : département de
-  naissance), relèvent plutôt de catégories et sur lesquelles les opérations
-  arithmétiques de base (somme, moyenne) n'ont aucun sens. On parle de
-  variables \textbf{nominales} s'il n'y a pas d'ordre total sur l'ensemble de
-  ces catégories (ex : département de naissance) ou \textbf{ordinales} s'il y
-  en a (ex : entièrement d'accord, assez d'accord, pas vraiment d'accord, pas
-  du tout d'accord).
-\end{itemize}
-
-Remarque : seuiller des variables quantitatives permet de les transformer en
-variables qualitatives ordinales. Par exemple, une variable d'âge peut être
-transformée en catégories (< 18, 18 -- 20, 20 -- 35, etc.)
-
-Le tableau~\ref{tab:remboursement_data} montre un exemple d'un échantillon de
-20 individus d'une population de données de remboursements d'un acte biologique
-bien précis : le dosage de l'antigène tumoral 125. Ces données sont issues de
-la base de dépenses de biologie médicale en France mise à disposition par
-l'Assurance
-Maladie\footnote{\url{http://open-data-assurance-maladie.ameli.fr/biologie/index.php}}. La
-population complète, de 604 individus, est disponible dans le fichier
-\texttt{data/OPEN\_BIO\_2018\_7325.csv}.
-
-Chaque individu de cette population (i.e. ligne du tableau) correspond à un
-ensemble de dosages et est décrit par 5 variables : la tranche d'âge des
-patients et patientes ; leur région ; le nombre de dosages ; et enfin les
-montants remboursés et remboursables. Dans ce tableau, l'âge est une variable
-qualitative ordinale ; la région une variable qualitative ; et les nombres et
-montants des variables quantitatives. On pourra choisir de traiter le nombre de
-remboursements comme une variable discrète ou continue.
-
-\begin{table}
-  \centering
-  \begin{tabular}{|r|r|r|r|r|r|} \hline
-    \multirow{2}{*}{Âge} & \multirow{2}{*}{Région} & Nombre & Montants & Montants  \\ 
-    & & d'actes & remboursés & remboursables \\ 
-    ans & & & (EUR) & (EUR) \\\hline 
-    $>$ 60 & 76 & 26 & 377,96 & 402,80\\  \hline
-    $>$ 60 & 75 & 1\,401 & 14\,054,37 & 21\,332,15\\  \hline
-    $>$ 60 & 44 & 5\,299 & 65\,928,93 & 80\,447,00\\  \hline
-    $>$ 60 & 32 & 1\,706 & 25\,137,65 & 26\,032,65\\  \hline
-    $>$ 60 & 32 & 2\,596 & 37\,877,02 & 39\,336,15\\  \hline
-    $>$ 60 & 27 & 14 & 159,85 & 211,35\\  \hline
-    $>$ 60 & 24 & 3\,565 & 50\,770,46 & 54\,076,15\\  \hline
-    $>$ 60 & 11 & 396 & 5\,226,55 & 6\,060,05\\  \hline
-    $>$ 60 & 5 & 260 & 4\,496,91 & 4\,676,40\\  \hline
-    $>$ 60 & 93 & 162 & 2\,303,56 & 2\,466,10\\  \hline
-    $>$ 60 & 76 & 578 & 8\,499,53 & 8\,793,10\\  \hline
-    40-59 & 76 & 13 & 172,26 & 199,80\\  \hline
-    40-59 & 44 & 102 & 1\,204,93 & 1\,557,20\\  \hline
-    40-59 & 11 & 48 & 555,39 & 733,05\\  \hline
-    40-59 & 84 & 14 & 190,21 & 217,85\\  \hline
-    40-59 & 32 & 126 & 1\,350,06 & 1\,912,15\\  \hline
-    20--39 & 32 & 749 & 7\,941,69 & 11\,362,40\\  \hline
-    20--39 & 32 & 24 & 289,35 & 365,25\\  \hline
-    20--39 & 5 & 918 & 9\,704,10 & 16\,550,40\\  \hline
-    20--39 & 11 & 106 & 1\,073,32 & 1\,618,35\\  \hline
-  \end{tabular}
-  \caption{Population de remboursements du dosage de l'antigène 125 dans le sang en 2018, 
-    composée de 20 individus décrits par 5 variables et extraite du fichier \texttt{data/OPEN\_BIO\_2018\_7325.csv}. \\
-    Région : 5 = Régions et Départements d'outre-mer. 
-    11 = Ile-de-France. 
-    24 = Centre-Val de Loire.
-    27 = Bourgogne-Franche-Comté.
-    32 = Hauts-de-France.
-    44 = Grand-Est.
-    75 = Nouvelle-Aquitaine.
-    76 = Occitanie.
-    84 = Auvergne-Rhône-Alpes.
-    93 = Provence-Alpes-Côte d'Azur et Corse.}
-  \label{tab:remboursement_data}
-\end{table}
-
-
-
-\subsection{Types de questions statistiques}
-
-\paragraph{La statistique descriptive:} Aussi appelée \textbf{statistique
-  exploratoire,} elle consiste à caractériser une population par la
-détermination d'un certain nombre de grandeurs qui la décrivent. Son objectif
-est de synthétiser l'information contenue dans un ensemble d'observations et de
-mettre en évidence des propriétés de cet ensemble. Elle permet aussi de
-suggérer des hypothèses relatives à la population dont sont issues les
-observations. Il s'agit principalement de calculer des indicateurs (par exemple
-des moyennes) et de visualiser les données par des graphiques. La visualisation
-peut être enrichie par des techniques de réduction de dimension (voir chapitre
-TODO REF), qui permettent de créer un petit nombre de variables qui résument
-les mesures prises sur les observations, et des techniques de partitionnement,
-ou clustering, qui permettent de réduire la taille d'un échantillon en
-regroupant les individus présentant des caractéristiques homogènes (ce sujet
-sera abordé plus en détail dans TODO nom cours ML avancé. Nous détaillons la
-statistique descriptive dans la section~\ref{sec:stat_descr}.
-
-\paragraph{La statistique inférentielle:} Aussi appellée \textbf{statistique
-  décisionnaire,} ou encore \textbf{inférence statistique,} elle consiste à
-tirer des conclusions sur une population à partir de l'étude d'un échantillon
-de celle-ci. Les données observées sont considérées comme un échantillon d'une
-population. Il s'agit alors d'étendre des propriétés constatées sur
-l'échantillon à la population. L'inférence statistique repose beaucoup sur les
-probabilités : on considèrera les observations comme les réalisations de
-variables aléatoires, ce qui permettra d'approcher les caractéristiques
-probabilistes de ces variables aléatoires à l'aide d'indicateurs calculées sur
-l'échantillon.  Nous détaillons la statistique inférentielle dans la
-section~\ref{sec:inference} ainsi qu'aux chapitres TODO et TODO.
-
-\paragraph{L'apprentissage statistique} TODO
-
-\section{Statistique descriptive}
-\label{sec:stat_descr}
 Le rôle de la statistique descriptive est de caractériser une population par la
 détermination d'un certain nombre de grandeurs qui la décrivent.
 
-\subsection{Statistique descriptive unidimensionelle}
+\section{Statistique descriptive unidimensionelle}
 Il s'agit ici de mettre en évidence les principales caractéristiques d'une
 unique variable statistique $x$ observée sur $n$ individus, à travers la série
 statistique $(x_1, x_2, \dots, x_n).$
 
-\subsubsection{Fréquences}
+\subsection{Fréquences}
 Prenons par exemple, 31 observation de la température minimale (en \textdegree
 C) pour la station météo de Paris-Montsouris, telles que relevées dans la
 première colonne de la table~\ref{tab:meteo_data}. 
@@ -278,7 +38,7 @@ est donnée dans le tableau~\ref{tab:remboursement_age_freq}.
 %     Fréquence & 20\% & 25\% & 55\% \\ \hline
 %   \end{tabular}
 %   \caption{Table des fréquences des âges parmi les 20 individus du tableau~\ref{tab:remboursement_data}.}
-%   \label{tab:remboursement_age_freq_subset}
+%   \label{tab:remboursement_age_freq_set}
 % \end{table}
 \begin{table}[h]
   \centering
@@ -376,7 +136,7 @@ illustré sur la figure~\ref{fig:meteo_tmin_cumul_freq}.
   \label{fig:meteo_tmin_cumul_freq}
 \end{figure}
 
-\subsubsection{Indicateurs numériques}
+\subsection{Indicateurs numériques}
 Enfin, des \textbf{indicateurs numériques} permettent de compléter cette
 description. On distinguera les \textbf{indicateurs de tendance centrale} qui
 indiquent l'ordre de grandeur des valeurs de la série statistique et où ces
@@ -464,7 +224,7 @@ d'en faciliter l'interprétation.
   \label{fig:meteo_tmin_boxplot}
 \end{figure}
 
-\subsection{Statistique descriptive bidimensionelle}
+\section{Statistique descriptive bidimensionelle}
 Il s'agit ici de mettre en évidence une éventuelle \textbf{liaison,}
 c'est-à-dire une variabilité simultanée, entre deux variables statistiques $x$
 et $y$, observées sur $n$ individus, à travers les séries statistiques
@@ -473,7 +233,7 @@ $(x_1, x_2, \dots, x_n)$ et $(y_1, y_2, \dots, y_n).$
 Cette liaison peut être causale ou non. Mettre en évidence une causalité est
 délicat, et dépasse le cadre de ce cours.
 
-\subsubsection{Liaison entre deux variables quantitatives}
+\subsection{Liaison entre deux variables quantitatives}
 
 \paragraph{Nuage de points}
 Pour visualiser la liaison entre deux variables quantitatives, on utilise
@@ -540,7 +300,7 @@ Pearson et nuage de points.
     \begin{subfigure}[t]{0.49\textwidth}
       \centering
       \includegraphics[width=0.8\textwidth]{figures/stats/pearson_0}
-      \caption{r(x, y) = -0.02.}
+      \caption{r(x, y) = -0.03.}
     \end{subfigure} 
 
     \begin{subfigure}[t]{0.49\textwidth}
@@ -748,53 +508,23 @@ TODO Interprétation
 % \item Utiliser http://iml.univ-mrs.fr/~reboul/enseignement.html pour proposer des exercices ?
 % \end{itemize}
 
-\section{Inférence statistique}
-L'inférence statistique a pour but de tirer des conclusions sur une population
-à partir de l'étude d'un échantillon de celle-ci. Pour cela, il est nécessaire
-de s'intéresser :
-\begin{itemize}
-\item aux techniques d'\textbf{échantillonnage} (cf section~\ref{sec:echantilonnage})
-  permettant de construire des échantillons d'une population ;
-\item à la \textbf{modélisation} permettant de supposer un modèle probabiliste
-  sur la population ;
-\item aux techniques d'\textbf{estimation} (cf section~\ref{sec:estimation})
-  permettant de déterminer (approximativement) un paramètre d'une population à
-  partir d'un échantillon de celle-ci ;
-\item aux \textbf{tests d'hypothèse} (cf chapitre TODO) permettant de valider
-  ou d'infirmer des hypothèses sur la population.
-\end{itemize}
 
-\subsection{Échantillonnage}
-\label{ref:echantilonnage}
-
-Les données du tableau~\ref{tab:remboursement_data} ont été extraites parmi les
-604 individus constituant la population totale. La \textbf{table des
-  fréquences} des âges dans la population totale est donnée dans le
-tableau~\ref{tab:remboursement_age_freq_total}.
-\begin{table}[h]
-  \centering
-  \begin{tabular}[h]{|l|c|c|c|c|c|} \hline 
-    Tranche d'âge (ans) & 20 -- 39 & 40 -- 59 & $>$ 60 \\ \hline     
-    Fréquence & 19\% & 31\% & 43\% \\ \hline
-  \end{tabular}
-  \caption{Table des fréquences des âges parmi les 604 individus 
-    parmi lesquels ceux du tableau~\ref{tab:remboursement_data} 
-    ont été échantillonnés.}
-  \label{tab:remboursement_age_freq_total}
-\end{table}
+% Les données du tableau~\ref{tab:remboursement_data} ont été extraites parmi les
+% 604 individus constituant la population totale. La \textbf{table des
+%   fréquences} des âges dans la population totale est donnée dans le
+% tableau~\ref{tab:remboursement_age_freq_total}.
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}[h]{|l|c|c|c|c|c|} \hline 
+%     Tranche d'âge (ans) & 20 -- 39 & 40 -- 59 & $>$ 60 \\ \hline     
+%     Fréquence & 19\% & 31\% & 43\% \\ \hline
+%   \end{tabular}
+%   \caption{Table des fréquences des âges parmi les 604 individus 
+%     parmi lesquels ceux du tableau~\ref{tab:remboursement_data} 
+%     ont été échantillonnés.}
+%   \label{tab:remboursement_age_freq_total}
+% \end{table}
 
 
-Ces valeurs sont assez éloignées de celles du tableau~\ref{tab:remboursement_age_freq}.
+% Ces valeurs sont assez éloignées de celles du tableau~\ref{tab:remboursement_age_freq}.
 
-\subsection{Estimation ponctuelle}
-\begin{itemize}
-\item cf cours Joseph
-\item cf ProbaAgreg p5-13 onwards
-\end{itemize}
-
-\subsection{Estimation par intervalle}
-\begin{itemize}
-\item intervalle de confiance
-\item cf ProbaAgreg p13 onwards
-\end{itemize}
-% \end{document}

@@ -1,3 +1,291 @@
 %-*- coding: iso-latin-1 -*-
-\label{chap:}
+\label{chap:estimation}
+
+\paragraph{Notions :} échantillon aléatoire, estimateur, estimation, biais d'un
+estimateur, convergence d'un estimateur, estimation par maximisation de la
+vraisemblance.
+
+\paragraph{Objectifs pédagogiques :}
+\begin{itemize}
+\item Choisir un estimateur, en particulier en déterminant des propriétés
+  telles que son biais, sa variance, ou sa convergence.
+\item Proposer un estimateur, en particulier par maximisation de la
+  vraisemblance.
+\end{itemize}
+
+
+\section{Inférence statistique}
+Alors que la statistique descriptive se contente de \textit{décrire} une
+population ou un échantillon de celle-ci, l'inférence statistique cherche à
+tirer des conclusions sur une population à partir de l'étude d'un échantillon
+de celle-ci. % Pour cela, il est nécessaire de s'intéresser :
+% \begin{itemize}
+% \item aux techniques d'\textbf{échantillonnage} (cf section~\ref{sec:echantilonnage})
+%   permettant de construire des échantillons d'une population ;
+% \item à la \textbf{modélisation} permettant de supposer un modèle probabiliste
+%   sur la population ;
+% \item aux techniques d'\textbf{estimation} (cf section~\ref{sec:estimation})
+%   permettant de déterminer (approximativement) un paramètre d'une population à
+%   partir d'un échantillon de celle-ci ;
+% \item aux \textbf{tests d'hypothèse} (cf chapitre~\ref{chap:tests}) permettant de valider
+%   ou d'infirmer des hypothèses sur la population.
+% \end{itemize}
+
+\section{Échantillonnage}
+\label{ref:echantilonnage}
+
+Lorsque la population à étudier est trop grande pour qu'il soit possible
+d'observer chacun de ses individus, on étudie alors une partie seulement de la
+population. Cette partie est appelée \textbf{échantillon}. On parle alors de
+\textbf{sondage}, par opposition à un \textbf{recensement}, qui consiste à
+étudier tous les individus d'une population.
+
+\paragraph{Hypothèses de l'échantillonnage}
+Pour tirer parti d'un échantillon, nous allons avoir besoin des hypothèses suivantes :
+\begin{itemize}
+\item La taille de la population est infinie ;
+\item Les variables mesurées sur la population peuvent être considérées comme
+  des variables aléatoires, dont les mesures sont des réalisations. Les lois de
+  probabilité suivies par ces variables peuvent appartenir à une famille connue
+  (e.g. loi gaussienne, loi de Poisson, etc.) ou être totalement
+  inconnues. Dans le premier cas, on parlera de \textbf{statistique
+    inférentielle paramétrique} ; dans le deuxième, de \textbf{statistique
+    inférentielle non-paramétrique}.
+\end{itemize}
+
+\paragraph{Objectifs de la statistique inférentielle}
+La statistique inférentielle a alors pour but d'\textbf{identifier les lois de
+  probabilité des variables aléatoires} en décrivant les variables. Cela peut
+prendre les formes suivantes :
+\begin{itemize}
+\item L'estimation, qui permet d'approcher les paramètres des lois (paramètre
+  $p$ d'une loi de Bernoulli, indice et paramètre d'échelle d'une loi Gamma) ou
+  certaines de leurs caractéristiques (espérance, variance, moments d'ordre
+  supérieur, quartiles, etc.). C'est le sujet de ce chapitres.
+\item Les tests d'hypothèse, qui permettent d'infirmer ou de confirmer des
+  hypothèses faites sur ces lois, leurs paramètres ou leurs
+  caractéristiques. Il s'agit par exemple de décider s'il est plausible que
+  l'espérance d'une variable soit supérieure à une certaine valeur ; ou qu'une
+  variable suive une loi normale. C'est le sujet du prochain chapitre.
+\end{itemize}
+
+\subsection{Échantillonnage aléatoire}
+Dans la suite de ce chapitre, nous allons considérer que l'échantillon obtenu
+par sondage est obtenu par \textbf{échantillonnage aléatoire simple} : on
+prélève des individus dans la population au hasard, sans remise. Chaque
+individu de la population a la même probabilité $1/N$ d'être prélevé, où $N$
+est la taille de la population (on rappelle que $N \rightarrow \infty$) et ils
+sont prélevés indépendamment les uns des autres.
+
+\paragraph{Remarque} D'autres techniques d'échantillonnage sont possibles,
+comme l'échantillonnage aléatoire \textit{stratifié}, dans lequel la population
+est partitionnée en strates selon une caractéristique (par exemple, par tranche
+d'âge), et l'échantillon est obtenu en procédant à un échantillonnage aléatoire
+simple dans chacune des strates, permettant d'obtenir pour chaque strate un
+échantillon de taille proportionnelle à la taille de strate dans la
+population. Ainsi, les individus n'ont pas tous la même probabilité d'être
+tirés : celle-ci dépend de la taille de la strate à laquelle ils appartiennent.
+
+% \begin{encadre}
+  {Deux échantillons $(x_1, x_2, \dots, x_n)$ et
+  $(x^\prime_1, x^\prime_2, \dots, x^\prime_n)$ de tailles identiques $n$ de la
+  même population seront donc différents. On modélise cette variabilité en
+  considérant que chacun des individus $x_i$ ou $x^\prime_i$ est la réalisation
+  d'une même variable aléatoire $X_i$, où $(X_1, X_2, \dots, X_n)$ est un
+  vecteur aléatoire, dont les composantes sont indépendantes et identiquement
+  distribuées. 
+  \begin{itemize}
+  \item $(X_1, X_2, \dots, X_n)$ est appelé \textbf{échantillon aléatoire} ;
+  \item $(x_1, x_2, \dots, x_n)$ et
+    $(x^\prime_1, x^\prime_2, \dots, x^\prime_n)$ sont deux échantillons,
+    c'est-à-dire deux \textit{réalisations} de cet échantillon aléatoire.
+  \end{itemize}}
+%\end{encadre}
+
+Un indicateur statistique de l'échantillon est alors la réalisation d'une
+variable aléatoire fonction de l'échantillon aléatoire.
+
+\begin{exemple} La moyenne d'un échantillon,
+$\bar{x} = \frac1n \sum_{i=1}^n x_i,$ est la réalisation d'une variable
+aléatoire $M_n$ définie par
+\[
+  M_n = \frac1n \sum_{i=1}^n X_i,
+\]
+qui est une fonction de l'échantillon aléatoire $(X_1, X_2, \dots, X_n)$.
+\end{exemple}
+
+\section{Estimation ponctuelle}
+Soit $(\Omega, \Acal, \PP)$ un espace probabilisé, $E$ un espace mesurable, et
+$X$ une variable aléatoire à valeurs dans $E$. En pratique, dans la suite de ce
+chapitre, nous considèrerons des variables aléatoires réelles ($E = \RR$ ou une
+partie de $\RR$ telle que $\RR_+$ ou $\NN$), mais les idées qui y sont
+présentées peuvent être étendues à $\RR^d$ ou à des espaces plus sophistiqués.
+
+Soit $(X_1, X_2, \dots, X_n)$ un échantillon aléatoire. Les $X_i$ sont
+indépendants et identiquement distribuées, de même loi $\PP_X$ que $X.$ Soit
+$(x_1, x_2, \dots, x_n)$ un échantillon, autrement dit une réalisation de cet
+échantillon aléatoire.
+
+Soit $\theta \in \RR$ une quantité déterministe (i.e. il ne s'agit pas d'une
+variable aléatoire), qui dépend uniquement de $\PP_X.$ Le but de l'estimation
+ponctuelle est d'approcher au mieux la valeur de $\theta$. 
+
+\begin{exemple} Si l'on fait l'hypothèse que $X$ suit une loi
+exponentielle (statistique inférentielle paramétrique), on peut chercher à
+estimer le paramètre $\theta$ de cette loi. On peut aussi chercher à estimer
+l'espérance de $\PP_X,$ un de ses moments, un quantile, etc.
+\end{exemple}
+
+\subsection{Définition d'un estimateur}
+On appelle \textbf{estimateur} de $\theta$ une statistique de l'échantillon
+aléatoire $(X_1, X_2, \dots, X_n),$ c'est à dire une variable aléatoire
+fonction de $(X_1, X_2, \dots, X_n) :$ un estimateur $\Theta_n$ de $\theta$
+peut être défini par 
+\[
+  \Theta_n = g(X_1, X_2, \dots, X_n), \qquad g: E \rightarrow \RR.
+\]
+
+Étant donné un échantillon $(x_1, x_2, \dots, x_n)$ de $X$, on appelle
+\textbf{estimation} de $\theta$ la valeur
+\[
+  \hat{\theta}_n = g(x_1, x_2, \dots, x_n) \in \RR,
+\]
+qui est donc une réalisation de $\Theta_n$.
+
+\paragraph{Résumé}
+Étant donné une variable aléatoire réelle $X$ à valeurs dans $E,$ un entier
+$n \in \NN^*$, et une valeur $\theta$ à estimer qui ne dépend que de la loi de
+$X,$
+\begin{itemize}
+\item un échantillon aléatoire $(X_1, X_2, \dots, X_n)$ est un vecteur
+  aléatoire, dont les composantes sont iid de même loi que $X$ ;
+\item un échantillon $(x_1, x_2, \dots, x_n) \in \RR^n$ est une réalisation de
+  ce vecteur aléatoire ;
+\item un estimateur de $\theta$ est une variable aléatoire $\Theta_n$ fonction
+  de $(X_1, X_2, \dots, X_n)$ : \\ $\Theta_n = g(X_1, X_2, \dots, X_n)$, avec $g: E \rightarrow \RR$ ;
+\item une estimation de $\theta$ est une réalisation $\hat{\theta}_n$ de
+  $\Theta_n$ : $\hat{\theta}_n = g(x_1, x_2, \dots, x_n) \in \RR.$
+\end{itemize}
+
+\subsection{Exemple : estimation de la moyenne par la moyenne empirique}
+Considérons maintenant que $X$ est de carré intégrable ($X \in \Lcal^2$),
+d'espérance $m$ et de variance $\sigma^2 > 0$.
+
+La \textbf{moyenne empirique} de $X$ est une variable aléatoire $M_n$, définie
+par
+\[
+  M_n = \frac1n \sum_{i=1}^n X_i.
+\]
+
+$M_n$ est un estimateur de $m$ : étant donné un échantillon
+$(x_1, x_2, \dots, x_n),$ la valeur $\hat{m}_n = \frac1n \sum_{i=1}^n x_i$ est
+une estimation de $m$.
+
+À ce stade, rien ne nous permet de dire que $M_n$ est un \textit{bon}
+estimateur de $m$ ; en effet, nous pourrions aussi définir
+$\frac2n \sum_{i=1}^n X_i$ comme estimateur de la moyenne. Quelles sont les
+\textit{propriétés} de $M_n$ qui nous font préférer poser $M_n$ comme nous
+l'avons fait ? Quelques indices :
+
+\begin{itemize}
+\item $\EE[M_n] = m.$ Nous verrons que l'on dit que $M_n$ est un estimateur
+  \textit{non-biaisé} de $m$ (cf. section~\ref{sec:biais_estimateur}) ;
+\item $\VV[M_n] = \frac{\sigma^2}{n}$ (voir preuve
+  section~\ref{sec:estimation_proofs}) : plus l'échantillon est grand, plus la
+  variance de l'estimateur est faible, autrement dit plus sa réalisation
+  $\hat{m}_n$ sera proche de son espérance $m$. On parle ici de la
+  \textit{précision} de $M_n$ (cf. section~\ref{sec:precision_estimateur}) ;
+\item Par la loi faible des grands nombres, $M_n \cvproba m.$ Nous
+  verrons que l'on dit que $M_n$ est un estimateur \textit{convergent} de $m$
+  (cf. section~\ref{sec:convergence_estimateur}) ;
+\item Par la loi forte des grands nombres, $M_n \cvps m.$ Nous
+  verrons que l'on dit que $M_n$ est un estimateur \textit{fortement convergent} de $m$
+  (cf. section~\ref{sec:convergence_estimateur}.)
+\end{itemize}
+
+
+
+\section{Propriétés d'un estimateur}
+
+\subsection{Biais d'un estimateur}
+\label{sec:biais_estimateur}
+Le \textbf{biais} d'un estimateur $\Theta_n$ de la quantité $\theta$ est défini par 
+\[
+  B(\Theta_n) = \EE[\Theta_n] - \theta.
+\]
+
+$\Theta_n$ est dit \textbf{non-biaisé} si $B(\Theta_n) = 0$, autrement dit si
+son espérance vaut $\theta$.
+
+La figure~\ref{fig:biais_variance} illustre les distributions de 3 estimateurs
+d'une même quantité $\theta$. On suppose ici que ce sont des gaussiennes. Les
+estimateurs $\Theta$ et $\Theta^{\prime\prime}$ sont
+non-biaisés. $\Theta^\prime$ est biaisé : son espérance vaut
+$\theta + \epsilon$.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/estimation/biais_variance}
+  \caption{Distribution de 3 estimateurs de $\theta$.}
+  \label{fig:biais_variance}
+\end{figure}
+
+\subsection{Exemple : Estimation non-biaisée de la variance}
+
+
+
+\subsection{Précision d'un estimateur}
+\label{sec:precision_estimateur}
+
+\begin{itemize}
+\item estimateur non biaisé : variance
+\item exemple moyenne empirique
+\item erreur quadratique moyenne  
+\item exemple moyenne empirique
+\end{itemize}
+
+
+
+\subsection{Convergence d'un estimateur}
+\label{sec:convergence_estimateur}
+
+On utilise en anglais le terme de ``\textit{consistent}'', ce qui conduit les
+francophones à parfois parler d'estimateur consistant plutôt que convergent.
+
+\section{Estimation par maximum de vraisemblance}
+
+
+\section{Preuves}
+\label{sec:estimation_proofs}
+\paragraph{Variance de la moyenne empirique} Soit $X$ une variable aléatoire
+réelle de carré intégrable, d'espérance $m$ et de variance $\sigma^2$. Soient
+$X_1, X_2, \dots, X_n$ indépendantes et identiquement distribuées, de même loi
+que $X$. 
+
+Par définition de la variance, $\sigma^2 = \EE[X^2] - \EE[X]^2$ donc
+$\EE[X^2] = \sigma^2 + m^2$.
+
+Posons $M_n = \frac1n \sum_{i=1}^n X_i.$
+\begin{align*}
+  \VV[M_n] &= \EE[M_n^2] - \EE[M_n]^2 
+   = \EE\left[\left(\frac1n \sum_{i=1}^n X_i\right)^2\right] - m^2 \\
+  & = \frac1{n^2} \EE\left[ \sum_{i=1}^n X_i \sum_{j=1}^n X_j\right] - m^2 \\
+  & = \frac1{n^2} \EE\left[ \sum_{i=1}^n \left(X_i^2 + \sum_{j \neq i }^n X_i X_j \right) \right] - m^2 \\
+  & = \frac1{n} \left(\EE[X^2] + \sum_{j \neq i }^n \EE[X]^2 \right) - m^2 \\
+  & = \frac1{n} \left(\sigma^2 + m^2 + (n-1) m^2  \right) - m^2 = \frac{\sigma^2}{n}.
+\end{align*}
+
+
+
+\begin{plusloin}
+\item Plus la variance d'un estimateur est faible, plus cet estimateur
+  peut-être considéré comme précis. Un estimateur est dit \textit{efficace}
+  s'il est non-biaisé et que sa variance tend vers la \textit{borne de
+    Cramér-Rao} quand la taille de l'échantillon tend vers l'infini. La borne
+  de Cramér-Rao est une borne inférieure de la variance d'un estimateur,
+  obtenue en prenant un point de vue de théorie de l'information sur
+  l'estimation statistique.
+\end{plusloin}
+
+
 

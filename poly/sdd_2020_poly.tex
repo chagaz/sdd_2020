@@ -1,5 +1,5 @@
 %-*- coding: iso-latin-1 -*-
-\documentclass[french,11pt]{book}
+\documentclass[french,11pt, openany]{book}
 \usepackage{babel}
 
 % Font
@@ -42,6 +42,7 @@
 \newcommand{\Ecal}{\mathcal{E}}
 \newcommand{\Gcal}{\mathcal{G}}
 \newcommand{\Kcal}{\mathcal{K}}
+\newcommand{\Lcal}{\mathcal{L}}
 \newcommand{\Ncal}{\mathcal{N}}
 \newcommand{\Pcal}{\mathcal{P}}
 \newcommand{\Qcal}{\mathcal{Q}}
@@ -57,7 +58,6 @@
 \newcommand{\OO}{\mathcal{O}}
 \newcommand{\TT}{\mathcal{T}}
 \newcommand{\UU}{\mathcal{U}}
-\newcommand{\VV}{\mathcal{V}}
 \newcommand{\XX}{\mathcal{X}}
 \newcommand{\YY}{\mathcal{Y}}
 \newcommand{\ZZ}{\mathcal{Z}}
@@ -67,6 +67,7 @@
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\RR}{\mathbb{R}}
+\newcommand{\VV}{\mathbb{V}}
 
 
 % Vectors
@@ -103,10 +104,12 @@
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
+\newcommand{\cvproba}{\stackrel{\PP}{\longrightarrow}}
+\newcommand{\cvps}{\stackrel{\text{p.s.}}{\longrightarrow}}
+
 \newcommand{\lzeronorm}[1]{\left|\left|#1\right|\right|_0}
 \newcommand{\lonenorm}[1]{\left|\left|#1\right|\right|_1}
 \newcommand{\ltwonorm}[1]{\left|\left|#1\right|\right|_2}
-
 
 % TODO
 \usepackage[dvipsnames]{xcolor}
@@ -118,6 +121,75 @@
 % iso-latin-1
 
 % aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+
+
+\makeatletter
+%%% Permet de pemettre \`a coup s\^ur la d\'efinition (que l'environnement soit d\'ej\`a d\'efini ou pas)
+%
+\def\forcedefenv#1{%%
+\global\expandafter\let\csname#1\endcsname\relax
+\global\expandafter\let\csname end#1\endcsname\relax
+}
+
+% Environnement "plusloin".
+%
+\forcedefenv{plusloin}
+\newenvironment{plusloin}[1][Pour aller plus loin]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad#1\quad\hrulefill}\par\nobreak
+\@afterheading
+\def\labelitemi{\textbullet}
+\begin{itemize}
+\setlength{\itemsep}{1ex}}{\end{itemize}\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin  Pour aller plus loin\quad\hrulefill
+}\nobreak\bigbreak}
+
+% Environnement "attention". 
+%
+\forcedefenv{attention}
+\newenvironment{attention}{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Attention\quad\hrulefill}\par\nobreak\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin  Attention\quad\hrulefill
+}\nobreak\bigbreak}
+
+% Environnement "encadre". 
+%
+\forcedefenv{encadre}
+% \newenvironment{encadre}[1][\relax]{\par\medbreak
+% \noindent\makebox[\textwidth]{\hrulefill\quad Encadr\'e\quad\hrulefill}\par\nobreak
+% \ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+% \@afterheading
+% }{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin  Encadr\'e\quad\hrulefill}\nobreak\bigbreak}
+\newenvironment{encadre}[1]{\par\medbreak
+  \noindent\fbox{\parbox{\linewidth}{
+\ifx#1\relax\else{\strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+%\@afterheading
+    }}}%{\par\nobreak\par\noindent\nobreak\bigbreak}
+
+
+% Environnement "exemple". 
+%
+\forcedefenv{exemple}
+% \newenvironment{exemple}[1][Exemple~:]{\par\medbreak\textit{#1}~\ignorespaces}{\par\bigbreak}
+\newenvironment{exemple}[1][\relax]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Exemple\quad\hrulefill}\par\nobreak
+\ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill}\nobreak\bigbreak}
+
+% Environnement "remarque". 
+%
+% \forcedefenv{remarque}
+% \newenvironment{remarque}[1][Remarque~:]{\par\medbreak\textbf{#1}~\ignorespaces}{\par\bigbreak}
+\forcedefenv{remarque}
+\newenvironment{remarque}[1][\relax]{\par\medbreak
+\noindent\makebox[\textwidth]{\hrulefill\quad Remarque\quad\hrulefill}\par\nobreak
+\ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+\@afterheading 
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin Encart\quad\hrulefill
+}\nobreak\bigbreak}
+\makeatother
+
+
 
 
 \begin{document}
@@ -163,15 +235,15 @@
 \chapter{Intro}
 \input{intro}
 
-\part{Estimation statistique}
-\chapter{Notions de statistique}
-\input{stats}
+\part{Notions de statistique}
+\chapter{Statistique descriptive}
+%\input{stat_descriptive}
+
+\chapter{Estimation}
+\input{estimation}
 
 \chapter{Tests d'hypothèse}
 %\input{tests}
-
-\chapter{Estimation de densité}
-%\input{estimation}
 
 \part{Analyse exploratoire}
 \chapter{Réduction de dimension}
@@ -182,10 +254,10 @@
 
 \part{Apprentissage supervisé}
 \chapter{Minimisation du risque empirique}
-\input{erm}
+%\input{erm}
 
 \chapter{Généralisation}
-\input{generalisation}
+%\input{generalisation}
 
 \chapter{Modèles non-linéaires}
 %\input{nonlin}
