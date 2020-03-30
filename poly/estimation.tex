@@ -4,7 +4,6 @@
 \paragraph{Notions :} échantillon aléatoire, estimateur, estimation, biais d'un
 estimateur, convergence d'un estimateur, estimation par maximisation de la
 vraisemblance.
-
 \paragraph{Objectifs pédagogiques :}
 \begin{itemize}
 \item Choisir un estimateur, en particulier en déterminant des propriétés
@@ -40,8 +39,8 @@ population. Cette partie est appelée \textbf{échantillon}. On parle alors de
 \textbf{sondage}, par opposition à un \textbf{recensement}, qui consiste à
 étudier tous les individus d'une population.
 
-\paragraph{Hypothèses de l'échantillonnage}
-Pour tirer parti d'un échantillon, nous allons avoir besoin des hypothèses suivantes :
+\paragraph{Hypothèses de l'échantillonnage} Pour tirer parti d'un échantillon, nous allons avoir besoin des hypothèses suivantes :
+
 \begin{itemize}
 \item La taille de la population est infinie ;
 \item Les variables mesurées sur la population peuvent être considérées comme
@@ -53,10 +52,11 @@ Pour tirer parti d'un échantillon, nous allons avoir besoin des hypothèses suiva
     inférentielle non-paramétrique}.
 \end{itemize}
 
-\paragraph{Objectifs de la statistique inférentielle}
-La statistique inférentielle a alors pour but d'\textbf{identifier les lois de
-  probabilité des variables aléatoires} en décrivant les variables. Cela peut
-prendre les formes suivantes :
+\paragraph{Objectifs de la statistique inférentielle} La statistique
+inférentielle a alors pour but d'\textbf{identifier les lois de probabilité des
+  variables aléatoires} en décrivant les variables. Cela peut prendre les
+formes suivantes :
+
 \begin{itemize}
 \item L'estimation, qui permet d'approcher les paramètres des lois (paramètre
   $p$ d'une loi de Bernoulli, indice et paramètre d'échelle d'une loi Gamma) ou
@@ -188,9 +188,9 @@ $\frac2n \sum_{i=1}^n X_i$ comme estimateur de la moyenne. Quelles sont les
 l'avons fait ? Quelques indices :
 
 \begin{itemize}
-\item $\EE[M_n] = m.$ Nous verrons que l'on dit que $M_n$ est un estimateur
+\item $\EE(M_n) = m.$ Nous verrons que l'on dit que $M_n$ est un estimateur
   \textit{non-biaisé} de $m$ (cf. section~\ref{sec:biais_estimateur}) ;
-\item $\VV[M_n] = \frac{\sigma^2}{n}$ (voir preuve
+\item $\VV(M_n) = \frac{\sigma^2}{n}$ (voir calcul
   section~\ref{sec:estimation_proofs}) : plus l'échantillon est grand, plus la
   variance de l'estimateur est faible, autrement dit plus sa réalisation
   $\hat{m}_n$ sera proche de son espérance $m$. On parle ici de la
@@ -200,7 +200,7 @@ l'avons fait ? Quelques indices :
   (cf. section~\ref{sec:convergence_estimateur}) ;
 \item Par la loi forte des grands nombres, $M_n \cvps m.$ Nous
   verrons que l'on dit que $M_n$ est un estimateur \textit{fortement convergent} de $m$
-  (cf. section~\ref{sec:convergence_estimateur}.)
+  (cf. section~\ref{sec:convergence_estimateur}).
 \end{itemize}
 
 
@@ -211,10 +211,10 @@ l'avons fait ? Quelques indices :
 \label{sec:biais_estimateur}
 Le \textbf{biais} d'un estimateur $\Theta_n$ de la quantité $\theta$ est défini par 
 \[
-  B(\Theta_n) = \EE[\Theta_n] - \theta.
+  \text{B}(\Theta_n) = \EE(\Theta_n) - \theta.
 \]
 
-$\Theta_n$ est dit \textbf{non-biaisé} si $B(\Theta_n) = 0$, autrement dit si
+$\Theta_n$ est dit \textbf{non-biaisé} si $\text{B}(\Theta_n) = 0$, autrement dit si
 son espérance vaut $\theta$.
 
 La figure~\ref{fig:biais_variance} illustre les distributions de 3 estimateurs
@@ -231,20 +231,56 @@ $\theta + \epsilon$.
 \end{figure}
 
 \subsection{Exemple : Estimation non-biaisée de la variance}
+Considérons $X$ est de carré intégrable ($X \in \Lcal^2$), d'espérance $m$ et
+de variance $\sigma^2$.
 
+La \textbf{variance empirique} de $X$ est une variable aléatoire $S_n$, définie
+par
+\[
+  S_n = \frac1n \sum_{i=1}^n (X_i - M_n)^2,
+\]
+où $M_n$ est la moyenne empirique telle que définie précédemment.
 
+$S_n$ est un estimateur de $\sigma^2.$
+
+Cependant, son biais vaut $\frac{n-1}{n} \sigma^2$  (voir calcul
+  section~\ref{sec:estimation_proofs}).
+
+On propose donc la \textbf{variance empirique corrigée,} définie par 
+\[
+  S^*_n = \frac1{n-1} \sum_{i=1}^n (X_i - M_n)^2,
+\]
+et qui est non-biaisé.
+
+Néanmoins, le biais de la variance empirique tend vers 0 lorsque $n$ tend vers
+$+\infty$. On parle alors d'un estimateur \textbf{asymptotiquement non-biaisé.}
 
 \subsection{Précision d'un estimateur}
 \label{sec:precision_estimateur}
 
-\begin{itemize}
-\item estimateur non biaisé : variance
-\item exemple moyenne empirique
-\item erreur quadratique moyenne  
-\item exemple moyenne empirique
-\end{itemize}
+Reprenons la figure~\ref{fig:biais_variance}. Les deux estimateurs $\Theta$ et
+$\Theta^{\prime\prime}$ sont non-biaisés. Cependant, $\Theta^{\prime\prime}$ a
+une plus grande variance ; une de ses réalisation a une probabilité plus grande
+que pour $\Theta$ d'être éloignée de $\theta$. 
 
+C'est cette notion que l'on utilise pour mesurer la précision d'un
+estimateur. Dans le cas d'un estimateur non-biaisée, sa précision est définie
+comme sa variance.
 
+Dans le cas général d'un estimateur biaisé, il faut aussi prendre en compte le
+biais. Un estimateur biaisé mais avec une faible variance pourra donner de
+meilleures estimations (c'est-à-dire plus proches de la vraie valeur) qu'un
+estimateur moins biaisé mais avec une plus grande variance.
+
+On utilise pour quantifier la précision d'un estimateur ponctuel générique son
+\textbf{erreur quadratique moyenne,} définie comme
+\[
+  \text{EQM}(\Theta_n) = \VV(\Theta_n) + \text{B}(\Theta_n)^2.
+\]
+
+\paragraph{Compromis biais-variance} Il est tout à fait possible qu'un
+estimateur biaisé ait une meilleure précision qu'un estimateur non-biaisé, si
+ce dernier a une plus grande variance !
 
 \subsection{Convergence d'un estimateur}
 \label{sec:convergence_estimateur}
@@ -255,25 +291,57 @@ francophones à parfois parler d'estimateur consistant plutôt que convergent.
 \section{Estimation par maximum de vraisemblance}
 
 
-\section{Preuves}
+\section{Calculs}
 \label{sec:estimation_proofs}
 \paragraph{Variance de la moyenne empirique} Soit $X$ une variable aléatoire
 réelle de carré intégrable, d'espérance $m$ et de variance $\sigma^2$. Soient
 $X_1, X_2, \dots, X_n$ indépendantes et identiquement distribuées, de même loi
 que $X$. 
 
-Par définition de la variance, $\sigma^2 = \EE[X^2] - \EE[X]^2$ donc
-$\EE[X^2] = \sigma^2 + m^2$.
+Par définition de la variance, $\sigma^2 = \EE(X^2) - \EE(X)^2$ donc
+$\EE(X^2) = \sigma^2 + m^2$.
 
 Posons $M_n = \frac1n \sum_{i=1}^n X_i.$
 \begin{align*}
-  \VV[M_n] &= \EE[M_n^2] - \EE[M_n]^2 
-   = \EE\left[\left(\frac1n \sum_{i=1}^n X_i\right)^2\right] - m^2 \\
-  & = \frac1{n^2} \EE\left[ \sum_{i=1}^n X_i \sum_{j=1}^n X_j\right] - m^2 \\
-  & = \frac1{n^2} \EE\left[ \sum_{i=1}^n \left(X_i^2 + \sum_{j \neq i }^n X_i X_j \right) \right] - m^2 \\
-  & = \frac1{n} \left(\EE[X^2] + \sum_{j \neq i }^n \EE[X]^2 \right) - m^2 \\
+  \VV(M_n) &= \EE(M_n^2) - \EE(M_n)^2 
+   = \EE\left(\left(\frac1n \sum_{i=1}^n X_i\right)^2\right) - m^2 \\
+  & = \frac1{n^2} \EE\left( \sum_{i=1}^n X_i \sum_{j=1}^n X_j\right) - m^2 \\
+  & = \frac1{n^2} \EE\left( \sum_{i=1}^n \left(X_i^2 + \sum_{j \neq i }^n X_i X_j \right) \right) - m^2 \\
+  & = \frac1{n} \left(\EE(X^2) + \sum_{j \neq i }^n \EE(X)^2 \right) - m^2 \\
   & = \frac1{n} \left(\sigma^2 + m^2 + (n-1) m^2  \right) - m^2 = \frac{\sigma^2}{n}.
 \end{align*}
+
+\paragraph{Biais de la variance empirique} Soit $X$ une variable aléatoire
+réelle de carré intégrable, d'espérance $m$ et de variance $\sigma^2$. Soient
+$X_1, X_2, \dots, X_n$ indépendantes et identiquement distribuées, de même loi
+que $X$. 
+
+Posons $M_n = \frac1n \sum_{i=1}^n X_i$ et $S_n = \frac1n \sum_{i=1}^n (X_i - M_n)^2.$ Alors
+\begin{align*}
+  \EE(S_n) = \frac1n \sum_{i=1}^n \EE((X_i - M_n)^2)  & =  
+    \frac1n \sum_{i=1}^n \left( \EE(X_i^2) +  \EE(M_n^2) - 2 \EE(X_i M_n) \right)  \\
+  & = \EE(X^2) + \EE(M_n^2) - \frac2n \sum_{i=1}^n \EE(X_i M_n).
+\end{align*}
+Nous avons montré lors du calcul de la variance de la moyenne empirique que
+$\EE(X_i^2) = \sigma^2 + m^2$ et que $\EE(M_n^2) = m^2 + \frac{\sigma^2}{n}.$
+
+De plus, par linéarité de l'espérance,
+\[
+  \EE(M_n^2) = \EE\left( \left(\frac1n \sum_{i=1}^n X_i \right) M_n \right) = \frac1n \sum_{i=1}^n \EE(X_i M_n),
+\]
+et donc 
+\[
+  \EE(M_n^2) - \frac2n \sum_{i=1}^n \EE(X_i M_n) = - \EE(M_n^2).
+\]
+
+On obtient ainsi 
+\[
+  \EE(S_n) = (\sigma^2 + m^2) - (m^2 + \frac{\sigma^2}{n}) = \frac{n-1}{n} \sigma^2.
+\]
+La variance empirique est donc biaisée et son biais vaut 
+\[
+  \text{B}(S_n) = \EE(S_n) - \sigma^2 = - \frac1n \sigma^2.
+\]
 
 
 
@@ -286,6 +354,10 @@ Posons $M_n = \frac1n \sum_{i=1}^n X_i.$
   obtenue en prenant un point de vue de théorie de l'information sur
   l'estimation statistique.
 \end{plusloin}
+
+
+
+
 
 
 
