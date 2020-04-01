@@ -6,6 +6,7 @@ estimateur, convergence d'un estimateur, estimation par maximisation de la
 vraisemblance.
 \paragraph{Objectifs pédagogiques :}
 \begin{itemize}
+\setlength{\itemsep}{3pt}
 \item Choisir un estimateur, en particulier en déterminant des propriétés
   telles que son biais, sa variance, ou sa convergence.
 \item Proposer un estimateur, en particulier par maximisation de la
@@ -39,8 +40,8 @@ population. Cette partie est appelée \textbf{échantillon}. On parle alors de
 \textbf{sondage}, par opposition à un \textbf{recensement}, qui consiste à
 étudier tous les individus d'une population.
 
-\paragraph{Hypothèses de l'échantillonnage} Pour tirer parti d'un échantillon, nous allons avoir besoin des hypothèses suivantes :
-
+\paragraph{Hypothèses de l'échantillonnage} Pour tirer parti d'un échantillon,
+nous allons avoir besoin des hypothèses suivantes :
 \begin{itemize}
 \item La taille de la population est infinie ;
 \item Les variables mesurées sur la population peuvent être considérées comme
@@ -56,7 +57,6 @@ population. Cette partie est appelée \textbf{échantillon}. On parle alors de
 inférentielle a alors pour but d'\textbf{identifier les lois de probabilité des
   variables aléatoires} en décrivant les variables. Cela peut prendre les
 formes suivantes :
-
 \begin{itemize}
 \item L'estimation, qui permet d'approcher les paramètres des lois (paramètre
   $p$ d'une loi de Bernoulli, indice et paramètre d'échelle d'une loi Gamma) ou
@@ -77,14 +77,23 @@ individu de la population a la même probabilité $1/N$ d'être prélevé, où $N$
 est la taille de la population (on rappelle que $N \rightarrow \infty$) et ils
 sont prélevés indépendamment les uns des autres.
 
-\paragraph{Remarque} D'autres techniques d'échantillonnage sont possibles,
-comme l'échantillonnage aléatoire \textit{stratifié}, dans lequel la population
-est partitionnée en strates selon une caractéristique (par exemple, par tranche
-d'âge), et l'échantillon est obtenu en procédant à un échantillonnage aléatoire
-simple dans chacune des strates, permettant d'obtenir pour chaque strate un
-échantillon de taille proportionnelle à la taille de strate dans la
-population. Ainsi, les individus n'ont pas tous la même probabilité d'être
-tirés : celle-ci dépend de la taille de la strate à laquelle ils appartiennent.
+\paragraph{Autres techniques d'échantillonnage} D'autres techniques
+d'échantillonnage sont possibles, comme l'échantillonnage aléatoire
+\textit{stratifié}, dans lequel la population est partitionnée en strates selon
+une caractéristique (par exemple, par tranche d'âge), et l'échantillon est
+obtenu en procédant à un échantillonnage aléatoire simple dans chacune des
+strates, permettant d'obtenir pour chaque strate un échantillon de taille
+proportionnelle à la taille de strate dans la population. Ainsi, les individus
+n'ont pas tous la même probabilité d'être tirés : celle-ci dépend de la taille
+de la strate à laquelle ils appartiennent.
+
+\paragraph{Représentativité} Avant de tirer des conclusions d'un échantillon
+aléatoire, il est important de s'assurer que celui-ci est représentatif de la
+population étudiée. Ainsi, les premières études cliniques démontrant
+l'efficacité de l'aspirine pour réduire le risque d'infarctus du myocarde chez
+les patients à risque portaient sur des échantillons composées principalement
+d'hommes ; ce n'est que bien plus tard que la communauté médicale a réalisé que
+ce n'est pas le cas chez les femmes.
 
 % \begin{encadre}
   {Deux échantillons $(x_1, x_2, \dots, x_n)$ et
@@ -169,13 +178,14 @@ $X,$
 
 \subsection{Exemple : estimation de la moyenne par la moyenne empirique}
 Considérons maintenant que $X$ est de carré intégrable ($X \in \Lcal^2$),
-d'espérance $m$ et de variance $\sigma^2 > 0$.
+d'espérance $m$ et de variance $\sigma^2$.
 
 La \textbf{moyenne empirique} de $X$ est une variable aléatoire $M_n$, définie
 par
-\[
+\begin{equation}
   M_n = \frac1n \sum_{i=1}^n X_i.
-\]
+  \label{eq:moyenne_empirique}
+\end{equation}
 
 $M_n$ est un estimateur de $m$ : étant donné un échantillon
 $(x_1, x_2, \dots, x_n),$ la valeur $\hat{m}_n = \frac1n \sum_{i=1}^n x_i$ est
@@ -191,7 +201,7 @@ l'avons fait ? Quelques indices :
 \item $\EE(M_n) = m.$ Nous verrons que l'on dit que $M_n$ est un estimateur
   \textit{non-biaisé} de $m$ (cf. section~\ref{sec:biais_estimateur}) ;
 \item $\VV(M_n) = \frac{\sigma^2}{n}$ (voir calcul
-  section~\ref{sec:estimation_proofs}) : plus l'échantillon est grand, plus la
+  section~\ref{sec:variance_moyenne_empirique}) : plus l'échantillon est grand, plus la
   variance de l'estimateur est faible, autrement dit plus sa réalisation
   $\hat{m}_n$ sera proche de son espérance $m$. On parle ici de la
   \textit{précision} de $M_n$ (cf. section~\ref{sec:precision_estimateur}) ;
@@ -206,14 +216,19 @@ l'avons fait ? Quelques indices :
 
 
 \section{Propriétés d'un estimateur}
+Nous considérdons toujours dans cette section un échantillon aléatoire
+$(X_1, X_2, \dots, X_n)$ de taille $n \in \NN^*$ d'une variable aléatoire
+réelle $X$ de loi $\PP_X$, et un estimateur $\Theta_n$ de $\theta$.
+
+Notre but ici est maintenant de caractériser $\Theta_n$.
 
 \subsection{Biais d'un estimateur}
 \label{sec:biais_estimateur}
 Le \textbf{biais} d'un estimateur $\Theta_n$ de la quantité $\theta$ est défini par 
-\[
+\begin{equation}
   \text{B}(\Theta_n) = \EE(\Theta_n) - \theta.
-\]
-
+  \label{eq:biais}
+\end{equation}
 $\Theta_n$ est dit \textbf{non-biaisé} si $\text{B}(\Theta_n) = 0$, autrement dit si
 son espérance vaut $\theta$.
 
@@ -236,20 +251,22 @@ de variance $\sigma^2$.
 
 La \textbf{variance empirique} de $X$ est une variable aléatoire $S_n$, définie
 par
-\[
+\begin{equation}
   S_n = \frac1n \sum_{i=1}^n (X_i - M_n)^2,
-\]
+  \label{eq:variance_empirique}
+\end{equation}
 où $M_n$ est la moyenne empirique telle que définie précédemment.
 
 $S_n$ est un estimateur de $\sigma^2.$
 
 Cependant, son biais vaut $\frac{n-1}{n} \sigma^2$  (voir calcul
-  section~\ref{sec:estimation_proofs}).
+  section~\ref{sec:biais_variance_empirique}).
 
 On propose donc la \textbf{variance empirique corrigée,} définie par 
-\[
+\begin{equation}
   S^*_n = \frac1{n-1} \sum_{i=1}^n (X_i - M_n)^2,
-\]
+  \label{eq:variance_empirique_corrigee}
+\end{equation}
 et qui est non-biaisé.
 
 Néanmoins, le biais de la variance empirique tend vers 0 lorsque $n$ tend vers
@@ -274,9 +291,10 @@ estimateur moins biaisé mais avec une plus grande variance.
 
 On utilise pour quantifier la précision d'un estimateur ponctuel générique son
 \textbf{erreur quadratique moyenne,} définie comme
-\[
-  \text{EQM}(\Theta_n) = \VV(\Theta_n) + \text{B}(\Theta_n)^2.
-\]
+\begin{equation}
+  \text{EQM}(\Theta_n) = \EE((\Theta_n - \theta)^2) = \VV(\Theta_n) + \text{B}(\Theta_n)^2.
+\label{eq:eqm}
+\end{equation}
 
 \paragraph{Compromis biais-variance} Il est tout à fait possible qu'un
 estimateur biaisé ait une meilleure précision qu'un estimateur non-biaisé, si
@@ -285,15 +303,312 @@ ce dernier a une plus grande variance !
 \subsection{Convergence d'un estimateur}
 \label{sec:convergence_estimateur}
 
-On utilise en anglais le terme de ``\textit{consistent}'', ce qui conduit les
-francophones à parfois parler d'estimateur consistant plutôt que convergent.
+On souhaite aussi d'un estimateur qu'il permette de s'approcher d'autant mieux
+de la quantité qu'il estime que le nombre d'échantillons est grand. On parle
+ici de la convergence d'une série de variables aléatoires réelles,
+$(\Theta_n)_{n \in \NN^*},$ vers une valeur réelle, $\theta$ ; il s'agit donc
+en fait de considérer la convergence vers une variable aléatoire $\Theta$ qui
+vaut $\theta$ presque partout.
+
+On dit que l'estimateur $\Theta_n$ de $\theta$ \textbf{est convergent} si 
+\begin{equation}
+  \label{eq:estimateur_convergent}
+  (\Theta_n)_{n \in \NN^*} \cvproba \theta.
+\end{equation}
+
+Si de plus $(\Theta_n)_{n \in \NN^*} \cvps \theta,$ on dit alors que $\Theta_n$
+est un estimateur \textbf{fortement convergent} de $\theta$.
+
+\paragraph{Propriété} Un estimateur sans biais et de variance
+asymptomatiquement nulle est convergent.
+
+La preuve en a été faite dans l'exercice « Convergence vers une constante » de
+Probabilité III. Pour rappe, posons $\Theta_n$ un estimateur non biaisé
+et de variance asymptotiquement nulle de $\theta \in \RR$.  Par définition,
+$\EE(\Theta_n) = \theta$ et $\VV(\Theta_n) \cvn 0$, $\Theta_n$ est donc
+d'espérance et de variance bornées et ainsi dans $\Lcal^2.$ Enfin,
+\[
+  \EE((\Theta_n - \theta)^2) = \VV(\Theta_n) + (\EE(\Theta_n) - \theta)^2,
+\]
+et donc $\EE((\Theta_n - \theta)^2) \cvn 0,$ ce qui signifie que
+$\Theta_n \cvltwo \theta$ et donc $\Theta_n \cvproba \theta. \hfill \square$
+
+\paragraph{Remarque} On utilise en anglais le terme de ``\textit{consistent}'',
+ce qui conduit les francophones à parfois parler d'estimateur consistant plutôt
+que convergent.
+
+\subsection{Exercice (estimation de la moyenne)}
+\label{sec:exo_proprietes}
+Nous cherchons à déterminer le poids moyen des bébés à la naissance en
+France. Pour cela, nous disposons d'un échantillon $(x_1, x_2, \dots, x_n)$ de
+$n$ mesures obtenues dans plusieurs maternités à travers le pays.
+
+Nous supposons que cet échantillon est une réalisation d'un échantillon
+$(X_1, X_2, \dots, X_n)$ de variables aléatoire réelles indépendantes et
+identiquement distribuées, d'espérance $m$ et de variance $\sigma^2$.
+
+On propose deux estimateurs de $m$ : 
+\[
+  M_n = \frac1n \sum_{i=1}^n X_i \text{ et } Z_n = \frac12 (X_n + X_{n-1}).
+\]
+
+Montrer que $M_n$ et $Z_n$ sont sans biais. Lequel choisir pour approcher $m$ ?
+
+(Solution : section~\ref{sec:sol_proprietes}.)
 
 \section{Estimation par maximum de vraisemblance}
+Nous considérdons toujours dans cette section un échantillon aléatoire
+$(X_1, X_2, \dots, X_n)$ de taille $n \in \NN^*$ d'une variable aléatoire
+réelle $X$, et une quantité $\theta \in \Scal \subseteq \RR$ à estimer. Nous
+notons $\PP_X$ la loi de $X$.
+
+Nous venons de voir comment caractériser un estimateur $\Theta_n$ afin de
+choisir le meilleur estimateur parmi plusieurs. Mais comment proposer un
+estimateur de $\theta$ ?
+
+Supposons que $(x_1, x_2, \dots, x_n)$ est une réalisation de
+$(X_1, X_2, \dots, X_n)$. La technique que nous allons voir consiste à
+maximiser la vraisemblance de l'échantillon, autrement dit la probabilité
+d'observer cet échantillon étant donnée la valeur estimée de $\theta$.
+
+\begin{exemple}
+  Nous nous intéressons à la réussite d'élèves au baccalauréat en
+  \^Ile-de-France, et disposons d'observations issues de plusieurs lycées de la
+  région.
+
+  Nous modélisons l'observation \og réussite \fg~ou \og échec \fg~comme la
+  réalisation d'une variable aléatoire $X$, de domaine
+  $E = \{0, 1\}$ ($0$ correspondant à \og échec \fg~et $1$ à \og réussite
+  \fg), et suivant une loi de probabilité $\PP_X$.  Un choix classique pour
+  cette loi de probabilité est d'utiliser une loi de Bernoulli de paramètre $p$
+  : 
+  \[
+    \PP_X(X=x) = p^x (1-p)^{1-x}.
+  \] 
+  Nos observations constituent un échantillon
+  $(x_1, x_2, \dots, x_n)$, qui est une réalisation de l'échantillon aléatoire
+  $(X_1, X_2, \dots, X_n)$ de composantes indépendantes et identiquement
+  distribuées de même loi que $X$.
+
+  Nous cherchons à estimer $p$ à partir de cet échantillon. 
+
+  Supposons que notre échantillon contient $n=500$ élèves, dont $b=450$ ont
+  eu le bac.
+
+  La valeur $p=50\%$ est peu vraisemblable ; la valeur $p=90\%$ l'est beaucoup
+  plus. C'est cette notion que nous allons formaliser par la suite.
+\end{exemple}
+
+On appelle \textbf{vraisemblance} de l'échantillon 
+$(x_1, x_2, \dots, x_n)$ la fonction de $\theta$ définie comme :
+\[
+  L(x_1, x_2, \dots, x_n; \theta) = \PP_X(X_1=x_1, X_2=x_2,
+  \dots, X_n=x_n|\theta) = \prod_{i=1}^n \PP_X(X_i=x_i|\theta),
+\]
+cette dernière égalité étant dûe à l'indépendance des éléments de l'échantillon
+aléatoire.
+
+On appelle alors \textbf{estimation par maximum de vraisemblance} ({\it maximum
+  likelihood estimate} ou {\it MLE} en anglais) de $\theta$ une valeur 
+$\thetamle$ qui maximise la vraisemblance, autrement dit la probabilité
+d'observer l'échantillon $(x_1, x_2, \dots, x_n)$ étant donné $\theta$:
+\begin{equation}
+  \label{eq:mle_estimator}
+  \thetamle \in \argmax_{\thetahat \in \Scal} \prod_{i=1}^n \PP_X(X_i=x_i|\thetahat).
+\end{equation}
+
+\textbf{Un estimateur par maximum de vraisemblance} de $\theta$ est une
+variable aléatoire réelle $\Thetamle$ dont la valeur quand
+$X_1=x_1, X_2=x_2, \dots, X_n=x_n$ est donnée par $\thetamle$.
+
+Pour simplifier les calculs, on choisira souvent de maximiser non pas
+directement la vraisemblance mais son logarithme :
+\begin{equation}
+  \label{eq:lmle_estimator} 
+  \thetamle \in \argmax_{\thetahat \in \Scal}\sum_{i=1}^n \log \PP_X(X_i=x_i|\thetahat).
+\end{equation}
+
+\begin{exemple}
+  Reprenons notre exemple de réussite au baccalauréat.
+  
+  L'estimation par maximum de vraisemblance de $p$ est
+  \begin{align*}
+    \hat p_{\text{MLE}} & = \argmax_{p \in [0, 1]} \sum_{i=1}^n \log \PP_X(X_i = x_i|p)
+                          = \argmax_{p \in [0, 1]} \sum_{i=1}^n \log 
+                          \left( p^{x_i} (1-p)^{1-x_i}  \right) \\
+                        & = \argmax_{p \in [0, 1]} \sum_{i=1}^n x_i \log p + 
+                          \left( n - \sum_{i=1}^n x_i \right) \log (1-p).
+  \end{align*}
+  La fonction
+  $L: p \mapsto \sum_{i=1}^n x_i \log p + \left( n - \sum_{i=1}^n x_i \right)
+  \log (1-p)$
+  est concave, nous pouvons donc la maximiser en annulant sa dérivée :
+  \begin{equation*}
+    \frac{\partial L}{\partial p} = \sum_{i=1}^n x_i \frac{1}{p} - 
+    \left( n - \sum_{i=1}^n x_i \right) \frac{1}{1-p},
+  \end{equation*}
+  ce qui nous donne
+  \begin{equation*}
+    (1 - \hat p_{\text{MLE}}) \sum_{i=1}^n x_i - \hat p_{\text{MLE}} \left( n - 
+      \sum_{i=1}^n x_i \right) = 0
+  \end{equation*}
+  et donc
+  \begin{equation}
+    \label{eq:mle_bernoulli}
+    \hat p_{\text{MLE}} = \frac{1}{n} \sum_{i=1}^n x_i = \frac{b}{n}.
+  \end{equation}
+  
+  L'estimateur par maximum de vraisemblance de $p$ est ainsi tout simplement la
+  moyenne empirique de l'échantillon. Dans notre exemple, $p=450/500=90\%.$
+\end{exemple}
 
 
-\section{Calculs}
-\label{sec:estimation_proofs}
-\paragraph{Variance de la moyenne empirique} Soit $X$ une variable aléatoire
+\paragraph{Propriété} L'estimateur par maximum de vraisemblance est convergent.
+
+
+\section{Estimation de Bayes}
+Supposons que plutôt que de ne pas connaître du tout la valeur du paramètre
+$\theta$, nous ayons une bonne idée des valeurs qu'il peut prendre. Cette
+information peut être très utile, surtout quand le nombre d'observations est
+faible. 
+
+Pour l'utiliser, nous allons utiliser une variable aléatoire $\Theta$, dont la
+loi $\PP_{\Theta}$ est la \textbf{distribution a priori}, c'est-à-dire définie
+avant d'avoir observé un échantillon, des valeurs de $\theta$.
+
+Il va maintenant s'agir d'utiliser la loi de Bayes pour exprimer la
+\textbf{distribution a posteriori} de $\Theta$ :
+\begin{equation}
+  \PP(\Theta | X_1, X_2, \dots, X_n) = \frac{\PP(X_1, X_2, \dots, X_n | \Theta) \PP(\Theta) }{ \PP(X_1, X_2, \dots, X_n)}.
+\label{eq:bayes_estimateur}
+\end{equation}
+
+La distribution a posteriori de $\Theta$, $\PP(\Theta | X_1, X_2, \dots, X_n)$,
+s'exprime en fonction de sa distribution a priori $\PP(\Theta),$ de la
+vraisemblance $\PP(X_1, X_2, \dots, X_n|\Theta),$ et de la probabilité
+marginale de l'échantillon $(X_1, X_2, \dots, X_n),$
+$\PP(X_1, X_2, \dots, X_n).$ 
+
+En d'autres termes, les observations permettent d'ajuster la distribution a
+priori de $\Theta$ en sa distribution a posteriori. Cette idée est au c\oe{}ur
+de \textbf{l'inférence bayésienne.}
+
+Là où l'estimation par maximum de vraisemblance cherche à maximiser la
+vraisemblance, l'estimation de Bayes cherche à minimiser l'erreur
+postérieure. La formulation est générique ; on peut imaginer utiliser plusieurs
+définitions de cette erreur.
+
+Une des définitions les plus fréquentes, qui est celle que nous
+utiliserons par la suite, consite à considérer comme fonction d'erreur l'erreur
+quadratique moyenne (définie section~\ref{sec:precision_estimateur}).
+
+
+L'\textbf{estimation de Bayes pour l'erreur quadratique moyenne} de $\theta$
+est alors définie par
+\begin{equation}
+  \label{eq:bayes_estimator}
+  \thetabayes \in \argmin_{\thetahat \in \Scal} \EE((\Theta - \thetahat)^2),
+\end{equation}
+cette espérance étant prise sur les distributions jointes de $\Theta$ et de
+$(X_1, X_2, \dots, X_n)$.
+
+\paragraph{Propriété} L'estimation de Bayes pour l'erreur quadratique moyenne
+est l'espérance de la distribution postérieure de $\Theta$ : 
+\begin{equation}
+  \label{eq:bayes_estimator2}
+  \thetabayes  = \EE(\Theta|X_1 = x_1, X_2=x_2, \dots, X_n=x_n).
+\end{equation}
+
+En effet, posons $\thetahat \in \Scal.$ Alors
+\begin{equation*}
+  \EE((\Theta - \thetahat)^2) = (\EE(\Theta) - \thetahat)^2 + 
+  \EE(\Theta^2) - \EE(\Theta)^2.
+\end{equation*}
+Comme ni $\EE(\Theta^2)$ ni $\EE(\Theta)^2$ ne dépendent de $\thetahat,$
+$\thetabayes$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\thetabayes = 
+\EE(\Theta) - \EE(\Theta|(X_1, X_2, \dots, X_n)). \hfill \square$.
+
+\begin{exemple}
+  Reprenons notre exemple de taux de réussite au baccalauréat.
+
+  Nous supposons maintenant que $p$ est une réalisation d'une variable
+  aléatoire $\Theta$ qui suit une loi bêta de paramètres $(\alpha, \beta).$ Quelques
+  détails sur cette loi sont rappelées à la section~\ref{sec:loi_beta}.
+
+  Pour calculer l'estimateur de Bayes de $p$, il nous faut connaître la loi
+  $\PP(\Theta|X_1=x_1, X_2=x_2, \dots, X_n=x_n).$
+  
+  La loi de Bayes, combinée à l'hypothèse d'indépendance et de distribution
+  identique des $X_i$, nous permet d'écrire
+  \begin{align*}
+    \PP(\Theta=p|X_1, X_2, \dots, X_n) & = \frac{\PP(X_1, X_2, \dots, X_n|p) \PP(p)}{\PP(X_1, X_2, \dots, X_n)} \\
+                     & = \frac{1}{\PP(X_1, X_2, \dots, X_n) B(\alpha, \beta)} 
+                       \prod_{i=1}^{n} p^{x_i} (1-p)^{1-x_i}  p^{\alpha-1}
+                       (1-p)^{\beta-1} \\
+                     & = \frac{1}{\PP(X_1, X_2, \dots, X_n) B(\alpha, \beta)} 
+                       p^{b + \alpha - 1} (1-p)^{n - b + \beta - 1}.  
+  \end{align*}
+  
+  On reconnaît ici la densité d'une nouvelle loi bêta.  Ainsi
+  $\Theta|X_1, X_2, \dots, X_n$ suit une loi bêta de paramètres $(b + \alpha)$ et
+  $(n - b + \beta).$
+
+  L'estimation de Bayes de $p$ est ainsi
+  \begin{equation*}
+    p_{\text{Bayes}} = \EE(\Theta|X_1=x_1, X_2=x_2, \dots, X_n=x_n) = \frac{(b + \alpha)}{
+      (b + \alpha) + (n - b + \beta)}
+    = \frac{b + \alpha}{n + \alpha + \beta}.
+  \end{equation*}
+  Cette première égalité est obtenue d'après la formule donnant l'espérance
+  d'une loi bêta (cf section~\ref{sec:loi_beta}).
+
+  \textbf{Remarque importante}
+  On peut réécrire cette estimation sous la forme
+  \begin{equation*}
+    p_{\text{Bayes}} = \frac{\alpha + \beta}{n + \alpha + \beta} \EE[\Theta] + 
+    \frac{n}{n + \alpha + \beta} p_{\text{MLE}}.
+  \end{equation*}
+  Ainsi, l'estimation de Bayes du paramètre $p$ est une combinaison linéaire de
+  l'espérance de sa distribution a priori et de son estimation par maximum de
+  vraisemblance.
+
+  De plus, le coefficient multiplicatif de l'espérance a priori décroît en
+  fonction de la taille $n$ de l'échantillon, tandis que le coefficient
+  multiplicatif de l'estimation par maximum de vraisemblance croît en fonction
+  de $n$. Ainsi, plus l'échantillon est grand, plus l'estimateur de Bayes fait
+  confiance aux données, et s'éloigne de l'espérance a priori du paramètre,
+  dont on est plus proche avec un petit échantillon.
+
+  La figure~\ref{fig:bayes_estimate} illustre cet exemple.
+
+  \textbf{Remarque} Le choix d'une loi bêta ne s'est pas fait au hasard. On
+  retrouve ici les lois conjuguées présentées en exercice de Probabilités
+  IV. En inférence bayésienne, on dit qu'une loi a priori et une loi a
+  posteriori sont conjuguées lorsqu'elles appartiennent à la même famille. En
+  particulier, la loi bêta est conjuguée à elle-même pour une vraisemblance de
+  Bernoulli.
+\end{exemple}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{figures/estimation/bayes_estimate}
+  \caption{Loi a priori et a posteriori pour le paramètre $p$ dans l'exemple du
+    taux de réussite au baccalauréat. Sans voir de données, $p=0.80$,
+    c'est-à-dire l'espérance de sa loi a priori (croix bleue). En utilisant
+    uniquement l'échantillon, $p=0.90$, c'est-à-dire son estimation par maximum
+    de vraisemblance (triangle vert). L'estimation de Bayes (rond orange) est
+    intermédiaire.}
+  \label{fig:bayes_estimate}
+\end{figure}
+
+
+
+
+\section{Annexe}
+\subsection{Variance de la moyenne empirique} 
+\label{sec:variance_moyenne_empirique}
+
+Soit $X$ une variable aléatoire
 réelle de carré intégrable, d'espérance $m$ et de variance $\sigma^2$. Soient
 $X_1, X_2, \dots, X_n$ indépendantes et identiquement distribuées, de même loi
 que $X$. 
@@ -311,7 +626,9 @@ Posons $M_n = \frac1n \sum_{i=1}^n X_i.$
   & = \frac1{n} \left(\sigma^2 + m^2 + (n-1) m^2  \right) - m^2 = \frac{\sigma^2}{n}.
 \end{align*}
 
-\paragraph{Biais de la variance empirique} Soit $X$ une variable aléatoire
+\subsection{Biais de la variance empirique} 
+\label{sec:biais_variance_empirique}
+Soit $X$ une variable aléatoire
 réelle de carré intégrable, d'espérance $m$ et de variance $\sigma^2$. Soient
 $X_1, X_2, \dots, X_n$ indépendantes et identiquement distribuées, de même loi
 que $X$. 
@@ -343,16 +660,59 @@ La variance empirique est donc biaisée et son biais vaut
   \text{B}(S_n) = \EE(S_n) - \sigma^2 = - \frac1n \sigma^2.
 \]
 
+\subsection{Solution de l'exercice~\ref{sec:exo_proprietes}}
+\label{sec:sol_proprietes}
+La démonstration pour la moyenne empirique $M_n$ a été faite plus haut.
+
+En ce qui concerne $Z_n$, 
+\[
+  \EE(Z_n) = \frac12 (\EE(X_n) + \EE(X_{n-1})) = m.
+\]
+
+Nous avons assez naturellement envie d'utiliser $M_n$, qui utilise toutes les
+observations, plutôt que $Z_n$, qui n'en utilise que deux.
+
+Pour nous en convaincre, nous pouvons comparer les variances de $M_n$ et
+$Z_n$. La variance de la moyenne empirique est $\VV(M_n) = \frac{\sigma^2}{n}$
+(voir plus haut). La variance de $Z_n$, elle, vaut
+\[
+  \VV(Z_n) = \frac14 \left( \VV(X_n) + \VV(X_{n-1}) \right) = \frac{\sigma^2}{2},
+\]
+la première égalité étant obtenue par indépendance de $X_n$ et $X_{n-1}$.
+
+$Z_n$ est ainsi un estimateur bien moins précis que $M_n$ dès que $n>2.$
+
+
+\subsection{Loi Beta}
+\label{sec:loi_beta}
+La densité de probabilité de la {\it loi bêta} de paramètres
+$\alpha, \beta > 0$, définie sur $0 \leq u \leq 1$, est donnée par :
+\begin{equation}
+  \label{eq:beta_distribution}
+  f_{\alpha, \beta} (u) = \frac{u^{\alpha -1} (1-u)^{\beta-1}}{B(\alpha, \beta)}     
+\end{equation}
+où
+$B(\alpha, \beta) = \frac{\Gamma(\alpha) \Gamma(\beta)}{\Gamma(\alpha+\beta)}$
+et $\Gamma$ est la fonction gamma. L'espérance de cette loi est
+$\frac{\alpha}{\alpha + \beta}$.
+
 
 
 \begin{plusloin}
+\item Un exercice sur la fonction de répartition empirique vous a été proposé
+  dans le poly de Probabilité III.
+\item On peut construire un estimateur par la \textit{méthode des moments}, qui
+  consiste à faire coincider les moments théoriques de $\PP_X$ (qui dépendent
+  donc de $\theta$) avec les moments empiriques de l'échantillon. La loi des
+  grands nombres justifie en effet d'approcher la moyenne par la moyenne
+  empirique. Cette méthode est généralement moins précise que le maximum de
+  vraisemblance.
 \item Plus la variance d'un estimateur est faible, plus cet estimateur
-  peut-être considéré comme précis. Un estimateur est dit \textit{efficace}
-  s'il est non-biaisé et que sa variance tend vers la \textit{borne de
-    Cramér-Rao} quand la taille de l'échantillon tend vers l'infini. La borne
-  de Cramér-Rao est une borne inférieure de la variance d'un estimateur,
-  obtenue en prenant un point de vue de théorie de l'information sur
-  l'estimation statistique.
+  peut-être considéré comme précis. La \textit{borne de Cramér-Rao} est une
+  borne inférieure de cette variance pour un estimateur sans biais, en se
+  basant sur l'information de Fisher. On dit qu'un estimateur est
+  \textit{efficace} s'il est non-biaisé et que sa variance tend vers sa borne
+  de Cramér-Rao.
 \end{plusloin}
 
 

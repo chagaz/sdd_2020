@@ -1,15 +1,32 @@
 %-*- coding: iso-latin-1 -*-
 \label{chap:stat_descr}
-\paragraph{Notions :} TODO UPDATE population, échantillon, estimation, biais, convergence
-d'un estimateur, variance, covariance, compromis biais-variance.
+\paragraph{Notions :} individu, population, fréquences, indicateurs de tendance
+centrale, indicateurs de liaison, table de contingence.
 
-\paragraph{Objectifs pédagogiques :}
-\begin{itemize}
-\item TODO
-\end{itemize}
+\paragraph{Objectif pédagogique :}
+Caractériser une variable statistique, ou la relation entre deux variables
+statistiques, à travers des représentations graphiques et le calcul
+d'indicateurs numériques.\\
 
 Le rôle de la statistique descriptive est de caractériser une population par la
-détermination d'un certain nombre de grandeurs qui la décrivent.
+détermination d'un certain nombre de grandeurs qui la décrivent. Ce chapitre
+présente quelques unes des visualisations et des indicateurs numériques les
+plus fréquemments utilisés pour décrire une unique variable statistique, ou la
+relation entre deux variables statistiques.
+
+Il s'agit ici uniquement de \textit{décrire} les données. La statistique
+descriptive ne nous permet pas de faire de l'\textit{inférerence}, c'est-à-dire
+de tirer des conclusions sur ces données. Elle nous permet par contre de faire
+des hypothèses, comme par exemple :
+\begin{itemize}
+\item Telle variable semble suivre une distribution uniforme sur un intervalle ;
+\item Telle variable semble dépendre de telle autre ;
+\item Telle variable semble prendre une valeur plus élevée dans un segment de
+  la population que dans un autre.
+\end{itemize}
+
+En découvrant les exemples de ce chapitre, demandez-vous quelles hypothèses les
+valeurs d'indicateurs et les visualisations graphiques vous suggèrent.
 
 \section{Statistique descriptive unidimensionelle}
 Il s'agit ici de mettre en évidence les principales caractéristiques d'une
@@ -96,6 +113,13 @@ donnée dans le tableau~\ref{tab:meteo_tmin_freq}.
 
 Cette table des fréquences peut directement être traduite en
 \textbf{histogramme,} comme illustré sur la figure~\ref{fig:meteo_tmin_hist}.
+
+Utiliser des fréquences plutôt que des comptes permet de comparer des
+échantillons de taille différente. De plus, la distribution des fréquences
+d'une série statistique de la variable $x$, représentée visuellement par un
+histogramme, peut être considéré comme une approximation de la distribution de
+la probabilité de cette variable dans la population.
+
 \begin{figure}[h]
   \centering
   \includegraphics[width=.5\textwidth]{figures/stats/meteo_tmin_hist}
@@ -103,11 +127,7 @@ Cette table des fréquences peut directement être traduite en
     tableau~\ref{tab:meteo_data}.}
   \label{fig:meteo_tmin_hist}
 \end{figure}
-Utiliser des fréquences plutôt que des comptes permet de comparer des
-échantillons de taille différente. De plus, la distribution des fréquences
-d'une série statistique de la variable $x$, représentée visuellement par un
-histogramme, peut être considéré comme une approximation de la distribution de
-la probabilité de cette variable dans la population.
+
 
 \paragraph{Fréquences cumulées} 
 On peut aussi choisir de représenter plutôt les \textbf{fréquences cumulées} :
@@ -171,8 +191,9 @@ Pour notre température minimale,
   \[ s^{*2}(x_1, x_2, \dots, x_n) = \frac1{n-1} \sum_{i=1}^n (x_i - \bar
     x)^2,\]
   La variance d'échantillonage est d'autant plus proche de la variance que le
-  nombre d'observations est grand. Nous verrons dans la section TODO qu'il
-  s'agit d'un estimateur \textbf{non-biaisé} de la variance de la population.
+  nombre d'observations est grand. Nous verrons dans la
+  section~\ref{sec:biais_estimateur} qu'il s'agit d'un estimateur
+  \textbf{non-biaisé} de la variance de la population.
 \item l'\textbf{écart-type} qui est la racine carrée de la variance, 
 \item le \textbf{coefficient de variation} 
   \[ \text{CV}(x_1, x_2, \dots, x_n) = \frac{s^2(x_1, x_2, \dots, x_n)}{\bar
@@ -233,6 +254,17 @@ $(x_1, x_2, \dots, x_n)$ et $(y_1, y_2, \dots, y_n).$
 Cette liaison peut être causale ou non. Mettre en évidence une causalité est
 délicat, et dépasse le cadre de ce cours.
 
+Comprendre la liaison entre deux variables nous permet de comprendre 
+\begin{itemize}
+\item Si une variable peut dépendre d'une autre : la température minimale
+  dépend-elle de l'ensoleillement ?
+\item Si une variable peut permettre de prédire une autre : la température
+  minimale permet-elle de prédire la température maximale ?
+\item Si une variable peut être remplacée par une autre : ai-je besoin de
+  prendre en compte et la température minimale et la température maximale, ou
+  la température moyenne suffit-elle ?
+\end{itemize}
+
 \subsection{Liaison entre deux variables quantitatives}
 
 \paragraph{Nuage de points}
@@ -251,18 +283,18 @@ figure~\ref{fig:meteo_tmin_vent} :
   \centering
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
-    \includegraphics[width=.8\textwidth]{figures/stats/meteo_tmin_tmax}
-    \caption{Nuage de points des températures maximales vs minimales du
-      tableau~\ref{tab:meteo_data}.}
+    \includegraphics[width=.7\textwidth]{figures/stats/meteo_tmin_tmax}
+    \caption{Températures maximales vs minimales.}
     \label{fig:meteo_tmin_tmax}
   \end{subfigure} \hfill
   \begin{subfigure}[t]{0.49\textwidth}
     \centering
-    \includegraphics[width=.8\textwidth]{figures/stats/meteo_tmin_vent}
-    \caption{Nuage de points du vent vs les températures minimales du
-      tableau~\ref{tab:meteo_data}.}
+    \includegraphics[width=.7\textwidth]{figures/stats/meteo_tmin_vent}
+    \caption{Vent vs températures minimales.}
     \label{fig:meteo_tmin_vent}
   \end{subfigure}
+  \caption{Nuages de points pour des paires de variables du
+    tableau~\ref{tab:meteo_data}.}
 \end{figure}
 
 
@@ -285,32 +317,31 @@ l'information mutuelle (hors cadre de ce cours), permettent de mesurer des
 liaisons \textit{non-linéaires}.
 
 Pour les données du tableau~\ref{tab:meteo_data}, la covariance entre la
-température minimale et la température maximale vaut 7.69 ; leur corrélation de
-Pearson vaut 0.91. La corrélation de Pearson entre vent et température minimale
-vaut 0.28. La figure~\ref{fig:pearson} illustre le rapport entre corrélation de
+température minimale et la température maximale vaut 7,69 ; leur corrélation de
+Pearson vaut 0,91. La corrélation de Pearson entre vent et température minimale
+vaut 0,28. La figure~\ref{fig:pearson} illustre le rapport entre corrélation de
 Pearson et nuage de points.
 
 \begin{figure}[h]
   \centering
-    \begin{subfigure}[t]{0.49\textwidth}
+    \begin{subfigure}[t]{0.24\textwidth}
       \centering
-      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_3}
+      \includegraphics[width=\textwidth]{figures/stats/pearson_3}
       \caption{r(x, y) = -1.00.}
     \end{subfigure} \hfill
-    \begin{subfigure}[t]{0.49\textwidth}
+    \begin{subfigure}[t]{0.24\textwidth}
       \centering
-      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_0}
-      \caption{r(x, y) = -0.03.}
-    \end{subfigure} 
-
-    \begin{subfigure}[t]{0.49\textwidth}
-      \centering
-      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_2}
-      \caption{r(x, y) = 0.52.}
+      \includegraphics[width=\textwidth]{figures/stats/pearson_0}
+      \caption{r(x, y) = 0.03.}
     \end{subfigure} \hfill
-    \begin{subfigure}[t]{0.49\textwidth}
+    \begin{subfigure}[t]{0.24\textwidth}
       \centering
-      \includegraphics[width=0.8\textwidth]{figures/stats/pearson_1}
+      \includegraphics[width=\textwidth]{figures/stats/pearson_2}
+      \caption{r(x, y) = 0.53.}
+    \end{subfigure} \hfill
+    \begin{subfigure}[t]{0.24\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{figures/stats/pearson_1}
       \caption{r(x, y) = 1.00.}
     \end{subfigure} \hfill
   \caption{Nuages de points entre deux variables simulées et leur corrélation de Pearson.}
@@ -403,12 +434,11 @@ d_{\chi^2} = \sum_{i=1}^K \sum_{j=1}^L  \frac{\left( A_{ij} -
     \frac{N_{i.}N_{.j}}{N} \right)^2}{\frac{N_{i.}N_{.j}}{N}}
 \]
 
-
 La table de contingence pour les variables « âge » et « région » des données de
 remboursement est donnée dans le tableau~\ref{tab:remboursement_age_region}. La
 distance du chi2 pour cette table de contingence est de 11.21, ce qui suggère
 une dépendance entre les variables « âge » et « région » dans les données. Nous
-verrons au chapitre TODO comment transformer cette distance en un test
+verrons au chapitre~\ref{chap:tests} comment transformer cette distance en un test
 statistique de dépendance.
 
 % \begin{table}[h]
@@ -450,7 +480,7 @@ et~\ref{fig:remboursement_age_region_cols} respectivement.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.9\textwidth]{figures/stats/remboursement_age_region_lines}
+  \includegraphics[width=\textwidth]{figures/stats/remboursement_age_region_lines}
   \caption{Diagramme en barres représentant, pour chaque tranche d'âges, la
     proportion relative d'individus de chaque région dans la table de
     contingence du tableau~\ref{tab:remboursement_age_region}.}
@@ -459,14 +489,12 @@ et~\ref{fig:remboursement_age_region_cols} respectivement.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.9\textwidth]{figures/stats/remboursement_age_region_cols}
+  \includegraphics[width=\textwidth]{figures/stats/remboursement_age_region_cols}
   \caption{Diagramme en barres représentant, pour chaque région, la proportion
     relative d'individus de chaque tranche d'âge dans la table de contingence du
     tableau~\ref{tab:remboursement_age_region}.}
   \label{fig:remboursement_age_region_cols}
 \end{figure}
-
-TODO Interprétation
 
 % Pour étudier la table de contingence, on pourra en calculer les \textbf{profils
 %   lignes} et les \textbf{profils colonnes} : il s'agit de normaliser les

@@ -2,31 +2,29 @@
 \documentclass[french,11pt,openany]{book}
 \usepackage{babel}
 
-% Font
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+% Fonts
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{gentium}
 
-\usepackage[tmargin=2cm,bmargin=2cm,lmargin=3cm,footnotesep=1cm]{geometry}
 
-% Vertical spaces
-\parskip=1ex\relax % space between paragraphs (incl. blank lines)
-\usepackage{enumitem}
-\setlist[itemize]{itemsep=0pt,topsep=0pt}
-%\setitemize{itemsep=1pt} % space between items
+% TODO
+\usepackage[dvipsnames]{xcolor}
+\newcommand{\todo}[1]{{\color{BrickRed}{TODO~#1}}}
+\newcommand{\rewrite}[1]{{\color{RoyalBlue}{#1}}}
 
 \usepackage{multirow}
 
 \usepackage[sectionbib]{natbib}
 %\newcommand{\mycite}[1]{\cite{#1}\footnote{\printbibliography}}
 
-\let\cleardoublepage\clearpage
-
-
-% % Math symbols
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{bm}
+%\let\cleardoublepage\clearpage
 
 % Side-by-side figures
 \usepackage{subcaption}
@@ -39,6 +37,44 @@
 \usepackage{graphicx}
 
 \usepackage[colorlinks=true,allcolors=black]{hyperref}
+
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=3cm,footnotesep=1cm]{geometry}
+
+% Vertical spaces
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=0pt,topsep=0pt}
+\setitemize{itemsep=1pt} % space between items
+
+\usepackage{titlesec}
+\titlespacing{\paragraph}{%
+  0pt}{%              left margin
+  0.5\baselineskip}{% space before (vertical)
+  1em}%               space after (horizontal)
+
+\titlespacing*{\section}{0pt}{10pt}{0pt}
+
+\titleclass{\part}{top}
+\titleformat{\part}[display]
+  {\normalfont\huge\bfseries}{\centering\partname\ \thepart}{5pt}{\Huge\centering}
+\titlespacing*{\part}{0pt}{50pt}{40pt}
+
+\titleclass{\chapter}{straight}
+\titlespacing*{\chapter}{0pt}{50pt}{30pt}
+\titleformat{\chapter}%[display]
+  {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{15pt}{\huge}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% SYMBOLS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % Math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
 
 % Math symbols
 \newcommand{\Acal}{\mathcal{A}}
@@ -103,32 +139,26 @@
 \makeatother
 
 \newcommand{\thetamle}{{\hat \theta_{\text{MLE}}}}
+\newcommand{\Thetamle}{\Theta_n^{\text{MLE}}}
 \newcommand{\thetabayes}{{\hat \theta_{\text{Bayes}}}}
 \newcommand{\thetahat}{{\hat \theta}}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
+\newcommand{\cvn}{\xrightarrow[n \rightarrow +\infty]{}}
 \newcommand{\cvproba}{\stackrel{\PP}{\longrightarrow}}
 \newcommand{\cvps}{\stackrel{\text{p.s.}}{\longrightarrow}}
+\newcommand{\cvltwo}{\stackrel{\Lcal^2}{\longrightarrow}}
 
 \newcommand{\lzeronorm}[1]{\left|\left|#1\right|\right|_0}
 \newcommand{\lonenorm}[1]{\left|\left|#1\right|\right|_1}
 \newcommand{\ltwonorm}[1]{\left|\left|#1\right|\right|_2}
-
-% TODO
-\usepackage[dvipsnames]{xcolor}
-\newcommand{\todo}[1]{{\color{BrickRed}{TODO~#1}}}
-\newcommand{\rewrite}[1]{{\color{RoyalBlue}{#1}}}
-
-% Emacs: to save in encoding iso-latin-1:
-% C-x C-m f
-% iso-latin-1
-
-% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
+%%% ENVIRONNEMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \makeatletter
 %%% Permet de pemettre \`a coup s\^ur la d\'efinition (que l'environnement soit d\'ej\`a d\'efini ou pas)
 %
@@ -193,11 +223,17 @@
 }{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill%\quad Fin Encart\quad\hrulefill
 }\nobreak\bigbreak}
 \makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
 
 \begin{document}
+
+% Vertical spacing above/before equations
+\setlength{\abovedisplayskip}{5pt}
+\setlength{\belowdisplayskip}{3pt}
+
 
 \renewcommand{\bibname}{}
 
@@ -237,35 +273,41 @@
 
 
 
-\chapter{Intro}
-\input{intro}
+%\chapter{Intro}
+%\input{intro}
 
-\part{Notions de statistique}
-\chapter{Statistique descriptive}
+%\part{Notions de statistique}
+%\chapter{Statistique descriptive}
 %\input{stat_descriptive}
+\clearpage 
 
 \chapter{Estimation}
 \input{estimation}
+\clearpage 
 
-\chapter{Tests d'hypothèse}
-%\input{tests}
+% \chapter{Tests d'hypothèse}
+% \input{tests}
 
-\part{Analyse exploratoire}
-\chapter{Réduction de dimension}
-%\input{dimred}
+% \part{Analyse exploratoire}
+% \chapter{Réduction de dimension}
+% \input{dimred}
+% \clearpage 
 
-\chapter{Bonnes pratiques}
-%\input{pratiques}
+% \chapter{Bonnes pratiques}
+% \input{pratiques}
 
-\part{Apprentissage supervisé}
-\chapter{Minimisation du risque empirique}
-%\input{erm}
+% \part{Apprentissage supervisé}
+% \chapter{Minimisation du risque empirique}
+% \input{erm}
+% \clearpage 
 
-\chapter{Généralisation}
-%\input{generalisation}
+% \chapter{Généralisation}
+% \input{generalisation}
+% \clearpage 
 
-\chapter{Modèles non-linéaires}
-%\input{nonlin}
+% \chapter{Modèles non-linéaires}
+% \input{nonlin}
+% \clearpage 
 
 
 \end{document}
