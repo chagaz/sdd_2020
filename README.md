@@ -28,15 +28,15 @@ __Modalités d'évaluation__
 
 __Emploi du temps__
 * __mercredi 22/04 :__ 
-  * __11h-12h30 :__  cours — Introduction 
-  * __14h-15h30 :__ : cours — Statistique descriptive
+  * __11h-12h30 :__  cours — Introduction et statistique descriptive
+  * __14h-15h30 :__ cours — Estimation et propriétés d'un estimateur
 
 * __mercredi 29/04 :__
-  * __11h-12h30 :__ cours — Estimation
+  * __11h-12h30 :__ cours — Techniques d'estimation
   * __14h-15h30 :__ cours — Tests statistiques
 
 * __mercredi 6/05 :__
-  * __11h-12h30 :__ PC — Estimation de densités
+  * __11h-12h30 :__ PC — Statistique inférentielle
   * __14h-15h30 :__ cours — Réduction de dimension
 
 * __mercredi 13/05 :__
