@@ -1,3 +1,221 @@
 %-*- coding: iso-latin-1 -*-
-\label{chap:}
+\label{chap:tests}
 
+\paragraph{Notions :} hypothèse nulle, hypothèse alternative, statistique de
+test, p-valeur, tests multiples.
+\paragraph{Objectifs pédagogiques :}
+\begin{itemize}      
+  \setlength{\itemsep}{3pt}
+\item Interpréter une p-valeur.
+\item Reconnaître une situation dans laquelle un test statistique est
+  approprié.
+\end{itemize}
+
+
+\section{Principe d'un test statistique}
+\label{sec:principe_test}
+Le but d'un test statistique est de déterminer la fiabilité d'une observation
+faite sur une échantillon.
+
+\begin{exemple}
+  Si je lance une pièce 5 fois et obtiens 5 fois pile, puis-je en déduire que
+  la pièce est déséquilibrée ? Ou ce résultat est-il dû au hasard de
+  l'échantillonnage ? Qu'en est-il si j'obtiens le même résultat après 50
+  lancers ?
+\end{exemple}
+
+\textbf{Un test statistique permet de calculer la probabilité d'observer, sous une
+certaine hypothèse, un résultat au moins aussi extrême que celui observé sur un
+échantillon.}
+
+\begin{exemple}
+  Reprenons l'exemple du lancer de pièce. Sous l'hypothèse que la pièce est
+  équilibrée, la probabilité $\pi$ d'obtenir « pile » pour un lancer est $0.5$
+  et celle d'obtenir pile pour 5 lancers est $0.5^5 = 3\%.$ Cette probabilité
+  est faible, mais non négligeable : on a 3\% de chance d'obtenir un résultat
+  aussi extrême que celui observé sur un échantillon.
+
+  Pour 50 lancers, cette probabilité tombe à $0.5^{50} = 9.10^{-16}.$ Cette
+  probabilité est extrêmement faible, et l'échantillon ne soutient pas
+  l'hypothèse selon laquelle la pièce est équilibrée : nous pouvons la rejeter.
+\end{exemple}
+
+\section{Formalisme}
+\label{sec:formalisme_test}
+Soit $(X_1, X_2, \dots, X_n)$ un échantillon aléatoire de taille $n \in \NN^*$
+d'une variable aléatoire réelle $X$ de loi $\PP_X.$ Rappelons que les
+composantes $X_i$ de ce vecteur aléatoire sont indépendantes et identiquement
+distribuées, de même loi que $X$. Les notions présentées dans ce chapitre
+s'appliquent aussi à des variables aléatoires de nature plus complexe (par
+exemple, des valeurs aléatoires multi-dimensionnelles) mais nous nous limitons
+aux variables aléatoires réelles par souci de simplicité.
+Nous supposons aussi disposer d'un échantillon $(x_1, x_2, \dots, x_n)$ qui est
+une réalisation de $(X_1, X_2, \dots, X_n)$.
+
+Un test statistique repose sur les éléments suivants :
+\begin{itemize}
+\item Une \textbf{hypothèse nulle,} notée $\HH_0$. L'hypothèse nulle est
+  celle que l'on chercher à rejeter.
+\item Une \textbf{hypothèse alternative,} notée $\HH_1$ ou $\HH_a$. C'est en
+  général la négation de $\HH_0$.
+\item Une \textbf{statistique de test,} $T$, qui sert à mesurer à quel point un
+  échantillon « dévie » de l'hypothèse nulle.
+\item Un \textbf{niveau de signification,} $0 < \alpha < 1$, qui sert à
+  déterminer si la probabilité d'observer, sous $\HH_0$, une statistique de
+  test au moins aussi extrême que celle observée sur l'échantillon
+  $(x_1, x_2, \dots, x_n)$ est suffisamment faible pour rejeter $\HH_0$.
+\end{itemize}
+
+Le but de cette section est de développer ces notions.
+
+\subsection{Hypothèses de test}
+Conduire un test d'hypothèse nécessite de formuler deux hypothèses :
+\begin{itemize}
+\item Une \textbf{hypothèse nulle,} notée $\HH_0$. Cette hypothèse doit être
+  précise et permettre de faire des calculs. Le but du test est de déterminer
+  s'il est raisonnable de rejeter cette hypothèse.
+\item Une \textbf{hypothèse alternative,} notée $\HH_1$ ou $\HH_a$. Cette
+  hypothèse est une forme de négation de $\HH_0$, et c'est l'hypothèse que l'on
+  adoptera si l'hypothèse nulle est rejetée.
+\end{itemize}
+
+L'hypothèse nulle est souvent une hypothèse formulée sur la valeur un paramètre
+$\theta \in \Scal \subseteq \RR$ caractérisant la loi $\PP_X$ de l'échantillon
+aléatoire. Il s'agit alors de tester
+\begin{equation}
+  \label{eq:h0}
+  \HH_0: \theta = \theta_0,
+\end{equation}
+où $\theta_0 \in \Scal$ est une valeur déterministe fixée à l'avance.
+
+L'hypothèse nulle peut cependant être de nature plus complexe, par exemple :
+\begin{itemize}
+\item « Deux variables statistique $X$ et $Y$ sont indépendantes » (c'est le
+  cas du test du $\xi^2$, cf. section~\ref{sec:chi2}).
+\item « Deux échantillons $(x_1, x_2, \dots, x_n)$ et $(y_1, y_2, \dots, y_n)$
+  sont des réalisations de la même distribution » (c'est le cas du test de
+  Wilcoxon-Mann-Whitney, qui dépasse le cadre de ce programme) ;
+\end{itemize}
+
+\begin{exemple}
+  Dans le cas de notre lancer de pièce,
+  \begin{itemize}
+  \item $X$ est une variable aléatoire discrète qui suit une loi de Bernoulli
+    de paramètre $\pi$. $\PP_X(1) = \pi$ et $\PP_X(0) = 1-\pi$ ;
+  \item l'échantillon aléatoire est un vecteur $(X_1, X_2, \dots, X_n)$ de $n$
+    composantes, iid de même loi que $X$ ;
+  \item une série de lancers est une réalisation $(x_1, x_2, \dots, x_n)$ de ce
+    vecteur aléatoire. Dans le cas de 5 lancers tous tombant sur « pile »,
+    cet échantillon est $(1, 1, 1, 1, 1)$ et $n=5.$
+  \item l'hypothèse nulle est $\HH_0: \pi = 0.5.$
+  \end{itemize}
+\end{exemple}
+
+Dans le cas où l'on cherche à tester la valeur d'un paramètre $\theta$ d'une
+population, l'hypothèse alternative peut prendre deux formes :
+\begin{itemize}
+\item $\theta \neq \theta_0$, ou en d'autres termes, 
+  \begin{equation}
+    \label{eq:h1_bilateral}
+    \HH_1: \theta < \theta_0 \text{ ou } \theta > \theta_0.
+  \end{equation}
+  On parle alors de test \textbf{bilatéral.}
+\item Si seulement l'une des deux parties de cette hypothèse alternative nous
+  intéresse, où est possible, on parle de test \textbf{unilatéral.} Il s'agit
+  alors de tester soit
+  \begin{equation}
+    \label{eq:h1_unilateral_gauche}
+    \HH_1: \theta < \theta_0,
+  \end{equation}
+  soit
+  \begin{equation}
+    \label{eq:h1_unilateral_droite}
+    \HH_1:  \theta > \theta_0.
+  \end{equation}
+\end{itemize}
+
+\begin{exemple}
+  Dans le cas de notre lancer de pièce, l'hypothèse alternative dans le cadre
+  d'un test bilatéral est
+  \[
+    \HH_1: \pi \neq 0.5.
+  \]
+  Si nous rejetons $\HH_0,$ notre conclusion sera que la pièce n'est pas équilibrée.
+
+  Dans le cadre d'un test bilatéral, par exemple 
+  \[
+    \HH_1: \pi > 0.5,
+  \]
+  si nous rejetons $\HH_0,$ notre conclusion sera que la pièce n'est pas
+  équilibrée, et qu'elle favorise « pile ».
+
+  Il ne s'agit donc pas du même test.
+\end{exemple}
+
+\subsection{Statistique de test et p-valeur}
+Une \textbf{statistique de test} $T$ est une statistique de l'échantillon
+aléatoire. Il s'agit donc d'une variable aléatoire réelle, fonction de
+$(X_1, X_2, \dots, X_n) : T = g(X_1, X_2, \dots, X_n)$ Cette statistique de
+test sert à mesurer à quel point un échantillon « dévie » de l'hypothèse nulle.
+
+\begin{exemple}
+  Dans l'exemple de notre lancer de pièce, la statistique de test $T$ est le nombre
+  de « pile » obtenus dans l'échantillon :
+  \[
+    T = \sum_{i=1}^n X_i.
+  \]
+\end{exemple}
+
+Posons $t = g(x_1, x_2, \dots, x_n)$ la réalisation de la statistique de test
+sur l'échantillon observé. On appelle \textbf{p-valeur} $p$ la probabilité
+d'observer une statistique au moins aussi extrême que $t$ sous l'hypothèse
+nulle.
+
+Un test statistique est ainsi généralement réalisé de sorte à ce que la
+distribution de la statistique de test sous $\HH_0$ soit connue, ce qui permet
+de déterminer la p-valeur correspondante.
+
+\begin{exemple}
+  Dans l'exemple de notre lancer de pièce, la réalisation $t$ de la statistique
+  de test $T$ est le nombre de « pile » obtenus : 
+  \[
+    t = \sum_{i=1}^n x_i.
+  \]
+  Ainsi, $t=5$ dans le cas de 5 lancers tous tombant sur « pile ».
+
+  Sous $\HH_0$, c'est-à-dire quand $\pi=0.5$, la probabilité d'observer $t=5$
+  quand $n=5$ est $p = 0.03\%.$ C'est notre p-valeur.
+\end{exemple}
+
+
+\subsection{Niveau de signification}
+Le \textbf{niveau de signification,} $0 < \alpha < 1$, est le seuil sur la
+p-valeur en-dessous duquel on estime légitime de rejeter l'hypothèse nulle. Ce
+seuil est fixé à l'avance. Il est généralement pris à $\alpha = 1\%$,
+$\alpha = 5\%$ ou $\alpha = 10\%$. Il est égal à la probabilité de rejeter
+l'hypothèse nulle alors qu'elle est correcte, ce qu'on appelle \textbf{erreur
+  de première espèce} (ou erreur de Type I).
+
+
+
+\subsection{Intervalle de confiance}
+TODO REF Probabilités V
+
+\section{Test d'indépendance du $\chi^2$}
+
+\section{Tests d'hypothèses multiples}
+\label{sec:mht}
+
+
+\begin{plusloin}
+\item La \textbf{puissance} d'un test statistique est la probabilité de rejeter
+  $\HH_0$ si elle est fausse. C'est le complément à 1 de l'erreur de deuxième
+  espèce (erreur de Type II), qui consiste à ne pas rejeter $\HH_0$ alors
+  qu'elle et fausse. La puissance est généralement délicate à évaluer car elle
+  nécessite de spécifier correctement $\HH_1$. 
+\item On dit d'un test statistique qu'il est sans biais si TODO
+\item On dit d'un test statistique qu'il converge si TODO
+\item Si la distribution de la statistique de test sous l'hypothèse nulle n'est
+  pas connue, on peut recourir à sa distribution empirique. Cette dernière est
+  obtenue par une technique de permutations. TODO
+\end{plusloin}
