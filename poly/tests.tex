@@ -24,9 +24,9 @@ faite sur une échantillon.
   lancers ?
 \end{exemple}
 
-\textbf{Un test statistique permet de calculer la probabilité d'observer, sous une
-certaine hypothèse, un résultat au moins aussi extrême que celui observé sur un
-échantillon.}
+\textbf{Un test statistique permet de déterminer si l'échantillon observé
+  permet d'invalider une hypothèse qu'il était raisonnable de formuler avant
+  d'observer les données.}
 
 \begin{exemple}
   Reprenons l'exemple du lancer de pièce. Sous l'hypothèse que la pièce est
@@ -60,10 +60,12 @@ Un test statistique repose sur les éléments suivants :
   général la négation de $\HH_0$.
 \item Une \textbf{statistique de test,} $T$, qui sert à mesurer à quel point un
   échantillon « dévie » de l'hypothèse nulle.
-\item Un \textbf{niveau de signification,} $0 < \alpha < 1$, qui sert à
-  déterminer si la probabilité d'observer, sous $\HH_0$, une statistique de
-  test au moins aussi extrême que celle observée sur l'échantillon
-  $(x_1, x_2, \dots, x_n)$ est suffisamment faible pour rejeter $\HH_0$.
+\item Un \textbf{niveau de signification,} $0 < \alpha < 1$, qui est la
+  probabilité de rejeter l'hypothèse nulle alors qu'elle est correcte. 
+% qui sert à
+  % déterminer si la probabilité d'observer, sous $\HH_0$, une statistique de
+  % test au moins aussi extrême que celle observée sur l'échantillon
+  % $(x_1, x_2, \dots, x_n)$ est suffisamment faible pour rejeter $\HH_0$.
 \end{itemize}
 
 Le but de cette section est de développer ces notions.
@@ -91,11 +93,33 @@ où $\theta_0 \in \Scal$ est une valeur déterministe fixée à l'avance.
 L'hypothèse nulle peut cependant être de nature plus complexe, par exemple :
 \begin{itemize}
 \item « Deux variables statistique $X$ et $Y$ sont indépendantes » (c'est le
-  cas du test du $\xi^2$, cf. section~\ref{sec:chi2}).
+  cas du test d'indépendance du $\chi^2$, cf. section~\ref{sec:chi2}).
 \item « Deux échantillons $(x_1, x_2, \dots, x_n)$ et $(y_1, y_2, \dots, y_n)$
   sont des réalisations de la même distribution » (c'est le cas du test de
   Wilcoxon-Mann-Whitney, qui dépasse le cadre de ce programme) ;
 \end{itemize}
+
+\paragraph{Présomption d'innocence} De même que le principe de la présomption
+d'innocence veut que l'on recueille suffisamment de preuves pour rejeter
+l'innocence, en théorie des tests statistiques il y a présomption de
+$\HH_0$. Il s'agit donc de savoir si l'échantillon observé (les preuves) est
+suffisant pour rejeter $\HH_0$, ce dont on conclura $\HH_1.$ Par contre, si
+l'on ne rejette pas $\HH_0$, cela peut venir soit de ce que $\HH_0$ est vraie,
+soit de ce que nous n'avons pas suffisamment de données pour rejeter
+$\HH_1$. Ainsi, $\HH_0$ doit être une hypothèse raisonnable, mais que l'on
+aimerait avoit des raisons de réfuter.  
+
+Dans le cadre d'une expérience scientifique, l'hypothèse $\HH_0$ correspond
+ainsi à l'état actuel des connaissances. Le but d'un test statistique est de
+déterminer si les données qui semblent contredire cette hypothèse sont
+effectivement suffisamment improbables sous $\HH_0$ pour justifier de la
+réfuter.
+Dans le cadre d'un essai clinique, par exemple, l'hypothèse $\HH_0$ se doit
+d'être une défavorable au nouveau médicament (« le nouveau médicament est
+inefficace » ou « le nouvea médicament n'est pas plus efficace que les
+traitements connus »). Le but du test statistique est de déterminer si les
+données récoltées jusqu'à présent sont suffisantes pour réfuter cette
+hypothèse.
 
 \begin{exemple}
   Dans le cas de notre lancer de pièce,
@@ -121,7 +145,7 @@ population, l'hypothèse alternative peut prendre deux formes :
   \end{equation}
   On parle alors de test \textbf{bilatéral.}
 \item Si seulement l'une des deux parties de cette hypothèse alternative nous
-  intéresse, où est possible, on parle de test \textbf{unilatéral.} Il s'agit
+  intéresse, ou est possible, on parle de test \textbf{unilatéral.} Il s'agit
   alors de tester soit
   \begin{equation}
     \label{eq:h1_unilateral_gauche}
@@ -133,6 +157,19 @@ population, l'hypothèse alternative peut prendre deux formes :
     \HH_1:  \theta > \theta_0.
   \end{equation}
 \end{itemize}
+
+De même que l'on élabore $\HH_0$ de sorte à ce qu'elle soit la plus plausible
+avant d'avoir observé les données, on élabore $\HH_1$ en fonction de ce que
+l'on espère découvrir. 
+
+Reprenons l'exemple d'un essai clinique sur un nouveau médicament. Si
+l'hypothèse $\HH_0$ est « le nouveau médicament n'a pas d'effet », on peut
+poser l'hypothèse alternative $\HH_1$ : « le nouveau traitement a un effet
+positif sur l'état des patients ». On espère ici non seulement rejeter
+l'hypothèse nulle, mais aussi suggérer une efficacité du traitement. Cette
+hypothèse est plus précise que l'hypothèse alternative selon laquelle « le
+nouveau traitement a un effet sur l'état des patients », cet effet pouvant être
+négatif.
 
 \begin{exemple}
   Dans le cas de notre lancer de pièce, l'hypothèse alternative dans le cadre
@@ -152,49 +189,247 @@ population, l'hypothèse alternative peut prendre deux formes :
   Il ne s'agit donc pas du même test.
 \end{exemple}
 
+
 \subsection{Statistique de test et p-valeur}
 Une \textbf{statistique de test} $T$ est une statistique de l'échantillon
 aléatoire. Il s'agit donc d'une variable aléatoire réelle, fonction de
 $(X_1, X_2, \dots, X_n) : T = g(X_1, X_2, \dots, X_n)$ Cette statistique de
 test sert à mesurer à quel point un échantillon « dévie » de l'hypothèse nulle.
 
+Une statistique de test est ainsi choisie de sorte à avoir une loi différente
+sous $\HH_0$ et sous $\HH_1$, et de sorte à ce que sa loi sous $\HH_0$ soit
+connue : c'est ce qui permettra de déterminer un critère de rejet de $\HH_0$
+garantissant le niveau de signification choisi.
+
+La plupart des test statistiques reposent sur des statistique de test dont le
+développement a été long et minutieux. Le choix entre plusieurs statistiques
+candidates pour un même problème est un choix difficile, qui repose entre
+autres sur la validité des hypothèses sur la distribution de l'échantillon
+aléatoire ou sur sa taille qui permettent de déterminer sa loi sous $\HH_0$.
+
+\paragraph{Remarque} Pour des tests portant sur un paramètre
+($\HH_0: \theta = \theta_0$), la statistique de test est souvent basée sur la
+différence entre un estimateur de ce paramètre et sa valeur sous $\HH_0$.
+
 \begin{exemple}
-  Dans l'exemple de notre lancer de pièce, la statistique de test $T$ est le nombre
-  de « pile » obtenus dans l'échantillon :
+  Reprenons l'exemple du lancer de pièce.
+
+  Dans la section~\ref{sec:principe_test}, nous avons choisi comme statistique
+  de test $T$ le nombre de pile obtenus dans l'échantillon :
   \[
     T = \sum_{i=1}^n X_i.
   \]
-\end{exemple}
 
-Posons $t = g(x_1, x_2, \dots, x_n)$ la réalisation de la statistique de test
-sur l'échantillon observé. On appelle \textbf{p-valeur} $p$ la probabilité
-d'observer une statistique au moins aussi extrême que $t$ sous l'hypothèse
-nulle.
-
-Un test statistique est ainsi généralement réalisé de sorte à ce que la
-distribution de la statistique de test sous $\HH_0$ soit connue, ce qui permet
-de déterminer la p-valeur correspondante.
-
-\begin{exemple}
-  Dans l'exemple de notre lancer de pièce, la réalisation $t$ de la statistique
-  de test $T$ est le nombre de « pile » obtenus : 
+  Sous $\HH_0$, autrement dit si $\pi=0.5$, la loi de $T$ est déterminée par 
   \[
-    t = \sum_{i=1}^n x_i.
+    \PP(T=k) = \PP\left(\sum_{i=1}^n X_i = k\right) \text{ pour } k=0, 1,
+    \dots, n.
   \]
-  Ainsi, $t=5$ dans le cas de 5 lancers tous tombant sur « pile ».
-
-  Sous $\HH_0$, c'est-à-dire quand $\pi=0.5$, la probabilité d'observer $t=5$
-  quand $n=5$ est $p = 0.03\%.$ C'est notre p-valeur.
+  On reconnait ici une loi binômiale de paramètres $n$ et $\pi.$
 \end{exemple}
 
 
 \subsection{Niveau de signification}
-Le \textbf{niveau de signification,} $0 < \alpha < 1$, est le seuil sur la
-p-valeur en-dessous duquel on estime légitime de rejeter l'hypothèse nulle. Ce
-seuil est fixé à l'avance. Il est généralement pris à $\alpha = 1\%$,
-$\alpha = 5\%$ ou $\alpha = 10\%$. Il est égal à la probabilité de rejeter
-l'hypothèse nulle alors qu'elle est correcte, ce qu'on appelle \textbf{erreur
-  de première espèce} (ou erreur de Type I).
+Nous avons maintenant posé $\HH_0$, $\HH_1$, et une statistique de test $T$
+dont nous connaissons la loi $\PP_{T0}$ sous $\HH_0$. Il nous faut maintenant
+déterminer la \textbf{zone de rejet} du test, autrement dit l'ensemble
+$\Ical \subseteq \RR$ de ses valeurs qui conduisent à rejeter $\HH_0$.
+
+Pour ce faire, nous avons besoin de fixer le \textbf{niveau de signification,}
+$0 < \alpha < 1$, qui est la probabilité de rejeter l'hypothèse nulle alors
+qu'elle est correcte. Ce seuil est fixé à l'avance, généralement parmi
+$\alpha = 1\%$, $\alpha = 5\%$ ou $\alpha = 10\%$, et détermine à quel point le
+test est strict.
+
+Ainsi, il s'agit de déterminer $\Ical \subseteq \RR$ de sorte à ce que
+$\PP_{T0}(T \in \Ical) = \alpha.$
+
+\begin{exemple}
+  Dans l'exemple du lancer de pièce, nous avons choisi le nombre de pile comme
+  statistique de test $T$. Sous $\HH_0 : \pi = 0.5$, $T$ suit une loi binomiale
+  de paramètres $n$ (le nombre de lancers) et $\pi$.
+
+  Posons $\alpha = 5\%.$
+
+  Considérons le test unilatéral $\HH_1 : \pi > 0.5$. Si nous rejetons $\HH_0$,
+  nous en conclurons que la pièce est biaisée en faveur du côté pile. Cela
+  signifie que nous souhaitons rejeter $\HH_0$ quand le nombre de pile dans
+  l'échantillon est grand. Il est ici naturel de considérer une zone de rejet
+  de la forme $\Ical = \mathopen]t_0, n\mathclose].$ En d'autres termes, nous allons rejeter
+  $\HH_0$ si la réalisation $t$ de $T$ sur notre échantillon est plus grande
+  qu'un seuil $t_0,$ fixé tel que $\PP_{T0}(T > t_0) = \alpha.$ 
+
+  En d'autres termes, si $F_{T0}$ est la fonction de répartition de $T$ sous
+  $\HH_0$, $t_0$ est fixé de sorte à ce que $F_{T0}(t_0) = \alpha$. Dans notre
+  exemple avec $n=5$ et $\alpha=0.05$, cela fixe $t_0 = 4.$
+
+  Le test consiste donc à rejeter l'hypothèse nulle si tous les 5 lancers
+  aboutissent à pile.
+
+  Considérons maintenant le test unilatéral $\HH_1 : \pi < 0.5.$ Rejeter
+  $\HH_0$ conduit à conclure que la pièce est biaisée en faveur du côté
+  face. Nous considérons maintenant une zone de rejet de la forme
+  $\Ical = \mathopen[0, t_0 \mathclose[,$ et $t_0$ est déterminé par
+  $\PP_{T0}(T < t_0) = \alpha.$ Avec $n=5$ et $\alpha=0.05$, cela fixe
+  $t_0=1$. Le test consiste donc à rejeter l'hypothèse nulle si aucun des 5
+  lancers n'aboutit à pile.
+
+  Enfin, considérons le test bilatéral $\HH_1 : \pi \neq 0.5.$ Rejeter $\HH_0$
+  conduit à conclure que la pièce est biaisée, en faveur de l'un ou de l'autre
+  de ses côtés. Nous considérons alors une zone de rejet de la forme
+  $\Ical = \mathopen[0, t_l \mathclose[ \; \cup \; \mathopen]t_r, n
+  \mathclose].$
+  Il nous faut donc choisir $t_l$ et $t_r$ de sorte à ce que
+  $\PP_{T0}(T < t_l) + \PP_{T0}(T > t_r) = \alpha.$ Il est assez naturel de
+  fixer alors $\PP_{T0}(T < t_l) = \PP_{T0}(T > t_r) = \frac{\alpha}{2}.$ Avec
+  $n=5$ et $\alpha=0.05$, on obtient $t_l = 0$ et $t_r = 5$ et il n'est donc
+  jamais possible de rejeter l'hypothèse nulle.
+
+  Le test que nous venons de définir s'appelle le test binomial. 
+
+  \paragraph{Remarque importante} On observe ici que, parmi les trois
+  hypothèses alternatives envisagées, seul le test statistique unilatéral
+  $\HH_1: \pi > 0.5$ nous permet de rejeter l'hypothèse nulle. C'est une
+  observation générale : un test unilatéral est plus puissant qu'un test
+  bilatéral ; cependant il n'est utile que si on sait de quel côté le définir.
+
+\end{exemple}
+
+Dans le cas d'un test sur la valeur d'un paramètre $\theta$, c'est-à-dire avec
+pour hypothèse nulle $\HH_0: \theta = \theta_0$, la zone de rejet sera de la
+forme
+\begin{itemize}
+\item $\Ical = \mathopen]t_r, +\infty \mathclose[$ pour le test unilatéral à droite
+  $\HH_1 : \theta > \theta_0$ ;
+\item $\Ical = \mathopen]-\infty, t_l \mathclose[$ pour le test unilatéral à gauche
+  $\HH_1 : \theta > \theta_0$ ;
+\item $\Ical = \mathopen]-\infty, t_l \mathclose[ \cup
+  \mathopen]t_r, +\infty \mathclose[$ pour le test bilatéral
+  $\HH_1 : \theta \neq \theta_0$. 
+\end{itemize}
+
+On cherchera souvent à utiliser une statistique de test symmétrique, de sorte à
+pouvoir utiliser $t_r = - t_l$.  Dans ce cas $t_0 = t_t$ est appelée
+\textbf{valeur critique} du test et est telle que
+\begin{itemize}
+\item $\PP_{T0}(T > t_0) = \alpha$ pour le test unilatéral à droite ; 
+\item $\PP_{T0}(T < - t_0) = \alpha$ pour le test unilatéral à gauche ; 
+\item $\PP_{T0}(|T| > t_0) = \alpha$ pour le test bilatéral. 
+\end{itemize}
+Dans ce contexte, étant donné un échantillon $(x_1, x_2, \dots, x_n)$ et la
+réalisation $t$ de $T$ sur cet échantillon, on appelle \textbf{p-valeur} la
+probabilité $\PP_{T0}(T > t)$ pour un test unilatéral à droite (respectivement,
+$\PP_{T0}(T < -t)$ pour un test unilatéral à gauche, et $\PP_{T0}(\abs{T} > t)$
+pour un test bilatéral). L'hypothèse nulle est rejetée si la p-valeur est plus
+petite que le niveau de signification. 
+
+En d'autres termes, la p-valeur peut être interprétée comme la probabilité
+d'obtenir, sous l'hypothèse nulle, un résultat au moins aussi extrême que celui
+observé.
+
+On rapporte ainsi généralement comme résultat d'un test non pas la statistique
+de test réalisée sur l'échantillon observé, mais la p-valeur correspondante.
+
+On lira ainsi dans des publications scientifiques des assertions suivies de «
+($p < 0.05$) », siginifiant que l'assertion en question est l'hypothèse
+alternative d'un test dont l'hypothèse nulle a été rejetée avec une p-valeur
+inférieure à $5\%$
+
+\begin{exemple}
+  Le test que nous avons défini dans l'exemple de la pièce de monnaie s'appelle
+  le test binomial. Il est implémenté dans \texttt{scipy.stats} :
+  \begin{lstlisting}[language=Python]
+    t = 5 # nb pile 
+    n = 5 # taille échantillons 
+    pi = 0.5 
+    import scipy.stats as st 
+    st.binom_test(t, n, pi, alternative='greater') # unilatéral à droite
+  \end{lstlisting}
+\end{exemple}
+
+\subsection{Erreurs de première et deuxième espèce}
+Deux types d'erreurs sont possibles quand on fait un test d'hypothèse :
+\begin{itemize}
+\item Rejeter l'hypothèse nulle alors qu'elle est correcte : on parle d'une
+  \textbf{erreur de première espèce}, ou \textbf{erreur de Type I}.
+\item Accepter l'hypothèse nulle alors qu'elle est en fait fausse : on parle
+  d'une \textbf{erreur de deuxième espèce}, ou \textbf{erreur de Type II}.
+\end{itemize}
+
+\paragraph{Moyen mnémotechnique} Ces deux types d'erreur sont numérotées dans
+le même ordre que dans l'histoire du garçon qui criait au loup : d'abord les
+villageois pensaient qu'il y avait un loup alors qu'il n'y en avait pas (erreur
+de première espèce), mais à la fin les villageois pensaient qu'il n'y avait pas
+de loup alors qu'il y en avait un (erreur de deuxième espèce). Ici l'hypothèse
+nulle est l'hypothèse correspondant à l'état « par défaut » du village, à
+savoir sans loup.
+
+Le niveau de signification $\alpha$ est ainsi la probabilité de commettre une
+erreur de première espèce.
+
+La probabilité de commettre une erreur de deuxième espèce est généralement noté
+$\beta$. La probabilité de rejeter $\HH_0$ à raison, $1-\beta$, est appelée la
+\textbf{puissance} du test.
+
+
+\section{Comparaison d'une moyenne observée à une moyenne théorique}
+\label{sec:test_moyenne}
+Dans cette section, nous allons dérouler un autre exemple de test statistique. 
+
+Nous souhaitons tester l'hypothèse selon laquelle les pigeons du Jardin du
+Luxembourg ont un poids moyen de 300g. Nous disposons de mesures pour 40
+pigeons, capturés et pesés par des élèves de l'École, dont la moyenne est de
+350g et l'écart-type 30g.
+
+Définissons une variable aléatoire réelle, de carré intégrable pour nous
+simplifier la vie, $X$. $X$ modélise le poids d'un pigeon. Posons $\mu$
+l'espérance de $X$ et $\sigma^2$ sa variance.
+
+Nous posons $n=40$ ; les poids des 40 pigeons, $(x_1, x_2, \dots, x_n)$, sont
+la réalisation de l'échantillon aléatoire $(X_1, X_2, \dots, X_n)$ composé de
+variables aléatoires indépendantes et identiquement distribuées de même loi que
+$X$.
+
+Nous posons l'hypothèse nulle à tester
+\[
+  \HH_0 : \mu = \mu_0, 
+\]
+avec $\mu_0 = 300g.$
+
+Nous n'avons aucun a priori sur le poids des pigeons du Jardin du Luxembourg,
+et formulons donc l'hypothèse alternative bilatérale
+\[
+  \HH_1 : \mu \neq \mu_0.
+\]
+
+Pour tester $\HH_0$, nous souhaitons déterminer la probabilité d'observer une
+moyenne empirique $\hat{m}$ de 350g si l'espérance de $X$ est de 300g.  En
+posant $M_n$ la moyenne empirique de l'échantillon, nous souhaitons déterminer
+$\PP(M_n=\hat{m}|\mu=\mu_0)$.
+
+Le théorème central limite nous indique que 
+\[
+  \frac{\sqrt{n} (M_n - \mu)}{\sigma}  \cvloi \Ncal(0, 1).
+\]
+
+Nous ne connaissons pas la variance $\sigma^2$ de $X$ ; cependant nous pouvons
+l'estimer grâce à l'écart-type empirique $\hat{\sigma} = 30g,$ et utiliser 
+\[
+  \frac{\sqrt{n} (M_n - \mu)}{\hat \sigma}  \cvloi \Ncal(0, 1).
+\]
+Nous ne remplaçons pas $\mu$ par son estimation $\hat{m}$ : ce n'aurait aucun
+sens, car nous cherchons justement à tester sa valeur.
+
+
+
+
+
+TODO test pour comparer la moyenne de deux échantillons, par exemple cas et
+contrôles dans un essai clinique.
+
+
+
+
 
 
 
@@ -202,6 +437,7 @@ l'hypothèse nulle alors qu'elle est correcte, ce qu'on appelle \textbf{erreur
 TODO REF Probabilités V
 
 \section{Test d'indépendance du $\chi^2$}
+\label{sec:chi2}
 
 \section{Tests d'hypothèses multiples}
 \label{sec:mht}
@@ -218,4 +454,5 @@ TODO REF Probabilités V
 \item Si la distribution de la statistique de test sous l'hypothèse nulle n'est
   pas connue, on peut recourir à sa distribution empirique. Cette dernière est
   obtenue par une technique de permutations. TODO
+\item TODO ``Controverse'' autour des p-valeurs
 \end{plusloin}

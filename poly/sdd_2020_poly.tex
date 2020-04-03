@@ -82,6 +82,7 @@
 \newcommand{\Ccal}{\mathcal{C}}
 \newcommand{\Ecal}{\mathcal{E}}
 \newcommand{\Gcal}{\mathcal{G}}
+\newcommand{\Ical}{\mathcal{I}}
 \newcommand{\Kcal}{\mathcal{K}}
 \newcommand{\Lcal}{\mathcal{L}}
 \newcommand{\Ncal}{\mathcal{N}}
@@ -150,10 +151,42 @@
 \newcommand{\cvproba}{\stackrel{\PP}{\longrightarrow}}
 \newcommand{\cvps}{\stackrel{\text{p.s.}}{\longrightarrow}}
 \newcommand{\cvltwo}{\stackrel{\Lcal^2}{\longrightarrow}}
+\newcommand{\cvloi}{\stackrel{\Lcal}{\longrightarrow}}
 
-\newcommand{\lzeronorm}[1]{\left|\left|#1\right|\right|_0}
-\newcommand{\lonenorm}[1]{\left|\left|#1\right|\right|_1}
-\newcommand{\ltwonorm}[1]{\left|\left|#1\right|\right|_2}
+% \newcommand{\lzeronorm}[1]{\left|\left|#1\right|\right|_0}
+% \newcommand{\lonenorm}[1]{\left|\left|#1\right|\right|_1}
+% \newcommand{\ltwonorm}[1]{\left|\left|#1\right|\right|_2}
+% \newcommand{\lzeronorm}[1]{\|#1\|_0}
+% \newcommand{\lonenorm}[1]{\|#1\|_1}
+% \newcommand{\ltwonorm}[1]{\|#1\|_2}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\innerproduct}{\langle}{\rangle}
+
+\DeclarePairedDelimiter{\lzeronorm}{\lVert}{\rVert_0}
+\DeclarePairedDelimiter{\lonenorm}{\lVert}{\rVert_0}
+\DeclarePairedDelimiter{\ltwonorm}{\lVert}{\rVert_0}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%% CODE LISTINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  % numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  % numbersep=5pt,                   % how far the line-numbers are from the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+  %identifierstyle=\color{MyBlue},
+  %procnamekeys={def,class}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
