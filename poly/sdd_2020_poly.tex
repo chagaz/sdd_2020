@@ -1,7 +1,7 @@
 %-*- coding: iso-latin-1 -*-
 \documentclass[french,11pt,openany]{book}
 \usepackage{babel}
-
+\DecimalMathComma
 % Emacs: to save in encoding iso-latin-1:
 % C-x C-m f
 % iso-latin-1
@@ -13,6 +13,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{gentium}
 
+% SI units
+\usepackage{siunitx}
 
 % TODO
 \usepackage[dvipsnames]{xcolor}
@@ -239,10 +241,24 @@
 \forcedefenv{exemple}
 % \newenvironment{exemple}[1][Exemple~:]{\par\medbreak\textit{#1}~\ignorespaces}{\par\bigbreak}
 \newenvironment{exemple}[1][\relax]{\par\medbreak
-\noindent\makebox[\textwidth]{\hrulefill\quad Exemple\quad\hrulefill}\par\nobreak
+\noindent\makebox[\textwidth]{\rule{10pt}{0.4pt} \; \textbf{Exemple} \; \hrulefill}\par\nobreak
+%\noindent\makebox[\textwidth]{\hrulefill\quad Exemple\quad\hrulefill}\par\nobreak
 \ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
 \@afterheading
 }{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill}\nobreak\bigbreak}
+
+
+% Environnement "answer". 
+%
+\forcedefenv{answer}
+% \newenvironment{exemple}[1][Exemple~:]{\par\medbreak\textit{#1}~\ignorespaces}{\par\bigbreak}
+\newenvironment{answer}[1][\relax]{\par\medbreak
+\noindent\makebox[\textwidth]{\rule{10pt}{0.4pt} \; \textbf{Réponse} \; \hrulefill}\par\nobreak
+\ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+\@afterheading
+}{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill}\nobreak\bigbreak}
+%}{\makebox[\textwidth]{\hrulefill}\nobreak}
+
 
 % Environnement "remarque". 
 %

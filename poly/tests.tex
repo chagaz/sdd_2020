@@ -30,12 +30,12 @@ faite sur une échantillon.
 
 \begin{exemple}
   Reprenons l'exemple du lancer de pièce. Sous l'hypothèse que la pièce est
-  équilibrée, la probabilité $\pi$ d'obtenir « pile » pour un lancer est $0.5$
-  et celle d'obtenir pile pour 5 lancers est $0.5^5 = 3\%.$ Cette probabilité
+  équilibrée, la probabilité $\pi$ d'obtenir « pile » pour un lancer est $0,5$
+  et celle d'obtenir pile pour 5 lancers est $0,5^5 = 3\%.$ Cette probabilité
   est faible, mais non négligeable : on a 3\% de chance d'obtenir un résultat
   aussi extrême que celui observé sur un échantillon.
 
-  Pour 50 lancers, cette probabilité tombe à $0.5^{50} = 9.10^{-16}.$ Cette
+  Pour 50 lancers, cette probabilité tombe à $0,5^{50} = 9.10^{-16}.$ Cette
   probabilité est extrêmement faible, et l'échantillon ne soutient pas
   l'hypothèse selon laquelle la pièce est équilibrée : nous pouvons la rejeter.
 \end{exemple}
@@ -131,7 +131,7 @@ hypothèse.
   \item une série de lancers est une réalisation $(x_1, x_2, \dots, x_n)$ de ce
     vecteur aléatoire. Dans le cas de 5 lancers tous tombant sur « pile »,
     cet échantillon est $(1, 1, 1, 1, 1)$ et $n=5.$
-  \item l'hypothèse nulle est $\HH_0: \pi = 0.5.$
+  \item l'hypothèse nulle est $\HH_0: \pi = 0,5.$
   \end{itemize}
 \end{exemple}
 
@@ -175,13 +175,13 @@ négatif.
   Dans le cas de notre lancer de pièce, l'hypothèse alternative dans le cadre
   d'un test bilatéral est
   \[
-    \HH_1: \pi \neq 0.5.
+    \HH_1: \pi \neq 0,5.
   \]
   Si nous rejetons $\HH_0,$ notre conclusion sera que la pièce n'est pas équilibrée.
 
   Dans le cadre d'un test bilatéral, par exemple 
   \[
-    \HH_1: \pi > 0.5,
+    \HH_1: \pi > 0,5,
   \]
   si nous rejetons $\HH_0,$ notre conclusion sera que la pièce n'est pas
   équilibrée, et qu'elle favorise « pile ».
@@ -220,7 +220,7 @@ différence entre un estimateur de ce paramètre et sa valeur sous $\HH_0$.
     T = \sum_{i=1}^n X_i.
   \]
 
-  Sous $\HH_0$, autrement dit si $\pi=0.5$, la loi de $T$ est déterminée par 
+  Sous $\HH_0$, autrement dit si $\pi=0,5$, la loi de $T$ est déterminée par 
   \[
     \PP(T=k) = \PP\left(\sum_{i=1}^n X_i = k\right) \text{ pour } k=0, 1,
     \dots, n.
@@ -232,7 +232,7 @@ différence entre un estimateur de ce paramètre et sa valeur sous $\HH_0$.
 \subsection{Niveau de signification}
 Nous avons maintenant posé $\HH_0$, $\HH_1$, et une statistique de test $T$
 dont nous connaissons la loi $\PP_{T0}$ sous $\HH_0$. Il nous faut maintenant
-déterminer la \textbf{zone de rejet} du test, autrement dit l'ensemble
+déterminer le \textbf{domaine de rejet} du test, autrement dit l'ensemble
 $\Ical \subseteq \RR$ de ses valeurs qui conduisent à rejeter $\HH_0$.
 
 Pour ce faire, nous avons besoin de fixer le \textbf{niveau de signification,}
@@ -246,57 +246,57 @@ $\PP_{T0}(T \in \Ical) = \alpha.$
 
 \begin{exemple}
   Dans l'exemple du lancer de pièce, nous avons choisi le nombre de pile comme
-  statistique de test $T$. Sous $\HH_0 : \pi = 0.5$, $T$ suit une loi binomiale
+  statistique de test $T$. Sous $\HH_0 : \pi = 0,5$, $T$ suit une loi binomiale
   de paramètres $n$ (le nombre de lancers) et $\pi$.
 
   Posons $\alpha = 5\%.$
 
-  Considérons le test unilatéral $\HH_1 : \pi > 0.5$. Si nous rejetons $\HH_0$,
+  Considérons le test unilatéral $\HH_1 : \pi > 0,5$. Si nous rejetons $\HH_0$,
   nous en conclurons que la pièce est biaisée en faveur du côté pile. Cela
   signifie que nous souhaitons rejeter $\HH_0$ quand le nombre de pile dans
-  l'échantillon est grand. Il est ici naturel de considérer une zone de rejet
-  de la forme $\Ical = \mathopen]t_0, n\mathclose].$ En d'autres termes, nous allons rejeter
-  $\HH_0$ si la réalisation $t$ de $T$ sur notre échantillon est plus grande
-  qu'un seuil $t_0,$ fixé tel que $\PP_{T0}(T > t_0) = \alpha.$ 
+  l'échantillon est grand. Il est ici naturel de considérer un domaine de rejet
+  de la forme $\Ical = \mathopen]t_0, n\mathclose].$ En d'autres termes, nous
+  allons rejeter $\HH_0$ si la réalisation $t$ de $T$ sur notre échantillon est
+  plus grande qu'un seuil $t_0,$ fixé tel que $\PP_{T0}(T > t_0) = \alpha.$
 
   En d'autres termes, si $F_{T0}$ est la fonction de répartition de $T$ sous
   $\HH_0$, $t_0$ est fixé de sorte à ce que $F_{T0}(t_0) = \alpha$. Dans notre
-  exemple avec $n=5$ et $\alpha=0.05$, cela fixe $t_0 = 4.$
+  exemple avec $n=5$ et $\alpha=0,05$, cela fixe $t_0 = 4.$
 
   Le test consiste donc à rejeter l'hypothèse nulle si tous les 5 lancers
   aboutissent à pile.
 
-  Considérons maintenant le test unilatéral $\HH_1 : \pi < 0.5.$ Rejeter
+  Considérons maintenant le test unilatéral $\HH_1 : \pi < 0,5.$ Rejeter
   $\HH_0$ conduit à conclure que la pièce est biaisée en faveur du côté
-  face. Nous considérons maintenant une zone de rejet de la forme
+  face. Nous considérons maintenant un domaine de rejet de la forme
   $\Ical = \mathopen[0, t_0 \mathclose[,$ et $t_0$ est déterminé par
-  $\PP_{T0}(T < t_0) = \alpha.$ Avec $n=5$ et $\alpha=0.05$, cela fixe
+  $\PP_{T0}(T < t_0) = \alpha.$ Avec $n=5$ et $\alpha=0,05$, cela fixe
   $t_0=1$. Le test consiste donc à rejeter l'hypothèse nulle si aucun des 5
   lancers n'aboutit à pile.
 
-  Enfin, considérons le test bilatéral $\HH_1 : \pi \neq 0.5.$ Rejeter $\HH_0$
+  Enfin, considérons le test bilatéral $\HH_1 : \pi \neq 0,5.$ Rejeter $\HH_0$
   conduit à conclure que la pièce est biaisée, en faveur de l'un ou de l'autre
-  de ses côtés. Nous considérons alors une zone de rejet de la forme
+  de ses côtés. Nous considérons alors un domaine de rejet de la forme
   $\Ical = \mathopen[0, t_l \mathclose[ \; \cup \; \mathopen]t_r, n
   \mathclose].$
   Il nous faut donc choisir $t_l$ et $t_r$ de sorte à ce que
   $\PP_{T0}(T < t_l) + \PP_{T0}(T > t_r) = \alpha.$ Il est assez naturel de
   fixer alors $\PP_{T0}(T < t_l) = \PP_{T0}(T > t_r) = \frac{\alpha}{2}.$ Avec
-  $n=5$ et $\alpha=0.05$, on obtient $t_l = 0$ et $t_r = 5$ et il n'est donc
+  $n=5$ et $\alpha=0,05$, on obtient $t_l = 0$ et $t_r = 5$ et il n'est donc
   jamais possible de rejeter l'hypothèse nulle.
 
   Le test que nous venons de définir s'appelle le test binomial. 
 
   \paragraph{Remarque importante} On observe ici que, parmi les trois
   hypothèses alternatives envisagées, seul le test statistique unilatéral
-  $\HH_1: \pi > 0.5$ nous permet de rejeter l'hypothèse nulle. C'est une
+  $\HH_1: \pi > 0,5$ nous permet de rejeter l'hypothèse nulle. C'est une
   observation générale : un test unilatéral est plus puissant qu'un test
   bilatéral ; cependant il n'est utile que si on sait de quel côté le définir.
 
 \end{exemple}
 
 Dans le cas d'un test sur la valeur d'un paramètre $\theta$, c'est-à-dire avec
-pour hypothèse nulle $\HH_0: \theta = \theta_0$, la zone de rejet sera de la
+pour hypothèse nulle $\HH_0: \theta = \theta_0$, le domaine de rejet sera de la
 forme
 \begin{itemize}
 \item $\Ical = \mathopen]t_r, +\infty \mathclose[$ pour le test unilatéral à droite
@@ -331,9 +331,9 @@ On rapporte ainsi généralement comme résultat d'un test non pas la statistique
 de test réalisée sur l'échantillon observé, mais la p-valeur correspondante.
 
 On lira ainsi dans des publications scientifiques des assertions suivies de «
-($p < 0.05$) », siginifiant que l'assertion en question est l'hypothèse
+($p < 0,05$) », siginifiant que l'assertion en question est l'hypothèse
 alternative d'un test dont l'hypothèse nulle a été rejetée avec une p-valeur
-inférieure à $5\%$
+inférieure à $5\%.$
 
 \begin{exemple}
   Le test que nous avons défini dans l'exemple de la pièce de monnaie s'appelle
@@ -362,7 +362,9 @@ villageois pensaient qu'il y avait un loup alors qu'il n'y en avait pas (erreur
 de première espèce), mais à la fin les villageois pensaient qu'il n'y avait pas
 de loup alors qu'il y en avait un (erreur de deuxième espèce). Ici l'hypothèse
 nulle est l'hypothèse correspondant à l'état « par défaut » du village, à
-savoir sans loup.
+savoir sans loup\footnote{Les fans de \textit{Battlestar Galactica} pourront
+  construire leur propre moyen mnémotechnique à partir de Starbuck qui refuse
+  de faire valider les élèves pilotes après avoir fait valider Zak.}.
 
 Le niveau de signification $\alpha$ est ainsi la probabilité de commettre une
 erreur de première espèce.
@@ -379,31 +381,38 @@ Dans cette section, nous allons dérouler un autre exemple de test statistique.
 Nous souhaitons tester l'hypothèse selon laquelle les pigeons du Jardin du
 Luxembourg ont un poids moyen de 300g. Nous disposons de mesures pour 40
 pigeons, capturés et pesés par des élèves de l'École, dont la moyenne est de
-350g et l'écart-type 30g.
+312g et l'écart-type 31g.
 
-Définissons une variable aléatoire réelle, de carré intégrable pour nous
-simplifier la vie, $X$. $X$ modélise le poids d'un pigeon. Posons $\mu$
-l'espérance de $X$ et $\sigma^2$ sa variance.
+Définissons une variable aléatoire réelle $X$ de carré intégrable. $X$ modélise
+le poids d'un pigeon. Posons $\mu$ l'espérance de $X$ et $\sigma^2$ sa
+variance.
 
-Nous posons $n=40$ ; les poids des 40 pigeons, $(x_1, x_2, \dots, x_n)$, sont
-la réalisation de l'échantillon aléatoire $(X_1, X_2, \dots, X_n)$ composé de
-variables aléatoires indépendantes et identiquement distribuées de même loi que
-$X$.
+\subsection{Hypothèses de test}
+\paragraph{Question:} Comment modéliser ce problème ? Que poser pour $\HH_0$ et
+$\HH_1$ ?
 
-Nous posons l'hypothèse nulle à tester
-\[
-  \HH_0 : \mu = \mu_0, 
-\]
-avec $\mu_0 = 300g.$
+\begin{answer}
+  Nous posons $n=40$ ; les poids des 40 pigeons, $(x_1, x_2, \dots, x_n)$, sont
+  la réalisation de l'échantillon aléatoire $(X_1, X_2, \dots, X_n)$ composé de
+  variables aléatoires indépendantes et identiquement distribuées de même loi
+  que $X$.
 
-Nous n'avons aucun a priori sur le poids des pigeons du Jardin du Luxembourg,
-et formulons donc l'hypothèse alternative bilatérale
-\[
-  \HH_1 : \mu \neq \mu_0.
-\]
+  Nous posons l'hypothèse nulle à tester
+  \[
+    \HH_0 : \mu = \mu_0,
+  \]
+  avec $\mu_0 = 300\si{g}.$
 
+  Nous n'avons aucun a priori sur le poids des pigeons du Jardin du Luxembourg,
+  et formulons donc l'hypothèse alternative bilatérale
+  \[
+    \HH_1 : \mu \neq \mu_0.
+  \]
+\end{answer}
+
+\subsection{Statistique de test}
 Pour tester $\HH_0$, nous souhaitons déterminer la probabilité d'observer une
-moyenne empirique $\hat{m}$ de 350g si l'espérance de $X$ est de 300g.  En
+moyenne empirique $\hat{m}$ de 312g si l'espérance de $X$ est de 300g.  En
 posant $M_n$ la moyenne empirique de l'échantillon, nous souhaitons déterminer
 $\PP(M_n=\hat{m}|\mu=\mu_0)$.
 
@@ -412,28 +421,200 @@ Le théorème central limite nous indique que
   \frac{\sqrt{n} (M_n - \mu)}{\sigma}  \cvloi \Ncal(0, 1).
 \]
 
-Nous ne connaissons pas la variance $\sigma^2$ de $X$ ; cependant nous pouvons
-l'estimer grâce à l'écart-type empirique $\hat{\sigma} = 30g,$ et utiliser 
+Avec $n = 40$, nous pouvons supposer que cette limite est suffisamment proche
+d'être atteinte pour poser
 \[
-  \frac{\sqrt{n} (M_n - \mu)}{\hat \sigma}  \cvloi \Ncal(0, 1).
+  \frac{\sqrt{n} (M_n - \mu)}{\sigma}  \sim \Ncal(0, 1).
 \]
+
+Nous ne connaissons pas la variance $\sigma^2$ de $X$ ; cependant nous pouvons
+l'estimer grâce à l'écart-type empirique $\hat{\sigma} = 31\si{g},$ et utiliser 
+\begin{equation}
+  \frac{\sqrt{n} (M_n - \mu)}{\hat \sigma}  \sim \Ncal(0, 1).
+\label{eq:tcl_moyenne}
+\end{equation}
 Nous ne remplaçons pas $\mu$ par son estimation $\hat{m}$ : ce n'aurait aucun
 sens, car nous cherchons justement à tester sa valeur.
 
+\paragraph{Question :} Comment utiliser l'équation~\ref{eq:tcl_moyenne} pour
+définir une statistique de test ?
+
+\begin{answer}
+  Si $\HH_0$ est vraie, alors $\mu = \mu_0$ et la variable aléatoire réelle
+  \begin{equation}
+    \label{eq:z_moyennes}
+    Z = \frac{\sqrt{n} (M_n - \mu_0)}{\hat \sigma}
+  \end{equation}
+  est une gaussienne standard : $Z \sim \Ncal(0, 1)$.
+
+  $Z$ est donc une variable aléatoire rélle dont nous connaissons la
+  distribution sous l'hypothèse nulle. Cela en fait une bonne candidate à être
+  statistique de test.
+\end{answer}
+Sous $\HH_0$, on s'attend à ce que la réalisation de $Z$ sur l'échantillon
+observé soit proche de $0.$ Nous réalisons un test bilatéral et n'avons aucun a
+priori sur le signe de $Z.$ Ainsi, nous rejetterons $\HH_0$ si la réalisation
+de $\abs{Z}$ est « trop grande » pour être plausible.
+
+Le test statistique permettant de tester si la moyenne d'un échantillon vaut
+une valeur prédéterminé consiste donc à rejeter $\HH_0$ si $\abs{Z} > z_0.$
+
+\paragraph{Question : } Étant donné un niveau de signification $\alpha$, quelle
+est la valeur critique $z_0$ ?
+
+\begin{answer}
+  Nous souhaitons que la probabilité de rejeter $\HH_0$ alors qu'elle est vraie
+  soit égale à $\alpha.$ En d'autres termes, nous cherchons $z_0$ tel que
+  \[
+    \PP(\abs{Z} > z_0) = \alpha, \text{ sachant } Z \sim \Ncal(0, 1).
+  \]
+  La densité de $Z$ étant symmétrique, on cherche donc $z_0$ telle que 
+  \[
+    \PP(Z < -z_0) = \frac{\alpha}{2}.
+  \]
+  Ceci est illustré sur la figure~\ref{fig:z_moyenne}.  
+\end{answer}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/tests/z_moyenne}
+  \caption{Densité d'une gaussienne centrée réduite. L'aire colorée vaut
+    $\alpha$ et correspond au domaine de rejet du test.}
+  \label{fig:z_moyenne}
+\end{figure}
+
+\paragraph{Question :} Peut-on rejeter l'hypothèse selon laquelle les pigeons
+du jardin du Luxembourg ont un poids moyen de 300g ?
+
+\begin{answer}
+  Cela dépend du niveau de signification que l'on choisit.
+
+  Calculons tout d'abord la réalisation de la statistique de test $Z$ sur notre
+  échantillon : $z = 2,45.$
+
+  Posons $\alpha = 0,05.$ Alors $z_0 \approx 1,96.$ On a bien $z > z_0$ et on
+  rejette l'hypothèse nulle. On dit que l'écart entre $M_n$ et $\mu_0$ est
+  \textbf{statistiquement significatif.}
+
+  Posons maintenant $\alpha = 0,01.$ Le domaine de rejet est plus restreint ;
+  $z_0 \approx 2,58.$ On ne peut pas rejeter l'hypothèse nulle. L'écart entre
+  $M_n$ et $\mu_0$ n'est pas statistiquement significatif.
 
 
+  Cet exemple est illustré sur la figure~\ref{fig:z_pigeons}.
+\end{answer}
 
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figures/tests/z_pigeons}
+  \caption{Densité d'une gaussienne centrée réduite. La valeur $z=2,45$ est
+    dans le domaine de rejet pour $\alpha = 0.05$ mais pas pour
+    $\alpha = 0.01$.}
+  \label{fig:z_pigeons}
+\end{figure}
+
+\subsection{p-valeur}
+\paragraph{Question :} Quelle est la p-valeur correspondant à la valeur de test
+$z=2,45$ ?
+
+\begin{answer}
+  La p-valeur est
+  \[
+    \PP(\abs{Z}) \geq \abs{z} = \PP(Z \leq -\abs{z}) + \PP(Z \geq \abs{z}) = 2
+    \PP(Z \leq -\abs{z}) = 2 \Phi(-\abs{z}) = 0.018.
+  \]
+  où $\Phi$ est la fonction de répartition d'une gaussienne standard.
+
+  Cette p-valeur est bien inférieure au seuil de signification $\alpha = 0.05$,
+  mais supérieure au seuil de signification $\alpha = 0.01$.
+\end{answer}
+
+\subsection{Test unilatéral à droite}
+Supposons maintenant que nous nous demandons si les pigeons du Jardin du
+Luxembourg, qui nous semblent particulièrement bien nourris de restes des
+sandwhicheries environnantes, ne seraient pas plus lourds que la moyenne de
+300g. Il s'agit maintenant de faire un test unilatéral à droite, pour lequel
+\[
+  \HH_1 : \mu \neq \mu_0.
+\]
+
+\paragraph{Question :} Comment cela transforme-t-il notre test d'hypothèse ?
+
+\begin{answer}
+  Le test statistique consiste maintenant à rejeter $\HH_0$ si $Z > z_r$ (sans
+  valeur absolue). En particulier, toutes les valeurs négatives nous font
+  accepter $\HH_0$, contrairement au cas bilatéral.
+  
+  La valeur critique $z_r$ est telle que 
+  \[
+    \PP(Z > z_r) = \alpha, \text{ sachant } Z \sim \Ncal(0, 1).
+  \]
+  La densité de $Z$ étant symmétrique, on cherche donc $z_0$ telle que 
+  \[
+    \Phi(-z_r) = \alpha.
+  \]
+  
+  Pour $\alpha = 0.05,$ la valeur critique est $z_r = 1,64.$ Pour
+  $\alpha = 0.01,$ la valeur critique est $z_r = 2,33.$ L'hypothèse nulle est
+  rejetée dans les deux cas.
+
+  Le test unilatéral est plus puissant pour les valeurs du bon côté.
+
+  Cet exemple est illustré sur la figure~\ref{fig:z_pigeons_unilateral}.
+\end{answer}
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/tests/z_pigeons_unilateral}
+  \caption{Densité d'une gaussienne centrée réduite. La valeur $z=2,45$ est
+    dans le domaine de rejet pour $\alpha = 0.05$ et pour $\alpha = 0.01$ dans
+    le cas du test unilatéral.}
+  \label{fig:z_pigeons_unilateral}
+\end{figure}
 
 TODO test pour comparer la moyenne de deux échantillons, par exemple cas et
 contrôles dans un essai clinique.
 
 
-
-
-
-
-
 \subsection{Intervalle de confiance}
+Reprenons le test bilatéral.
+
+Étant donné $\alpha,$ nous avons déterminé $z_0$ de sorte à ce que
+\[
+  \PP(\abs{Z} > z_0) = \alpha, \text{ sachant } Z \sim \Ncal(0, 1).
+\]
+
+En d'autres termes, 
+\[
+  \PP(-z_0 \leq Z \leq z_0) = 1 - \alpha. 
+\]
+(On pourra se référer à la figure~\ref{fig:z_moyenne}.)
+
+D'après la définition de $Z$ (équation~\ref{eq:z_moyennes}), cela est équivalent à 
+\[
+  \PP\left( M_n - \frac{\hat{\sigma}}{\sqrt{n}} z_0 \leq 
+    \mu \leq M_n + \frac{\hat{\sigma}}{\sqrt{n}}z_0 \right) = 1 - \alpha.
+\]
+
+Ainsi l'intervalle 
+\[
+  I = \left[ M_n - \frac{\hat{\sigma}}{\sqrt{n}} z_0, 
+      M_n + \frac{\hat{\sigma}}{\sqrt{n}} z_0   \right]
+\]
+est un \textbf{intervalle de confiance} à $(1 - \alpha)$ pour la taille moyenne $\mu$.
+
+Dans notre exemple, l'intervalle de confiance à 95\% pour la valeur moyenne du
+poids d'un pigeon est $[302,4\si{g}~; 321,6\si{g}]$.
+$\mu_0$ n'est pas dans l'intervalle de confiance ; on adopte l'hypothèse
+alternative selon laquelle $\mu \neq \mu_0.$
+
+L'intervalle de confiance à 99\% est $[299,4\si{g}~; 324,6\si{g}].$ Cet
+intervalle contient $\mu_0$. On ne peut pas rejeter l'hypothèse nulle.
+
+TODO Intervalle de confiance pour le test unilatéral.
+
 TODO REF Probabilités V
 
 \section{Test d'indépendance du $\chi^2$}
