@@ -139,11 +139,11 @@ Soit $\theta \in \RR$ une quantité déterministe (i.e. il ne s'agit pas d'une
 variable aléatoire), qui dépend uniquement de $\PP_X.$ Le but de l'estimation
 ponctuelle est d'approcher au mieux la valeur de $\theta$. 
 
-\begin{exemple} Si l'on fait l'hypothèse que $X$ suit une loi
-exponentielle (statistique inférentielle paramétrique), on peut chercher à
-estimer le paramètre $\theta$ de cette loi. On peut aussi chercher à estimer
-l'espérance de $\PP_X,$ un de ses moments, un quantile, etc.
-\end{exemple}
+Si l'on fait l'hypothèse que $X$ suit une loi exponentielle (statistique
+inférentielle paramétrique), on peut chercher à estimer le paramètre $\theta$
+de cette loi. On peut aussi chercher à estimer l'espérance de $\PP_X,$ un de
+ses moments, un quantile, etc.
+
 
 \subsection{Définition d'un estimateur}
 On appelle \textbf{estimateur} de $\theta$ une statistique de l'échantillon
@@ -193,30 +193,34 @@ une estimation de $m$.
 
 À ce stade, rien ne nous permet de dire que $M_n$ est un \textit{bon}
 estimateur de $m$ ; en effet, nous pourrions aussi définir
-$\frac2n \sum_{i=1}^n X_i$ comme estimateur de la moyenne. Quelles sont les
-\textit{propriétés} de $M_n$ qui nous font préférer poser $M_n$ comme nous
-l'avons fait ? Quelques indices :
+$\frac2n \sum_{i=1}^n X_i$ comme estimateur de la moyenne. 
 
-\begin{itemize}
-\item $\EE(M_n) = m.$ Nous verrons que l'on dit que $M_n$ est un estimateur
-  \textit{non-biaisé} de $m$ (cf. section~\ref{sec:biais_estimateur}) ;
-\item $\VV(M_n) = \frac{\sigma^2}{n}$ (voir calcul
-  section~\ref{sec:variance_moyenne_empirique}) : plus l'échantillon est grand, plus la
-  variance de l'estimateur est faible, autrement dit plus sa réalisation
-  $\hat{m}_n$ sera proche de son espérance $m$. On parle ici de la
-  \textit{précision} de $M_n$ (cf. section~\ref{sec:precision_estimateur}) ;
-\item Par la loi faible des grands nombres, $M_n \cvproba m.$ Nous
-  verrons que l'on dit que $M_n$ est un estimateur \textit{convergent} de $m$
-  (cf. section~\ref{sec:convergence_estimateur}) ;
-\item Par la loi forte des grands nombres, $M_n \cvps m.$ Nous
-  verrons que l'on dit que $M_n$ est un estimateur \textit{fortement convergent} de $m$
-  (cf. section~\ref{sec:convergence_estimateur}).
-\end{itemize}
 
+\paragraph{Question :} Quelles sont selon vous les \textit{propriétés} de $M_n$
+qui nous font préférer poser $M_n$ comme nous l'avons fait ?
+
+\begin{answer}
+  \begin{itemize}
+  \item $\EE(M_n) = m.$ \\Nous verrons que l'on dit que $M_n$ est un estimateur
+    \textit{non-biaisé} de $m$ (cf. section~\ref{sec:biais_estimateur}) ;
+  \item $\VV(M_n) = \frac{\sigma^2}{n}$ (voir calcul
+    section~\ref{sec:variance_moyenne_empirique}) : plus l'échantillon est
+    grand, plus la variance de l'estimateur est faible, autrement dit plus sa
+    réalisation $\hat{m}_n$ sera proche de son espérance $m$. \\On parle ici de
+    la \textit{précision} de $M_n$ (cf. section~\ref{sec:precision_estimateur})
+    ;
+  \item Par la loi faible des grands nombres, $M_n \cvproba m.$ \\Nous verrons
+    que l'on dit que $M_n$ est un estimateur \textit{convergent} de $m$
+    (cf. section~\ref{sec:convergence_estimateur}) ;
+  \item Par la loi forte des grands nombres, $M_n \cvps m.$ \\Nous verrons que
+    l'on dit que $M_n$ est un estimateur \textit{fortement convergent} de $m$
+    (cf. section~\ref{sec:convergence_estimateur}).
+  \end{itemize}
+\end{answer}
 
 
 \section{Propriétés d'un estimateur}
-Nous considérdons toujours dans cette section un échantillon aléatoire
+Nous considérons toujours dans cette section un échantillon aléatoire
 $(X_1, X_2, \dots, X_n)$ de taille $n \in \NN^*$ d'une variable aléatoire
 réelle $X$ de loi $\PP_X$, et un estimateur $\Theta_n$ de $\theta$.
 
@@ -322,7 +326,7 @@ est un estimateur \textbf{fortement convergent} de $\theta$.
 \paragraph{Propriété} Un estimateur sans biais et de variance
 asymptomatiquement nulle est convergent.
 
-La preuve en a été faite dans l'exercice « Convergence vers une constante » de
+\paragraph{Preuve} La preuve en a été faite dans l'exercice « Convergence vers une constante » de
 Probabilité III. Pour rappe, posons $\Theta_n$ un estimateur non biaisé
 et de variance asymptotiquement nulle de $\theta \in \RR$.  Par définition,
 $\EE(\Theta_n) = \theta$ et $\VV(\Theta_n) \cvn 0$, $\Theta_n$ est donc
@@ -519,6 +523,7 @@ est l'espérance de la distribution postérieure de $\Theta$ :
   \thetabayes  = \EE(\Theta|X_1 = x_1, X_2=x_2, \dots, X_n=x_n).
 \end{equation}
 
+\paragraph{Preuve}
 En effet, posons $\thetahat \in \Scal.$ Alors
 \begin{equation*}
   \EE((\Theta - \thetahat)^2) = (\EE(\Theta) - \thetahat)^2 + 
@@ -526,17 +531,18 @@ En effet, posons $\thetahat \in \Scal.$ Alors
 \end{equation*}
 Comme ni $\EE(\Theta^2)$ ni $\EE(\Theta)^2$ ne dépendent de $\thetahat,$
 $\thetabayes$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\thetabayes = 
-\EE(\Theta) - \EE(\Theta|(X_1, X_2, \dots, X_n)). \hfill \square$.
+\EE(\Theta) - \EE(\Theta|(X_1, X_2, \dots, X_n)). \hfill \square$
 
 \begin{exemple}
-  Reprenons notre exemple de taux de réussite au baccalauréat.
-
-  Nous supposons maintenant que $p$ est une réalisation d'une variable
-  aléatoire $\Theta$ qui suit une loi bêta de paramètres $(\alpha, \beta).$ Quelques
-  détails sur cette loi sont rappelées à la section~\ref{sec:loi_beta}.
+  Reprenons notre exemple de taux de réussite au baccalauréat.  Nous supposons
+  maintenant que $p$ est une réalisation d'une variable aléatoire $\Theta$ qui
+  suit une loi bêta de paramètres $(\alpha, \beta)$
+  (cf. section~\ref{sec:loi_beta}).
 
   Pour calculer l'estimateur de Bayes de $p$, il nous faut connaître la loi
-  $\PP(\Theta|X_1=x_1, X_2=x_2, \dots, X_n=x_n).$
+  \[
+    \PP(\Theta|X_1=x_1, X_2=x_2, \dots, X_n=x_n).
+  \]
   
   La loi de Bayes, combinée à l'hypothèse d'indépendance et de distribution
   identique des $X_i$, nous permet d'écrire
@@ -593,9 +599,9 @@ $\thetabayes$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\t
   \centering
   \includegraphics[width=\textwidth]{figures/estimation/bayes_estimate}
   \caption{Loi a priori et a posteriori pour le paramètre $p$ dans l'exemple du
-    taux de réussite au baccalauréat. Sans voir de données, $p=0.80$,
+    taux de réussite au baccalauréat. Sans voir de données, $p=0,80$,
     c'est-à-dire l'espérance de sa loi a priori (croix bleue). En utilisant
-    uniquement l'échantillon, $p=0.90$, c'est-à-dire son estimation par maximum
+    uniquement l'échantillon, $p=0,90$, c'est-à-dire son estimation par maximum
     de vraisemblance (triangle vert). L'estimation de Bayes (rond orange) est
     intermédiaire.}
   \label{fig:bayes_estimate}
@@ -619,12 +625,15 @@ $\EE(X^2) = \sigma^2 + m^2$.
 Posons $M_n = \frac1n \sum_{i=1}^n X_i.$
 \begin{align*}
   \VV(M_n) &= \EE(M_n^2) - \EE(M_n)^2 
-   = \EE\left(\left(\frac1n \sum_{i=1}^n X_i\right)^2\right) - m^2 \\
-  & = \frac1{n^2} \EE\left( \sum_{i=1}^n X_i \sum_{j=1}^n X_j\right) - m^2 \\
-  & = \frac1{n^2} \EE\left( \sum_{i=1}^n \left(X_i^2 + \sum_{j \neq i }^n X_i X_j \right) \right) - m^2 \\
-  & = \frac1{n} \left(\EE(X^2) + \sum_{j \neq i }^n \EE(X)^2 \right) - m^2 \\
-  & = \frac1{n} \left(\sigma^2 + m^2 + (n-1) m^2  \right) - m^2 = \frac{\sigma^2}{n}.
+   = \EE\left(\left(\frac1n \sum_{i=1}^n X_i\right)^2\right) - m^2 
+   = \frac1{n^2} \EE\left( \sum_{i=1}^n X_i \sum_{j=1}^n X_j\right) - m^2 \\
+  & = \frac1{n^2} \EE\left( \sum_{i=1}^n \left(X_i^2 + \sum_{j \neq i }^n X_i X_j \right) \right) - m^2 
+   = \frac1{n} \left(\EE(X^2) + \sum_{j \neq i }^n \EE(X)^2 \right) - m^2, \\
 \end{align*}
+Et donc 
+\[
+  \VV(M_n) = \frac1{n} \left(\sigma^2 + m^2 + (n-1) m^2  \right) - m^2 = \frac{\sigma^2}{n}.
+\]
 
 \subsection{Biais de la variance empirique} 
 \label{sec:biais_variance_empirique}
@@ -718,6 +727,9 @@ $\frac{\alpha}{\alpha + \beta}$.
 
 
 
-
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "sdd_2020_poly"
+%%% End:
 
 

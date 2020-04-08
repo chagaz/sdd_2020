@@ -2,12 +2,12 @@
 \label{chap:intro}
 
 \section{Continuité pédagogique}
-TODO
+\todo{Mise au point sur les modalités d'enseignement à distance.}
 
 
 \section{Qu'est-ce que la science des données ?}
-TODO
-
+\todo{Définir données, science des données, donner des exemples d'application
+  diverses et variées.}
 
 Le premier but de ce cours est de démystifier la science des données, le Big
 Data, l'intelligence artificielle telle qu'on en parle de nos jours et à vous
@@ -101,7 +101,7 @@ bien précis : le dosage de l'antigène tumoral 125. Ces données sont issues de
 la base de dépenses de biologie médicale en France mise à disposition par
 l'Assurance
 Maladie\footnote{\url{http://open-data-assurance-maladie.ameli.fr/biologie/index.php}}. La
-population complète, de 604 individus, est disponible dans le fichier
+population complète, de 604 individus, est disponible dans le fichier\\
 \texttt{data/OPEN\_BIO\_2018\_7325.csv}.
 
 Chaque individu de cette population (i.e. ligne du tableau) correspond à un
@@ -126,13 +126,14 @@ en évidence des propriétés de cet ensemble. Elle permet aussi de suggérer des
 hypothèses relatives à la population dont sont issues les observations. Il
 s'agit principalement de calculer des indicateurs (par exemple des moyennes) et
 de visualiser les données par des graphiques. La visualisation peut être
-enrichie par des techniques de réduction de dimension (voir chapitre TODO REF),
-qui permettent de créer un petit nombre de variables qui résument les mesures
-prises sur les observations, et des techniques de partitionnement, ou
-clustering, qui permettent de réduire la taille d'un échantillon en regroupant
-les individus présentant des caractéristiques homogènes (ce sujet sera abordé
-plus en détail dans TODO nom cours ML avancé. Nous détaillons la statistique
-descriptive dans le chapitre~\ref{sec:stat_descr}.
+enrichie par des techniques de réduction de dimension (voir
+chapitre~\ref{chap:dimred}), qui permettent de créer un petit nombre de
+variables qui résument les mesures prises sur les observations, et des
+techniques de partitionnement, ou clustering, qui permettent de réduire la
+taille d'un échantillon en regroupant les individus présentant des
+caractéristiques homogènes (ce sujet sera abordé plus en détail dans \todo{nom
+  du cours ML avancé}). Nous détaillons la statistique descriptive dans le
+chapitre~\ref{chap:stat_descr}.
 
 \subsection{Statistique inférentielle} 
 Aussi appellée \textbf{statistique décisionnaire,} ou encore \textbf{inférence
@@ -148,14 +149,14 @@ l'échantillon. Les chapitres~\ref{chap:estimation} et~\ref{chap:tests} traîtent
 de statistique inférentielle.
 
 
-\subsection{L'apprentissage statistique} TODO Notions d'apprentissage
-non-supervisé / exploratoire / analyse exploratoire de données ; vs
-apprentissage supervisé. Reprendre intro Dunod.
+\subsection{L'apprentissage statistique} 
+\todo{Introduire le ML + notions d'apprentissage non-supervisé / exploratoire /
+  analyse exploratoire de données ; vs apprentissage supervisé.}
 
 
 \section{Déroulé du cours et évaluation}
 Le document que vous êtes en train de lire vit sur GitHub :
-\href{https://github.com/chagaz/sdd\_2020}{https://github.com/chagaz/sdd\_2020}.
+\href{https://github.com/chagaz/sdd\_2020}{\texttt{https://github.com/chagaz/sdd\_2020}}.
 
 Dans ce même répertoire, vous trouverez aussi les dossiers
 \begin{itemize}
@@ -172,8 +173,10 @@ ajouts via des pull-requests.
 
 \section{Remerciements}
 Les contenus de ce poly s'appuient en partie sur des documents mis à
-disposition par Laure Reboul, Jean-Jacques Ruch, Joseph Salmon, TODO ainsi que
-les ouvrages de TODO
+disposition par Laure Reboul, Joseph Salmon, \todo{compléter} ainsi que les
+ouvrages \textit{Probabilités, analyse des données et Statistique} (Technip) de
+Gilbert Saporta et \textit{Introduction au Machine Learning} (Dunod InfoSup) de
+Chloé-Agathe Azencott.
 
 
 %\section{Tableaux de données}
@@ -224,7 +227,7 @@ les ouvrages de TODO
   \begin{tabular}{|r|r|r|r|r|r|} \hline
     \multirow{2}{*}{Âge} & \multirow{2}{*}{Région} & Nombre & Montants & Montants  \\ 
     & & d'actes & remboursés & remboursables \\ 
-    ans & & & (EUR) & (EUR) \\\hline 
+    ans & & & (\texteuro) & (\texteuro) \\\hline 
     $>$ 60 & 76 & 26 & 377,96 & 402,80\\  \hline
     $>$ 60 & 75 & 1\,401 & 14\,054,37 & 21\,332,15\\  \hline
     $>$ 60 & 44 & 5\,299 & 65\,928,93 & 80\,447,00\\  \hline
@@ -260,3 +263,10 @@ les ouvrages de TODO
     93 = Provence-Alpes-Côte d'Azur et Corse.}
   \label{tab:remboursement_data}
 \end{table}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "sdd_2020_poly"
+%%% End:

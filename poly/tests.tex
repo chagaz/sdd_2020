@@ -3,12 +3,14 @@
 
 \paragraph{Notions :} hypothèse nulle, hypothèse alternative, statistique de
 test, p-valeur, tests multiples.
-\paragraph{Objectifs pédagogiques :}
+\paragraph{Objectifs pédagogiques :} 
 \begin{itemize}      
   \setlength{\itemsep}{3pt}
-\item Interpréter une p-valeur.
 \item Reconnaître une situation dans laquelle un test statistique est
   approprié.
+\item Poser les hypothèses de test nulle et alternative correspondant à un
+  énoncé.
+\item Interpréter une statistique de test ou une p-valeur.
 \end{itemize}
 
 
@@ -18,10 +20,10 @@ Le but d'un test statistique est de déterminer la fiabilité d'une observation
 faite sur une échantillon.
 
 \begin{exemple}
-  Si je lance une pièce 5 fois et obtiens 5 fois pile, puis-je en déduire que
+Si je lance une pièce 5 fois et obtiens 5 fois pile, puis-je en déduire que
   la pièce est déséquilibrée ? Ou ce résultat est-il dû au hasard de
   l'échantillonnage ? Qu'en est-il si j'obtiens le même résultat après 50
-  lancers ?
+  lancers ? 
 \end{exemple}
 
 \textbf{Un test statistique permet de déterminer si l'échantillon observé
@@ -35,7 +37,7 @@ faite sur une échantillon.
   est faible, mais non négligeable : on a 3\% de chance d'obtenir un résultat
   aussi extrême que celui observé sur un échantillon.
 
-  Pour 50 lancers, cette probabilité tombe à $0,5^{50} = 9.10^{-16}.$ Cette
+  Pour 50 lancers, cette probabilité tombe à $0,5^{50} = 9,10^{-16}.$ Cette
   probabilité est extrêmement faible, et l'échantillon ne soutient pas
   l'hypothèse selon laquelle la pièce est équilibrée : nous pouvons la rejeter.
 \end{exemple}
@@ -93,7 +95,7 @@ où $\theta_0 \in \Scal$ est une valeur déterministe fixée à l'avance.
 L'hypothèse nulle peut cependant être de nature plus complexe, par exemple :
 \begin{itemize}
 \item « Deux variables statistique $X$ et $Y$ sont indépendantes » (c'est le
-  cas du test d'indépendance du $\chi^2$, cf. section~\ref{sec:chi2}).
+  cas du test d'indépendance du $\chi^2$, \todo{cf. TD}).
 \item « Deux échantillons $(x_1, x_2, \dots, x_n)$ et $(y_1, y_2, \dots, y_n)$
   sont des réalisations de la même distribution » (c'est le cas du test de
   Wilcoxon-Mann-Whitney, qui dépasse le cadre de ce programme) ;
@@ -143,10 +145,11 @@ population, l'hypothèse alternative peut prendre deux formes :
     \label{eq:h1_bilateral}
     \HH_1: \theta < \theta_0 \text{ ou } \theta > \theta_0.
   \end{equation}
-  On parle alors de test \textbf{bilatéral.}
+  On parle alors de test \textbf{bilatéral} (\textit{two-sided test} en
+  anglais).
 \item Si seulement l'une des deux parties de cette hypothèse alternative nous
-  intéresse, ou est possible, on parle de test \textbf{unilatéral.} Il s'agit
-  alors de tester soit
+  intéresse, ou est possible, on parle de test \textbf{unilatéral}
+  (\textit{one-sided test} en anglais). Il s'agit alors de tester soit
   \begin{equation}
     \label{eq:h1_unilateral_gauche}
     \HH_1: \theta < \theta_0,
@@ -235,11 +238,11 @@ dont nous connaissons la loi $\PP_{T0}$ sous $\HH_0$. Il nous faut maintenant
 déterminer le \textbf{domaine de rejet} du test, autrement dit l'ensemble
 $\Ical \subseteq \RR$ de ses valeurs qui conduisent à rejeter $\HH_0$.
 
-Pour ce faire, nous avons besoin de fixer le \textbf{niveau de signification,}
-$0 < \alpha < 1$, qui est la probabilité de rejeter l'hypothèse nulle alors
-qu'elle est correcte. Ce seuil est fixé à l'avance, généralement parmi
-$\alpha = 1\%$, $\alpha = 5\%$ ou $\alpha = 10\%$, et détermine à quel point le
-test est strict.
+Pour ce faire, nous avons besoin de fixer le \textbf{niveau de signification}
+(\textit{significance level}), $0 < \alpha < 1$, qui est la probabilité de
+rejeter l'hypothèse nulle alors qu'elle est correcte. Ce seuil est fixé à
+l'avance, généralement parmi $\alpha = 1\%$, $\alpha = 5\%$ ou $\alpha = 10\%$,
+et détermine à quel point le test est strict.
 
 Ainsi, il s'agit de déterminer $\Ical \subseteq \RR$ de sorte à ce que
 $\PP_{T0}(T \in \Ical) = \alpha.$
@@ -292,20 +295,24 @@ $\PP_{T0}(T \in \Ical) = \alpha.$
   $\HH_1: \pi > 0,5$ nous permet de rejeter l'hypothèse nulle. C'est une
   observation générale : un test unilatéral est plus puissant qu'un test
   bilatéral ; cependant il n'est utile que si on sait de quel côté le définir.
-
 \end{exemple}
 
+\subsection{Valeur critique}
 Dans le cas d'un test sur la valeur d'un paramètre $\theta$, c'est-à-dire avec
-pour hypothèse nulle $\HH_0: \theta = \theta_0$, le domaine de rejet sera de la
-forme
+pour hypothèse nulle 
+\[
+  \HH_0: \theta = \theta_0,
+\]
+le domaine de rejet sera de la forme
 \begin{itemize}
-\item $\Ical = \mathopen]t_r, +\infty \mathclose[$ pour le test unilatéral à droite
-  $\HH_1 : \theta > \theta_0$ ;
-\item $\Ical = \mathopen]-\infty, t_l \mathclose[$ pour le test unilatéral à gauche
-  $\HH_1 : \theta > \theta_0$ ;
-\item $\Ical = \mathopen]-\infty, t_l \mathclose[ \cup
-  \mathopen]t_r, +\infty \mathclose[$ pour le test bilatéral
-  $\HH_1 : \theta \neq \theta_0$. 
+\item $\Ical = \mathopen]t_r, +\infty \mathclose[$ pour le test unilatéral à
+  droite, pour lequel $\HH_1 : \theta > \theta_0$ ;
+\item $\Ical = \mathopen]-\infty, t_l \mathclose[$ pour le test unilatéral à
+  gauche, pour lequel $\HH_1 : \theta > \theta_0$ ;
+\item
+  $\Ical = \mathopen]-\infty, t_l \mathclose[ \cup \mathopen]t_r, +\infty
+  \mathclose[$
+  pour le test bilatéral, pour lequel $\HH_1 : \theta \neq \theta_0$.
 \end{itemize}
 
 On cherchera souvent à utiliser une statistique de test symmétrique, de sorte à
@@ -316,12 +323,22 @@ pouvoir utiliser $t_r = - t_l$.  Dans ce cas $t_0 = t_t$ est appelée
 \item $\PP_{T0}(T < - t_0) = \alpha$ pour le test unilatéral à gauche ; 
 \item $\PP_{T0}(|T| > t_0) = \alpha$ pour le test bilatéral. 
 \end{itemize}
+
+\subsection{p-valeur}
+La \textbf{p-valeur} (\textit{p-value} en anglais) d'un test statistique est
+définie dans le cas où le test statistique peut être réalisé en comparant une
+statistique de test $T$\footnote{ou sa valeur absolue $\abs{T}$, sans perte de
+  généralité, puisque l'on peut alors utiliser la statistique $U = \abs{T}.$} à
+une valeur critique $t_0$.
+
 Dans ce contexte, étant donné un échantillon $(x_1, x_2, \dots, x_n)$ et la
 réalisation $t$ de $T$ sur cet échantillon, on appelle \textbf{p-valeur} la
 probabilité $\PP_{T0}(T > t)$ pour un test unilatéral à droite (respectivement,
 $\PP_{T0}(T < -t)$ pour un test unilatéral à gauche, et $\PP_{T0}(\abs{T} > t)$
-pour un test bilatéral). L'hypothèse nulle est rejetée si la p-valeur est plus
-petite que le niveau de signification. 
+pour un test bilatéral). 
+
+L'hypothèse nulle est rejetée si la p-valeur est plus petite que le niveau de
+signification. On dit alors que la p-valeur est \textbf{significative.}
 
 En d'autres termes, la p-valeur peut être interprétée comme la probabilité
 d'obtenir, sous l'hypothèse nulle, un résultat au moins aussi extrême que celui
@@ -347,13 +364,22 @@ inférieure à $5\%.$
   \end{lstlisting}
 \end{exemple}
 
+\begin{attention}
+  On fera attention à ne pas sur-interpréter la p-valeur. En particulier, la
+  p-valeur \textit{n'est pas} la probabilité que l'hypothèse nulle soit vraie :
+  $\PP(t|\HH_0) \neq \PP(\HH_0|t)$.
+\end{attention}
+
+
 \subsection{Erreurs de première et deuxième espèce}
 Deux types d'erreurs sont possibles quand on fait un test d'hypothèse :
 \begin{itemize}
 \item Rejeter l'hypothèse nulle alors qu'elle est correcte : on parle d'une
-  \textbf{erreur de première espèce}, ou \textbf{erreur de Type I}.
+  \textbf{erreur de première espèce}, ou \textbf{erreur de Type I}
+  (\textit{Type I error} en anglais).
 \item Accepter l'hypothèse nulle alors qu'elle est en fait fausse : on parle
-  d'une \textbf{erreur de deuxième espèce}, ou \textbf{erreur de Type II}.
+  d'une \textbf{erreur de deuxième espèce}, ou \textbf{erreur de Type II}
+  (\textit{Type II error} en anglais).
 \end{itemize}
 
 \paragraph{Moyen mnémotechnique} Ces deux types d'erreur sont numérotées dans
@@ -371,7 +397,7 @@ erreur de première espèce.
 
 La probabilité de commettre une erreur de deuxième espèce est généralement noté
 $\beta$. La probabilité de rejeter $\HH_0$ à raison, $1-\beta$, est appelée la
-\textbf{puissance} du test.
+\textbf{puissance} du test (\textit{power} en anglais).
 
 
 \section{Comparaison d'une moyenne observée à une moyenne théorique}
@@ -507,10 +533,10 @@ du jardin du Luxembourg ont un poids moyen de 300g ?
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.7\textwidth]{figures/tests/z_pigeons}
+  \includegraphics[width=0.65\textwidth]{figures/tests/z_pigeons}
   \caption{Densité d'une gaussienne centrée réduite. La valeur $z=2,45$ est
-    dans le domaine de rejet pour $\alpha = 0.05$ mais pas pour
-    $\alpha = 0.01$.}
+    dans le domaine de rejet pour $\alpha = 0,05$ mais pas pour
+    $\alpha = 0,01$.}
   \label{fig:z_pigeons}
 \end{figure}
 
@@ -522,12 +548,12 @@ $z=2,45$ ?
   La p-valeur est
   \[
     \PP(\abs{Z}) \geq \abs{z} = \PP(Z \leq -\abs{z}) + \PP(Z \geq \abs{z}) = 2
-    \PP(Z \leq -\abs{z}) = 2 \Phi(-\abs{z}) = 0.018.
+    \PP(Z \leq -\abs{z}) = 2 \Phi(-\abs{z}) = 0,018.
   \]
   où $\Phi$ est la fonction de répartition d'une gaussienne standard.
 
-  Cette p-valeur est bien inférieure au seuil de signification $\alpha = 0.05$,
-  mais supérieure au seuil de signification $\alpha = 0.01$.
+  Cette p-valeur est bien inférieure au seuil de signification $\alpha = 0,05$,
+  mais supérieure au seuil de signification $\alpha = 0,01$.
 \end{answer}
 
 \subsection{Test unilatéral à droite}
@@ -555,8 +581,8 @@ sandwhicheries environnantes, ne seraient pas plus lourds que la moyenne de
     \Phi(-z_r) = \alpha.
   \]
   
-  Pour $\alpha = 0.05,$ la valeur critique est $z_r = 1,64.$ Pour
-  $\alpha = 0.01,$ la valeur critique est $z_r = 2,33.$ L'hypothèse nulle est
+  Pour $\alpha = 0,05,$ la valeur critique est $z_r = 1,64.$ Pour
+  $\alpha = 0,01,$ la valeur critique est $z_r = 2,33.$ L'hypothèse nulle est
   rejetée dans les deux cas.
 
   Le test unilatéral est plus puissant pour les valeurs du bon côté.
@@ -569,7 +595,7 @@ sandwhicheries environnantes, ne seraient pas plus lourds que la moyenne de
   \centering
   \includegraphics[width=0.85\textwidth]{figures/tests/z_pigeons_unilateral}
   \caption{Densité d'une gaussienne centrée réduite. La valeur $z=2,45$ est
-    dans le domaine de rejet pour $\alpha = 0.05$ et pour $\alpha = 0.01$ dans
+    dans le domaine de rejet pour $\alpha = 0,05$ et pour $\alpha = 0,01$ dans
     le cas du test unilatéral.}
   \label{fig:z_pigeons_unilateral}
 \end{figure}
@@ -600,40 +626,73 @@ D'après la définition de $Z$ (équation~\ref{eq:z_moyennes}), cela est équivalent
 
 Ainsi l'intervalle 
 \[
-  I = \left[ M_n - \frac{\hat{\sigma}}{\sqrt{n}} z_0, 
-      M_n + \frac{\hat{\sigma}}{\sqrt{n}} z_0   \right]
+  \left[ M_n - \frac{\hat{\sigma}}{\sqrt{n}} z_0, \; M_n +
+    \frac{\hat{\sigma}}{\sqrt{n}} z_0 \right]
 \]
-est un \textbf{intervalle de confiance} à $(1 - \alpha)$ pour la taille moyenne $\mu$.
+est un \textbf{intervalle de confiance} à $(1 - \alpha)$ pour la taille moyenne
+$\mu$ (voir Probabilités V).
 
 Dans notre exemple, l'intervalle de confiance à 95\% pour la valeur moyenne du
 poids d'un pigeon est $[302,4\si{g}~; 321,6\si{g}]$.
-$\mu_0$ n'est pas dans l'intervalle de confiance ; on adopte l'hypothèse
+$\mu_0 = 300\si{g}$ n'est pas dans l'intervalle de confiance ; on adopte l'hypothèse
 alternative selon laquelle $\mu \neq \mu_0.$
 
 L'intervalle de confiance à 99\% est $[299,4\si{g}~; 324,6\si{g}].$ Cet
 intervalle contient $\mu_0$. On ne peut pas rejeter l'hypothèse nulle.
 
-TODO Intervalle de confiance pour le test unilatéral.
+\paragraph{Exercice :} Calculer l'intervalle de confiance à 95\% et à 99\% pour
+le test d'hypothèse unilatéral à droite.
+\todo{Rédiger la solution}
 
-TODO REF Probabilités V
-
-\section{Test d'indépendance du $\chi^2$}
-\label{sec:chi2}
+% \section{Test d'indépendance du $\chi^2$}
+% \label{sec:chi2}
 
 \section{Tests d'hypothèses multiples}
 \label{sec:mht}
-
+\todo{}
 
 \begin{plusloin}
-\item La \textbf{puissance} d'un test statistique est la probabilité de rejeter
-  $\HH_0$ si elle est fausse. C'est le complément à 1 de l'erreur de deuxième
-  espèce (erreur de Type II), qui consiste à ne pas rejeter $\HH_0$ alors
-  qu'elle et fausse. La puissance est généralement délicate à évaluer car elle
-  nécessite de spécifier correctement $\HH_1$. 
-\item On dit d'un test statistique qu'il est sans biais si TODO
-\item On dit d'un test statistique qu'il converge si TODO
-\item Si la distribution de la statistique de test sous l'hypothèse nulle n'est
-  pas connue, on peut recourir à sa distribution empirique. Cette dernière est
-  obtenue par une technique de permutations. TODO
-\item TODO ``Controverse'' autour des p-valeurs
+\item \todo{On dit d'un test statistique qu'il est sans biais si}
+\item \todo{On dit d'un test statistique qu'il converge si}
+\item \todo{Si la distribution de la statistique de test sous l'hypothèse nulle n'est
+  pas connue, on peut recourir à des méthodes empiriques pour la déterminer de
+  manière empirique.}
+\item Pour plus de détails sur la sur-interprétation des p-valeurs en sciences
+  et le \textit{p-hacking} (consistant à ne conserver, parmi de nombreux tests
+  conduits sur les données, ceux qui donnent des p-valeurs significatives), on
+  pourra se reporter aux références suivantes.
+  \vspace{-105pt}
+  \begin{thebibliography}{99}
+  \bibitem{ioannidis2005}
+    John PA Ioannidis.
+    {Why most published research findings are false.}
+    \textit{PLoS medicine,} 
+    2(8):{e124},
+    {2005.}
+
+  \bibitem{head2015}
+    Megan L Head, Luke Holman, Rob Lanfear, Andrew T Kahn and Michael D Jennions.
+    {The extent and consequences of p-hacking in science.}
+    \textit{PLoS biology},
+    13(3):{e1002106},
+    {2015.}
+  \bibitem{wasserstein2016}
+    Ronald L Wasserstein, Nicole A Lazar, et al.
+    {The ASA's statement on p-values: context, process, and purpose}.
+    \textit{The American Statistician},
+    70(2):129--133,
+    2016.
+
+  \bibitem{holmes2018}
+    Susan Holmes.
+    {Statistical proof? The problem of irreproducibility}.
+    \textit{Bulletin (New Series) of the American Mathematical Society},
+    {55}(1), 2018.
+  \end{thebibliography}
 \end{plusloin}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "sdd_2020_poly"
+%%% End:

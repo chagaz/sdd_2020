@@ -1,6 +1,26 @@
 %-*- coding: iso-latin-1 -*-    
 \label{chap:generalisation}
-Blah
+
+\todo{
+  \begin{itemize}
+  \item Cohérence des notations avec les chapitres précédents.
+  \item Lien avec le cours d'optimisation.
+  \item Alléger / élaguer.
+  \end{itemize}
+}
+
+
+\paragraph{Notions :} généralisation ; sur-apprentissage ; sélection de modèle
+; validation croisée ; régularisation des modèles paramétriques linéaires
+\paragraph{Objectifs pédagogiques :} 
+\begin{itemize}      
+  \setlength{\itemsep}{3pt}
+\item Détecter un risque de sur-apprentissage ;
+\item Mettre en place un cadre permettant de sélectionner un modèle parmi
+  plusieurs et d'estimer sa performance en généralisation ;
+\item Utiliser la régularisation pour éviter le sur-apprentissage ;
+\item Manipuler les régularisations $\ell_1$ et $\ell_2$ sur des modèles linéaires.
+\end{itemize}
 
 \section{Généralisation et sur-apprentissage}
 \subsection{Généralisation}
@@ -106,54 +126,55 @@ problème de régression.
 
 \subsection{Compromis biais-variance}
 \label{sec:bias_variance}
-Pour mieux comprendre le risque d'un modèle $f: \XX \rightarrow \YY$, nous
-pouvons le comparer à l'erreur minimale $\Rcal^*$ qui peut être atteinte par
-n'importe quelle fonction mesurable de $\XX$ dans $\YY$ : c'est ce qu'on
-appelle l'\textit{excès d'erreur}, et que l'on peut décomposer de la façon
-suivante :
-\begin{equation}
-  \label{eq:estimation_approximation}
-  \Rcal(f) - \Rcal^* = \left[ \Rcal(f) - \min_{h \in \FF} 
-    \Rcal(h) \right]
-  + \left[ \min_{h \in \FF} \Rcal(h) - \Rcal^* \right]
-\end{equation}
+\todo{Réécrire en lien avec le chapitre sur l'estimation.}
+% Pour mieux comprendre le risque d'un modèle $f: \XX \rightarrow \YY$, nous
+% pouvons le comparer à l'erreur minimale $\Rcal^*$ qui peut être atteinte par
+% n'importe quelle fonction mesurable de $\XX$ dans $\YY$ : c'est ce qu'on
+% appelle l'\textit{excès d'erreur}, et que l'on peut décomposer de la façon
+% suivante :
+% \begin{equation}
+%   \label{eq:estimation_approximation}
+%   \Rcal(f) - \Rcal^* = \left[ \Rcal(f) - \min_{h \in \FF} 
+%     \Rcal(h) \right]
+%   + \left[ \min_{h \in \FF} \Rcal(h) - \Rcal^* \right]
+% \end{equation}
 
-Le premier terme, $\Rcal(f) - \min_{h \in \FF} \Rcal(h)$, quantifie la distance
-entre le modèle $f$ et le modèle optimal sur $\FF$. C'est ce que l'on appelle
-{\it l'erreur d'estimation.}
+% Le premier terme, $\Rcal(f) - \min_{h \in \FF} \Rcal(h)$, quantifie la distance
+% entre le modèle $f$ et le modèle optimal sur $\FF$. C'est ce que l'on appelle
+% {\it l'erreur d'estimation.}
 
-Le second terme, $\min_{h \in \FF} \Rcal(h) - \Rcal^*$, quantifie la qualité du
-modèle optimal sur $\FF$, autrement dit, la qualité du choix de l'espace des
-hypothèses. C'est ce que l'on appelle {\it l'erreur d'approximation.} Si $\FF$
-est l'ensemble des fonctions mesurables, alors l'erreur d'approximation est
-nulle.
+% Le second terme, $\min_{h \in \FF} \Rcal(h) - \Rcal^*$, quantifie la qualité du
+% modèle optimal sur $\FF$, autrement dit, la qualité du choix de l'espace des
+% hypothèses. C'est ce que l'on appelle {\it l'erreur d'approximation.} Si $\FF$
+% est l'ensemble des fonctions mesurables, alors l'erreur d'approximation est
+% nulle.
 
-Ainsi, l'écriture~\ref{eq:estimation_approximation} permet de décomposer
-l'erreur entre un terme qui découle de la qualité de l'espace des hypothèses et
-un autre qui découle de la qualité de la procédure d'optimisation utilisée. En
-pratique, sauf dans des cas très particuliers où cela est rendu possible par
-construction, il n'est pas possible de calculer ces termes d'erreur.
-Cependant, cette écriture nous permet de comprendre le problème suivant :
-choisir un espace des hypothèses plus large permet généralement de réduire
-l'erreur d'approximation, car un modèle plus proche de la réalité a plus de
-chances de se trouver dans cet espace. Cependant, puisque cet espace est plus
-vaste, la solution optimale y est aussi généralement plus difficile à trouver :
-l'erreur d'estimation, elle, augmente. C'est dans ce cas qu'il y a
-sur-apprentissage. \\
+% Ainsi, l'écriture~\ref{eq:estimation_approximation} permet de décomposer
+% l'erreur entre un terme qui découle de la qualité de l'espace des hypothèses et
+% un autre qui découle de la qualité de la procédure d'optimisation utilisée. En
+% pratique, sauf dans des cas très particuliers où cela est rendu possible par
+% construction, il n'est pas possible de calculer ces termes d'erreur.
+% Cependant, cette écriture nous permet de comprendre le problème suivant :
+% choisir un espace des hypothèses plus large permet généralement de réduire
+% l'erreur d'approximation, car un modèle plus proche de la réalité a plus de
+% chances de se trouver dans cet espace. Cependant, puisque cet espace est plus
+% vaste, la solution optimale y est aussi généralement plus difficile à trouver :
+% l'erreur d'estimation, elle, augmente. C'est dans ce cas qu'il y a
+% sur-apprentissage. \\
 
 Un espace des hypothèses plus large permet généralement de construire des
 modèles plus complexes : par exemple, l'ensemble des droites vs. l'ensemble des
 polynômes de degré 9 (cf. figure~\ref{fig:overfit_regr}). C'est une variante du
 principe du {\it rasoir d'Ockham}, selon lequel les
-hypothèses les plus simples sont les plus vraisemblables.\\
+hypothèses les plus simples sont les plus vraisemblables.
 
 Il y a donc un compromis entre erreur d'approximation et erreur d'estimation :
 il est difficile de réduire l'une sans augmenter l'autre. Ce compromis est
 généralement appelé {\it compromis biais-variance} : l'erreur d'approximation
 correspond au {\it biais} de la procédure d'apprentissage, tandis que l'erreur
-d'estimation correspond à sa {\it variance}. On retrouvera ce compromis dans
-l'estimation bayésienne de paramètres à la
-section~\ref{sec:bias_variance_bayes}.
+d'estimation correspond à sa {\it variance}. % On retrouvera ce compromis dans
+% l'estimation bayésienne de paramètres à la
+% section~\ref{sec:bias_variance_bayes}.
 
 Considérons par exemple pour un problème de régression un espace des hypothèses
 naïf qui ne contient que des fonctions constantes. Supposons que les étiquettes
@@ -166,7 +187,8 @@ un {\it biais} très important qui conduit à construire des prédicteurs qui
 retournent $a$ pour toutes les observations.
 
 \section{Sélection de modèle}
-Le théorème du {\it no free lunch} de~\citet{wolpert1997} indique qu'aucun
+Le théorème du {\it no free lunch} % de~\citet{wolpert1997}
+indique qu'aucun
 algorithme de machine learning ne peut bien fonctionner pour {\it tous} les
 problèmes d'apprentissage : un algorithme qui fonctionne bien sur un type
 particulier de problèmes le compensera en fonctionnant moins bien sur d'autres
@@ -284,9 +306,11 @@ par observation de $\DD$. Pour conclure sur la performance du modèle, on peut :
 \end{figure}
 
 \section{Critères de performance}
-Il existe de nombreuses façons d'évaluer la performance prédictive d'un modèle
-d'apprentissage supervisé. Cette section présente les principaux critères
-utilisés.
+\todo{Réécrire de manière moins exhaustive ; lien avec erreurs de première et deuxième espèce d'un test}.
+
+% Il existe de nombreuses façons d'évaluer la performance prédictive d'un modèle
+% d'apprentissage supervisé. Cette section présente les principaux critères
+% utilisés.
 
 \subsection{Matrice de confusion et critères dérivés}
 \label{sec:confusion_matrix}
@@ -501,13 +525,12 @@ anti-corrélées.
 Plus un modèle est simple, et moins il a de chances de sur-apprendre. Pour
 limiter le risque de sur-apprentissage, il est donc souhaitable de limiter la
 complexité d'un modèle. C'est ce que permet de faire la {\it régularisation},
-une technique que nous verrons plus en détail au cours de cet ouvrage (à
-commencer par le chapitre~\ref{chap:regularisation}), et qui consiste à ajouter
-au terme d'erreur que l'on cherche à minimiser un terme qui mesure la
-complexité du problème (par exemple, dans le cas précédent, le degré du
-polynôme ou le nombre de coefficients du modèle). Ainsi, un modèle complexe qui
-a une erreur empirique faible peut être défavorisé face à une modèle plus
-simple, même si celui-ci présente une erreur empirique plus élevée.
+une technique qui consiste à ajouter au terme d'erreur que l'on cherche à
+minimiser un terme qui mesure la complexité du problème (par exemple, dans le
+cas précédent, le degré du polynôme ou le nombre de coefficients du
+modèle). Ainsi, un modèle complexe qui a une erreur empirique faible peut être
+défavorisé face à une modèle plus simple, même si celui-ci présente une erreur
+empirique plus élevée.
 
 Lorsque les variables sont fortement corrélées, ou que leur nombre dépasse
 celui des observations, la matrice $X \in \RR^{p+1}$ représentant nos données
@@ -589,14 +612,13 @@ les coefficients sont obtenus par
   \lambda \ltwonorm{\bbeta}^2.
 \end{equation}    
 
-La régression ridge est un cas particulier de {\it régularisation de Tikhonov}
-(développée pour résoudre des équations intégrales).  Elle intervient aussi
-dans les réseaux de neurones, où elle est appelée {\it weight decay}
-(dégradation / modération des pondérations, voir section~\ref{sec:saturation}).
+% La régression ridge est un cas particulier de {\it régularisation de Tikhonov}
+% (développée pour résoudre des équations intégrales).  Elle intervient aussi
+% dans les réseaux de neurones, où elle est appelée {\it weight decay}
+% (dégradation / modération des pondérations, voir section~\ref{sec:saturation}).
 
 \subsection{Solution}
-Le problème~\ref{eq:ridgereg} est un problème d'optimisation convexe (voir
-section~\ref{sec:optimisation}) : il s'agit de minimiser une forme
+Le problème~\ref{eq:ridgereg} est un problème d'optimisation convexe : il s'agit de minimiser une forme
 quadratique. Il se résout en annulant le gradient en $\bbeta$ de la fonction
 objective :
 \begin{equation}
@@ -659,7 +681,7 @@ figure~\ref{fig:ridge_path}.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.7\textwidth]{figures/generalisation/ridge_path}
+  \includegraphics[width=0.5\textwidth]{figures/generalisation/ridge_path}
   \caption{Chemin de régularisation de la régression ridge pour un jeu de
     données avec 12 variables. Chaque ligne représente l'évolution du
     coefficient de régression d'une de ces variables quand $\lambda$ augmente :
@@ -740,8 +762,7 @@ supervisée. Il s'agit donc aussi d'une méthode de réduction de dimension.
 
 \subsection{Solution}
 Le lasso~\ref{eq:lasso} n'admet pas de solution explicite. On pourra utiliser
-un algorithme à directions de descente (voir
-section~\ref{sec:gradient_descent}) pour le résoudre. De plus, il ne s'agit pas
+un algorithme à directions de descente  pour le résoudre. De plus, il ne s'agit pas
 toujours d'un problème strictement convexe (en particulier, quand $p > n$) et
 il n'admet donc pas nécessairement une unique solution. En pratique, cela pose
 surtout problème quand les variables ne peuvent pas être considérées comme les
@@ -775,7 +796,7 @@ quadratique sont plus susceptibles d'y être tangente en un point où une ou
 plusieurs coordonnées sont nulles (voir figure~\ref{fig:l1reg}).
 
 \begin{figure}[h]
-  \centering \includegraphics[width=0.7\textwidth]{figures/generalisation/l1reg}
+  \centering \includegraphics[width=0.5\textwidth]{figures/generalisation/l1reg}
   \caption{La solution du problème d'optimisation sous
     contraintes~\ref{eq:lasso_dual} (ici en deux dimensions) se situe sur
     une ligne de niveau de la somme des moindres carrés tangente à la boule
@@ -793,7 +814,7 @@ remarquera aussi que le chemin de régularisation pour n'importe quelle variable
 est linéaire par morceaux ; c'est une propriété du lasso.
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.7\textwidth]{figures/generalisation/lasso_path}
+  \includegraphics[width=0.5\textwidth]{figures/generalisation/lasso_path}
   \caption{Chemin de régularisation du lasso pour un jeu de données avec 12
     variables. Chaque ligne représente l'évolution du coefficient de régression
     d'une de ces variables quand $\lambda$ augmente : les variables sont
@@ -809,26 +830,32 @@ parcimonieux. Cependant, le choix de cette variable est aléatoire, et peut
 changer si l'on répète la procédure d'optimisation. Le lasso a donc tendance à
 être instable.
 
+\section{Exercice : SVM linéaire pour la régression}
+\todo{}
+
+% \section{Points clés}
+% \begin{itemize}
+% \item Le compromis biais-variance traduit le compromis entre l'erreur
+%   d'approximation, correspondant au biais de l'algorithme d'apprentissage, et
+%   l'erreur d'estimation, correspondant à sa variance.
+% \item La généralisation et le sur-apprentissage sont des préoccupations
+%   majeures en machine learning : comment s'assurer que des modèles entraînés
+%   pour minimiser leur erreur de prédiction sur les données observées seront
+%   généralisables aux données pour lesquelles il nous intéresse de faire des
+%   prédictions ?
+% \item Ajouter un terme de régularisation, fonction du vecteur des coefficients
+%   $\bbeta$, au risque empirique de la régression linéaire permet d'éviter le
+%   sur-apprentissage
+% \item La régression ridge utilise la norme $\ell_2$ de $\bbeta$ comme
+%   régulariseur ; elle admet toujours une unique solution analytique, et a un
+%   effet de regroupement sur les variables corrélées.
+% \item Le lasso utilise la norme $\ell_1$ de $\bbeta$ comme régulariseur ; il
+%   crée un modèle parcimonieux, et permet donc d'effectuer une réduction de
+%   dimension supervisée.
+% \end{itemize}
 
 
-
-\section{Points clés}
-\begin{itemize}
-\item Le compromis biais-variance traduit le compromis entre l'erreur
-  d'approximation, correspondant au biais de l'algorithme d'apprentissage, et
-  l'erreur d'estimation, correspondant à sa variance.
-\item La généralisation et le sur-apprentissage sont des préoccupations
-  majeures en machine learning : comment s'assurer que des modèles entraînés
-  pour minimiser leur erreur de prédiction sur les données observées seront
-  généralisables aux données pour lesquelles il nous intéresse de faire des
-  prédictions ?
-\item Ajouter un terme de régularisation, fonction du vecteur des coefficients
-  $\bbeta$, au risque empirique de la régression linéaire permet d'éviter le
-  sur-apprentissage
-\item La régression ridge utilise la norme $\ell_2$ de $\bbeta$ comme
-  régulariseur ; elle admet toujours une unique solution analytique, et a un
-  effet de regroupement sur les variables corrélées.
-\item Le lasso utilise la norme $\ell_1$ de $\bbeta$ comme régulariseur ; il
-  crée un modèle parcimonieux, et permet donc d'effectuer une réduction de
-  dimension supervisée.
-\end{itemize}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "sdd_2020_poly"
+%%% End:

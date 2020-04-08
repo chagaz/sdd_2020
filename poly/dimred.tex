@@ -1,3 +1,763 @@
 %-*- coding: iso-latin-1 -*-
-\label{chap:}
+\label{chap:dimred}
 
+\todo{
+  \begin{itemize}
+  \item Cohérence des notations avec les chapitres précédents.
+  \item Lien avec le cours d'optimisation.
+  \item Alléger / élaguer.
+  \end{itemize}
+}
+
+
+\paragraph{Notions :} sélection de variables ; extraction de variables ;
+filtrage ; analyse en composantes principales ; analyse en composantes principales probabiliste.
+\paragraph{Objectifs pédagogiques :} 
+\begin{itemize}      
+  \setlength{\itemsep}{3pt}
+\item Expliquer l'intérêt de réduire la dimension d'un jeu de données ;
+\item Faire la différence entre la sélection de variables et l'extraction de variables ;
+\item Mettre en \oe{}uvre des méthodes de sélection de variable par filtrage ;
+\item Projeter des données sur un espace de plus petite dimension par factorisation de matrice ; 
+\item Mettre en \oe{}uvre des méthodes d'extraction de variable.
+\end{itemize}
+
+\section{Motivation}
+Le but de la réduction de dimension est de transformer une représentation
+$X \in \RR^{n \times p}$ des données en une représentation
+$X^* \in \RR^{n \times m}$ où $m \ll p$. Les raisons de cette démarche sont
+multiples : 
+
+\begin{itemize}
+\item \todo{Visualiser les données}
+% Bien que le but de l'apprentissage automatique soit justement d'automatiser le
+% traitement des données, il est essentiel pour appliquer les méthodes présentées
+% dans cet ouvrage à bon escient de bien comprendre le problème particulier que
+% l'on cherche à résoudre et les données dont on dispose. Cela permet de mieux
+% définir les variables à utiliser, d'éliminer éventuellement les données
+% aberrantes, et de guider le choix des algorithmes. Dans ce but, il est très
+% utile de pouvoir {\it visualiser} les données ; mais ce n'est pas tâche aisée
+% avec $p$ variables. Ainsi, limiter les variables à un faible nombre de
+% dimensions permet de visualiser les données plus facilement, quitte à perdre un
+% peu d'information lors de la transformation.
+\item \todo{Réduire les coûts algorithmiques d'un modèle supervisé}
+% Cet aspect-là est purement computationnel : réduire la dimension des données
+% permet de réduire d'une part l'espace qu'elles prennent en mémoire et d'autre
+% part les temps de calcul. De plus, si certaines variables sont inutiles, ou
+% redondantes, il n'est pas nécessaire de les obtenir pour de nouvelles
+% observations : cela permet de réduire le coût d'acquisition des données.
+\item \todo{Améliorer la qualité d'un modèle supervisé + fléau de la dimension}
+% \label{sec:dimcurse}
+%   Notre motivation principale pour réduire la dimension des données est de
+%   pouvoir construire de meilleurs modèles d'apprentissage supervisé. Par
+%   exemple, un modèle paramétrique construit sur un plus faible nombre de
+%   variables est moins susceptible de sur-apprendre, comme nous l'avons vu avec
+%   le lasso au chapitre~\ref{chap:regularisation}.
+
+%   De plus, si certaines des variables mesurées ne sont pas pertinentes pour le
+%   problème d'apprentissage qui nous intéresse, elles peuvent induire
+%   l'algorithme d'apprentissage en erreur. Prenons comme exemple l'algorithme
+%   des plus proches voisins (chapitre~\ref{chap:knn}), qui base ses prédictions
+%   sur les étiquettes des exemples d'entraînement les plus proches de
+%   l'observation à étiqueter. Supposons que l'on utilise une distance de
+%   Minkowski ; toutes les variables ont alors la même importance dans le calcul
+%   des plus proches voisins. Ainsi les variables qui ne sont pas pertinentes
+%   peuvent biaiser la définition du plus proche voisin, et introduire du bruit
+%   dans le modèle, comme illustré sur la figure~\ref{fig:dimred_improves_algo}.
+
+%   \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.4\textwidth]{figures/dimred/dimred_improves_algo}
+%     \caption{En utilisant les deux dimensions, les trois plus proches voisins de
+%       l'étoile sont majoritairement des (x). En utilisant seulement la
+%       variable en abscisse, ses trois plus proches voisins sont majoritairement des
+%       (+). Si la variable en ordonnée n'est pas pertinente, elle
+%       fausse le résultat de l'algorithme des trois plus proches voisins.}
+%     \label{fig:dimred_improves_algo}
+%   \end{figure}
+
+%   Enfin, nous faisons face en haute dimension à un phénomène connu sous le nom
+%   de {\it fléau de la dimension}, ou {\it curse of dimensionality} en
+%   anglais. Ce terme qualifie le fait que les intuitions développées en faible
+%   dimension ne s'appliquent pas nécessairement en haute dimension.
+
+%   En effet, en haute dimension, les exemples d'apprentissage ont tendance à
+%   tous être éloignés les uns des autres. Pour comprendre cette assertion,
+%   plaçons-nous en dimension $p$ et considérons l'hypersphère $\Scal(\xx, R)$ de
+%   rayon $R \in \RR_+^*$ centrée sur une observation $\xx$, ainsi que l'hypercube
+%   $\Ccal(\xx, R)$ circonscrit à cette hypersphère. Le volume de $\Scal(\xx)$
+%   vaut $\frac{2 R^p \pi^{p/2}}{p \Gamma(p/2)}$, tandis que celui de
+%   $\Ccal(\xx, R)$, dont le côté a pour longueur $2R$, vaut $2^p R^p$. Ainsi
+%   \begin{equation*}
+%     \lim_{p \rightarrow \infty} \frac{\text{Vol}(\Ccal(\xx, R))}{
+%       \text{Vol}(\Scal(\xx, R))} = 0.
+%   \end{equation*}
+%   Cela signifie que la probabilité qu'un exemple situé dans $\Ccal(\xx, R)$
+%   appartienne à $\Scal(\xx, R)$, qui vaut $\frac{\pi}4 \approx 0.79$ lorsque
+%   $p=2$ et $\frac{\pi}6 \approx 0.52$ lorsque $p=3$
+%   (cf. figure~\ref{fig:sphere_in_cube}), devient très faible quand $p$ est
+%   grand : les données ont tendance à être éloignées les unes des autres.
+
+%   Cela implique que les algorithmes développés en utilisant une notion de
+%   similarité, comme les plus proches voisins, les arbres de décision ou les
+%   SVM, ne fonctionnent pas nécessairement en grande dimension. Ainsi, réduire
+%   la dimension peut être nécessaire à la construction de bons modèles.
+
+%   \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.3\textwidth]{figures/dimred/sphere_in_cube}
+%     \caption{Ici en dimension 3, on considère la proportion du volume du cube
+%       de côté $a=2R$ située à l'intérieur de la sphère de rayon $R$ inscrite
+%       dans ce cube.}
+%     \label{fig:sphere_in_cube}
+%   \end{figure}
+\end{itemize}
+
+
+Deux possibilités s'offrent à nous pour réduire la dimension de nos données :
+\begin{itemize}
+\item la \textbf{sélection de variables}, qui consiste à éliminer un nombre
+  $p-m$ de variables de nos données ;
+\item l'\textbf{extraction de variables}, qui consiste à {\it créer} $m$
+  nouvelles variables à partir des $p$ variables dont nous disposons
+  initialement.
+\end{itemize}
+
+La suite de ce chapitre détaille des exemples de ces deux approches.
+
+\section{Sélection de variables non-supervisée}
+\todo{Méthodes de filtrage pour éliminer des variables du jeu de données.}
+
+\todo{Donner quelques éléments pour le supervisé, auxquels se référer de nouveau plus tard.}
+
+% \section{Sélection de variables supervisée} 
+% Les approches de {\it sélection de variables} consistent à choisir $m$
+% variables à conserver parmi les $p$ existantes, et à ignorer les $p-m$
+% autres. On peut les séparer en trois catégories : les méthodes de {\it
+%   filtrage}, les méthodes de {\it conteneur}, et les méthodes {\it
+%   embarquées}. Les méthodes que nous allons voir ici sont des méthodes
+% supervisées : nous supposons disposer d'un jeu de données étiqueté
+% $\DD = \{(\xx^i, y^i)\}_{i=1, \dots, n}$ où $\xx^i \in \RR^p$.
+
+%   \subsection{Méthodes de filtrage}
+%   La sélection de variable par {\it filtrage} consiste à appliquer un {\it
+%     critère de sélection} indépendamment à chacune des $p$ variables
+%    ; il s'agit de quantifier la pertinence de la $p$-ème variable
+%   du jeu de donnée par rapport à $y$.
+
+%   Quelques exemples d'un tel critère sont la corrélation avec l'étiquette, un
+%   test statistique comme celui du $\chi^2$ dans le cas d'un problème de
+%   classification, ou l'information mutuelle.
+
+%   La {\it corrélation} entre la variable $j$ et l'étiquette $y$ se calcule
+%   comme celle entre une étiquette prédite et une étiquette réelle
+%   (cf. équation~\ref{eq:pearson}) :
+%   \begin{equation}
+%     R_j = \frac{\sum_{i=1}^n \left( y^i -  \frac1n \sum_{i=1}^n y^i \right)
+%       \left( x^i_j -  \frac1n \sum_{i=1}^n f(\xx^i) \right)}{
+%       \sqrt{\sum_{i=1}^n \left( y^i -  \frac1n \sum_{i=1}^n y^i \right)^2}
+%       \sqrt{\sum_{i=1}^n \left( x^i_j -  \frac1n \sum_{l=1}^n x^l_j \right)^2}.
+%     }
+%   \end{equation}
+
+%   \begin{definition}[(Information mutuelle)]
+%     L'{\it information mutuelle} entre deux variables aléatoires $X_j$ et $Y$ mesure
+%     leur dépendance au sens probabiliste ; elle est nulle si et seulement si
+%     les variables sont indépendantes, et croît avec leur degré de
+%     dépendance. Elle est définie, dans le cas discret, par
+%     \begin{equation*}
+%       I(X_j, Y) = \sum_{x_j, y} \PP(X_j=x_j, Y=y) \log \frac{\PP(X_j=x_j, Y=y)}{
+%       \PP(X_j=x_j) \PP(Y=y)},
+%     \end{equation*}
+%     et dans le cas continu par
+%     \begin{equation*}
+%       I(X_j, Y) = \int_{x_j} \int_y p(x_j, y) \log \frac{p(x_j, y)}{
+%       p(x_j) p(y)} \mathrm{d}x_j \; \mathrm{d}y.
+%     \end{equation*}
+%   \end{definition}
+%   L'estimateur de Kozachenko-Leonenko est l'un des plus fréquemment utilisés
+%   pour estimer l'information mutuelle~\citep{kozachenko1987}.
+  
+%   Les méthodes de filtrage souffrent de traiter les variables individuellement
+%   : elles ne peuvent pas prendre en compte leurs effets combinés. Un exemple
+%   classique pour illustrer ce problème est celui du \og ou exclusif \fg~(XOR) :
+%   prise individuellement, $x_1$ (resp. $x_2$) est décorrélée de $y = x_1 \text{
+%     XOR } x_2$, alors qu'ensemble, ces deux variables expliqueraient
+%   parfaitement l'étiquette $y$.
+
+%   \subsection{Méthodes de conteneur}
+%   Les méthodes de {\it conteneur}, ou {\it wrapper methods} en anglais,
+%   consistent à essayer de déterminer le meilleur sous-ensemble de variables
+%   {\it pour un algorithme d'apprentissage donné.} On parle alors souvent non
+%   pas de sélection de variables mais de {\it sélection de sous-ensemble}, ou
+%   {\it subset selection} en anglais.
+
+%   Ces méthodes sont le plus souvent des méthodes heuristiques. En effet, il est
+%   généralement impossible de déterminer la performance d'un algorithme sur un
+%   jeu de données sans l'avoir entraîné. Il n'est pas raisonnable d'adopter une
+%   stratégie exhaustive, sauf pour un très faible nombre de variables, car le
+%   nombre de sous-ensembles de $p$ variables est de $2^p-1$ (en excluant
+%   $\emptyset$). On adoptera donc une approche gloutonne.
+
+%   Quelques exemples de ces approches sont la {\it recherche ascendante}, la
+%   {\it recherche descendante}, et la {\it recherche flottante} que nous
+%   détaillons ci-dessous.
+
+%   Étant donnés un jeu de données $\DD = (X, \yy)$ où $X \in \RR^{n \times p}$,
+%   un sous-ensemble de variables $\Ecal \subset \{1, 2, \dots, p\}$, et un
+%   algorithme d'apprentissage, on notera $X_\Ecal \in \RR^{n \times |\Ecal|}$ la
+%   matrice $X$ restreinte aux variables apparaissant dans $\Ecal$, et $E_\DD(\Ecal)$
+%   l'estimation de l'erreur de généralisation de cet algorithme d'apprentissage,
+%   entraîné sur $(X_\Ecal, \yy)$. Cette estimation est généralement obtenue sur
+%   un jeu de test ou par validation croisée.
+
+%   La recherche ascendante consiste à partir d'un ensemble de variables vide, et
+%   à lui ajouter variable par variable celle qui améliore au mieux sa
+%   performance, jusqu'à ne plus pouvoir l'améliorer.
+
+%   \begin{definition}[(Recherche ascendante)]
+%     On appelle {\it recherche ascendante}, ou {\it forward search} en anglais,
+%     la procédure gloutonne de sélection de variables suivante :
+%     \begin{enumerate}
+%     \item Initialiser $\FF = \emptyset$
+%     \item Trouver la meilleure variable à ajouter à $\FF$ : 
+%       \begin{equation*}
+%         j^* = \argmin_{j \in \{1, \dots, p\} \setminus \FF}  E_\DD(\FF \cup \{j\})
+%       \end{equation*}
+%     \item Si $E_\DD(\FF \cup \{j\}) >  E_\DD(\FF)$ : s'arrêter
+%     \item[] sinon :  $\FF \leftarrow \FF \cup \{j\}$ ; recommencer 2-3.
+%     \end{enumerate}
+%   \end{definition}
+%   Dans le pire des cas (celui où on devra itérer jusqu'à ce que $\FF = \{1, 2,
+%   \dots, p\}$), cet algorithme requiert de l'ordre de $\OO(p^2)$ évaluations de
+%   l'algorithme d'apprentissage sur un jeu de données, ce qui peut être
+%   intensif, mais est bien plus efficace que $\OO(2^p)$ comme requis par l'approche
+%   exhaustive.
+
+%   À l'inverse, la recherche descendante consiste à partir de l'ensemble de
+%   toutes les variables, et à lui retirer variable par variable celle qui
+%   améliore au mieux sa performance, jusqu'à ne plus pouvoir l'améliorer.
+%   \begin{definition}[(Recherche descendante)]
+%     On appelle {\it recherche descendante}, ou {\it backward search} en anglais,
+%     la procédure gloutonne de sélection de variables suivante :
+%     \begin{enumerate}
+%     \item Initialiser $\FF = \{1, \dots, p\}$
+%     \item Trouver la meilleure variable à retirer de $\FF$ : 
+%       \begin{equation*}
+%         j^* = \argmin_{j \in \FF} E_\DD(\FF \setminus \{j\})
+%       \end{equation*}
+%     \item Si $E_\DD(\FF \setminus \{j\}) >  E_\DD(\FF)$ : s'arrêter
+%     \item[] sinon :  $\FF \leftarrow \FF \setminus \{j\}$ ; recommencer 2-3.
+%     \end{enumerate}
+%   \end{definition}
+
+%   L'avantage de l'approche descendante sur l'approche ascendante est qu'elle
+%   fournit nécessairement un sous-ensemble de variables meilleur que
+%   l'intégralité des variables. En effet, ce n'est pas parce qu'on ne peut pas,
+%   à une étape de la méthode ascendante, trouver de variable à ajouter à $\FF$,
+%   que la performance de l'algorithme est meilleure sur $(X_\FF, \yy)$ que sur
+%   $(X, \yy)$.
+
+%   La recherche flottante permet d'explorer un peu différemment 
+%   l'espace des possibles en combinant les deux approches.
+%   \begin{definition}[(Recherche flottante)]
+%     Étant donné deux paramètres entiers strictement positifs $q$ et $r$, on
+%     appelle {\it recherche flottante}, ou {\it floating search} en anglais, la
+%     procédure gloutonne de sélection de variables suivante :
+%     \begin{enumerate}
+%     \item Initialiser $\FF = \emptyset$
+%     \item Trouver les $q$ meilleures variables à ajouter à $\FF$ : 
+%       \begin{equation*}
+%         \Scal^* = \argmin_{\Scal \subseteq \{1, \dots, p\} \setminus \FF, \;|\Scal|=q} E_\DD(\FF \cup \Scal)
+%       \end{equation*}
+%     \item Si $E_\DD(\FF \cup \Scal) <  E_\DD(\FF)$ : 
+%     $\FF \leftarrow \FF \cup \Scal$ 
+%     \item Trouver les $r$ meilleures variables à retirer de $\FF$ : 
+%       \begin{equation*}
+%         \Scal^* = \argmin_{\Scal \subseteq \{1, \dots, p\} \setminus \FF, \; |\Scal|=r} 
+%         E_\DD(\FF \setminus \Scal)
+%       \end{equation*}
+%     \item Si $E_\DD(\FF \setminus \Scal) >  E_\DD(\FF)$ : s'arrêter
+%     \item[] sinon :  $\FF \leftarrow \FF \setminus \Scal$ ; recommencer 2-5.
+%     \end{enumerate}
+%   \end{definition}
+
+%   \subsection{Méthodes embarquées}
+%   Enfin, les {\it méthodes embarquées}, ou {\it embedded approaches} en
+%   anglais, apprennent en même temps que le modèle les variables à y inclure. Il
+%   s'agit généralement de modèles paramétriques parcimonieux, c'est-à-dire tels
+%   que les coefficients affectés à certaines variables soient nuls. Ces
+%   variables sont alors éliminées du modèle. L'exemple le plus prégnant de ces
+%   techniques est le lasso, que nous avons vu dans la section~\ref{sec:lasso}.
+
+%   Dans le même ordre d'idée, la mesure d'importance des variables dans les
+%   forêts aléatoires (voir chapitre~\ref{chap:arbres}) peut être utilisée pour
+%   décider quelles variables éliminer.
+
+% \section{Extraction de variables}
+\section{Analyse en composantes principales}
+\label{sec:pca}
+La méthode la plus classique pour réduire la dimension d'un jeu de données par
+extraction de variables est l'\textbf{analyse en composantes principales}, ou
+{\it ACP}. On parle aussi souvent de {\it PCA}, de son nom anglais {\it
+  Principal Component Analysis}.
+
+\subsection{Maximisation de la variance}
+L'idée centrale d'une ACP est de représenter les données de sorte à maximiser
+leur variance selon les nouvelles dimensions, afin de pouvoir continuer à
+distinguer les exemples les uns des autres dans leur nouvelle représentation
+(cf. figure~\ref{fig:data_variance}).
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.4\textwidth]{figures/dimred/data_variance}
+  \caption{La variance des données en deux dimensions est maximale selon l'axe
+    indiqué par la flèche.}
+  \label{fig:data_variance}
+\end{figure}
+
+Formellement, une nouvelle représentation de $\XX$ est définie par une base
+orthonormée sur laquelle projeter la matrice de données $X$.
+
+Une \textbf{analyse en composantes principales}, ou {\it ACP}, de la matrice
+$X \in \RR^{n \times p}$ est une transformation linéaire orthogonale qui permet
+d'exprimer $X$ dans une nouvelle base orthonormée, de sorte que la plus grande
+variance de $X$ par projection s'aligne sur le premier axe de cette nouvelle
+base, la seconde plus grande variance sur le deuxième axe, et ainsi de suite.
+
+Les axes de cette nouvelle base sont appelés les \textbf{composantes
+  principales}, abrégées en {PC} pour {\it Principal Components}.
+
+\begin{attention}
+  Dans la suite de cette section, nous supposons que les variables ont été {\it
+    standardisées} de sorte à toutes avoir une moyenne de 0 et une variance de
+  1, pour éviter que les variables qui prennent de grandes valeurs aient plus
+  d'importance que celles qui prennent de faibles valeurs. C'est un pré-requis
+  de l'application de l'ACP.  Cette standardisation s'effectue en centrant la
+  moyenne et en réduisant la variance de chaque variable :
+  \begin{equation}
+    \label{eq:standardization}
+    x^i_j \leftarrow \frac{x^i_j - \bar{x_j}}{\sqrt{\frac1n 
+        \sum_{l=1}^n (x^l_j - \bar{x_j})^2}},
+  \end{equation}
+  où $\bar{x_j} = \frac1n \sum_{l=1}^n x^l_j.$ On dira alors que $X$ est {\it
+    centrée} : chacune de ses colonnes a pour moyenne 0.
+\end{attention}
+
+\paragraph{Théorème} 
+Soit $X \in \RR^{n \times p}$ une matrice {\it centrée} de covariance
+$\Sigma = \frac1n X^\top X$. Les composantes principales de $X$ sont les
+vecteurs propres de $\Sigma$, ordonnés par valeur propre décroissante.
+
+\paragraph{Preuve}
+Commençons par démontrer que, pour tout vecteur $\ww \in \RR^p$, la variance de
+la projection de $X$ sur $\ww$ vaut $w^\top \Sigma w.$
+
+La projection de $X \in \RR^{n \times p}$ sur $\ww \in \RR^p$ est le vecteur
+$\zz = X w.$ Comme $X$ est centrée, la moyenne de $\zz$ vaut
+\begin{equation*}
+  \frac1n \sum_{i=1}^n z_i = \frac1n \sum_{i=1}^n \sum_{j=1}^p x^i_j w_j = 
+  \frac1n \sum_{j=1}^p  w_j \sum_{i=1}^n x^i_j = 0.
+\end{equation*}
+Sa variance vaut
+\begin{equation*}
+  \text{Var}[\zz] = \frac1n \sum_{i=1}^n zz_i^2 = \frac1n \ww^\top X^\top X \ww
+  = \ww^\top \Sigma \ww.
+\end{equation*}    
+
+Appelons maintenant $\ww_1 \in \RR^p$ la première composante
+principale. $\ww_1$ est orthonormé et tel que la variance de $X \ww_1$ soit
+maximale :
+\begin{equation}
+  \label{eq:pc1}
+  \ww_1 = \argmax_{\ww \in \RR^p} \ww^\top \Sigma \ww \text{ avec } \ltwonorm{\ww_1}=1.
+\end{equation}
+Il s'agit d'un problème d'optimisation quadratique sous contrainte d'égalité,
+que l'on peut résoudre en introduisant le multiplicateur de Lagrange
+$\alpha_1 > 0$ et en écrivant le lagrangien
+\begin{equation*}
+  L(\alpha_1, \ww) = \ww^\top \Sigma \ww - \alpha_1 
+  \left( \ltwonorm{\ww} - 1 \right).
+\end{equation*}
+Par dualité forte, % $\min_{\ww \in \RR^p} w^\top \Sigma w = \max_{\alpha_1}
+    % \inf_{\ww \in \RR^p} L(\alpha_1, \ww).$
+le maximum de $\ww^\top \Sigma \ww$ sous la contrainte $\ltwonorm{\ww_1}=1$ est
+égal à $\min_{\alpha_1} \sup_{\ww \in \RR^p} L(\alpha_1, \ww).$ Le supremum du
+lagrangien est atteint en un point où son gradient s'annule, c'est-à-dire qui
+vérifie
+\begin{equation*}
+  2 \Sigma \ww - 2 \alpha_1 \ww = 0.
+\end{equation*}
+Ainsi, $\Sigma \ww_1 = \alpha_1 \ww_1$ et $(\alpha_1, \ww_1)$ forment un couple
+(valeur propre, vecteur propre) de $\Sigma$.
+
+Parmi tous les vecteurs propres de $\Sigma$, $\ww_1$ est celui qui maximise la
+variance $\ww_1^\top \Sigma \ww_1 = \alpha_1 \ltwonorm{\ww_1} = \alpha_1.$
+Ainsi, $\alpha_1$ est la plus grande valeur propre de $\Sigma$ (rappelons que
+$\Sigma$ étant définie par $X^\top X$ est semi-définie positive et que toutes
+ses valeurs propres sont positives.)
+
+La deuxième composante principale de $X$ vérifie
+\begin{equation}
+  \label{eq:pc2}
+  \ww_2 = \argmax_{\ww \in \RR^p} \ww^\top \Sigma \ww \text{ avec } \ltwonorm{\ww_2}=1
+  \text{ et } \ww^\top\ww_1=0.
+\end{equation}
+Cette dernière contrainte nous permet de garantir que la base des composantes
+principales est orthonormée.
+
+Nous introduisons donc maintenant deux multiplicateurs de Lagrange
+$\alpha_2 > 0$ et $\beta_2 > 0$ et obtenons le lagrangien
+\begin{equation*}
+  L(\alpha_2, \beta_2, \ww) = \ww^\top \Sigma \ww - \alpha_2 
+  \left(\ltwonorm{\ww}^2 - 1 \right)
+  - \beta_2 \ww^\top\ww_1.
+\end{equation*}
+Comme précédemment, son supremum en $\ww$ est atteint en un point où son
+gradient s'annule :
+\begin{equation*}
+  2 \Sigma \ww_2 - 2 \alpha_2 \ww_2 - \beta_2 \ww_1 = 0.
+\end{equation*}
+En multipliant à gauche par $\ww_1^\top$, on obtient
+\begin{equation*}
+  2 \ww_1^\top \Sigma \ww_2 - 2 \alpha_2 \ww_1^\top \ww_2 - 
+  \beta_2 \ww_1^\top \ww_1 = 0
+\end{equation*}
+d'où l'on conclut que $\beta_2=0$ et, en remplaçant dans l'équation précédente,
+que, comme pour $\ww_1$, $2 \Sigma \ww_2 - 2 \alpha_1 \ww_2 = 0$.  Ainsi
+$(\alpha_2, \ww_2)$ forment un couple (valeur propre, vecteur propre) de
+$\Sigma$ et $\alpha_2$ est maximale : il s'agit donc nécessairement de la
+deuxième valeur propre de $\Sigma$.
+    
+Le raisonnement se poursuit de la même manière pour les composantes principales
+suivantes. \hfill $\square$
+
+  
+\paragraph{Remarque} Alternativement, on peut prouver ce théorème
+en observant que $\Sigma$, qui est par construction définie positive, est
+diagonalisable par un changement de base orthonormée :
+$\Sigma = Q^\top \Lambda Q$, où $\Lambda \in \mathbb{R}^{p \times p}$ est une
+matrice diagonale dont les valeurs diagonales sont les valeurs propres de
+$\Sigma$.  Ainsi,
+\begin{equation*}
+  \ww_1^\top \Sigma \ww_1 = \ww_1^\top Q^\top \Lambda Q \ww_1 = 
+  \left(Q \ww_1 \right)^\top \Lambda \left(Q \ww_1 \right).
+\end{equation*}
+Si l'on pose $\vv = Q \ww_1$, il s'agit donc de trouver $\vv$ de norme 1 ($Q$
+étant orthonormée et $\ww_1$ de norme 1) qui maximise
+$\sum_{j=1}^p v_j^2 \lambda_j$.  Comme $\Sigma$ est définie positive,
+$\lambda_j \geq 0 \; \forall j=1, \dots, p$. De plus, $\ltwonorm{\vv} = 1$
+implique que $0 \leq v_j^1 \leq 1 \; \forall j=1, \dots, p.$ Ainsi,
+$\sum_{j=1}^p v_j^2 \lambda_j \leq \max_{j=1, \dots, p} \lambda_j \sum_{j=1}^p
+v_j^2 \leq \max_{j=1, \dots, p} \lambda_j$
+et ce maximum est atteint quand $v_j=1$ et $v_k=0 \; \forall k \neq j$. On
+retrouve ainsi que $\ww_1$ est le vecteur propre correspondant à la plus grande
+valeur propre de $\Sigma$, et ainsi de suite.
+
+
+\subsection{Décomposition en valeurs singulières}
+\paragraph{Théorème} 
+Soit $X \in \RR^{n \times p}$ une matrice {\it centrée}. Les composantes
+principales de $X$ sont ses vecteurs singuliers à droite ordonnés par valeur
+singulière décroissante.
+
+\paragraph{Preuve}
+Si l'on écrit $X$ sous la forme $U D V^\top$ où $U \in \RR^{n \times n}$ et
+$V \in \RR^{p \times p}$ sont orthogonales, et $D \in \RR^{n \times p}$ est
+diagonale, alors
+\begin{equation*}
+  \Sigma = X^\top X = V D U^\top U D V^\top = V D^2 V^\top
+\end{equation*}
+et les valeurs singulières de $X$ (les entrées de $D$) sont les racines carrées
+des valeurs propres de $\Sigma$, tandis que les vecteurs singuliers à droite de
+$X$ (les colonnes de $V$) sont les vecteurs propres de $\Sigma$. \hfill $\square$
+
+  
+En pratique, les implémentations de la décomposition en valeurs singulières (ou
+SVD) sont numériquement plus stables que celles de décomposition spectrale. On
+préfèrera donc calculer les composantes principales de $X$ en calculant la SVD
+de $X$ plutôt que la décomposition spectrale de $X^\top X$.
+
+\subsection{Choix du nombre de composantes principales}
+Réduire la dimension des données par une ACP implique de {\it choisir} un
+nombre de composantes principales à conserver. Pour ce faire, on utilise la
+\textbf{proportion de variance expliquée} par ces composantes : la variance de $X$
+s'exprime comme la trace de $\Sigma$, qui est elle-même la somme de ses valeurs
+propres.
+
+Ainsi, si l'on décide de conserver les $m$ premières composantes principales de
+$X$, la proportion de variance qu'elles expliquent est
+\begin{equation*}
+  \frac{\alpha_1 + \alpha_2 + \dots + \alpha_m}{\text{Tr}(\Sigma)}
+\end{equation*}
+où $\alpha_1 \geq \alpha_2 \geq \dots \geq \alpha_p$ sont les valeurs propres
+de $\Sigma$ par ordre décroissant.
+  
+Il est classique de s'intéresser à l'évolution, avec le nombre de composantes,
+soit de la proportion de variance expliquée par chacune d'entre elles, soit à
+cette proportion cumulée, que l'on peut représenter visuellement sur un {\it
+  scree plot} (figure~\ref{fig:scree_plot}). Ce graphe peut nous servir à
+déterminer :
+\begin{itemize}
+\item soit le nombre de composantes principales qui explique un pourcentage de
+  la variance que l'on s'est initialement fixé (par exemple, sur la
+  figure~\ref{fig:scree_plot_cumul}, $95\%$) ;
+\item soit le nombre de composantes principales correspondant au « coude » du
+  graphe, à partir duquel ajouter une nouvelle composante principale ne semble
+  plus informatif.
+\end{itemize}
+
+\begin{figure}[h]
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/dimred/scree_plot}
+    \caption{Pourcentage de variance expliqué par chacune des composantes
+      principales. À partir de 6 composantes principales, ajouter de nouvelles
+      composantes n'est plus vraiment informatif.}
+    \label{fig:scree_plot}
+  \end{subfigure} \hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{figures/dimred/scree_plot_cumul}  
+    \caption{Pourcentage cumulé de variance expliquée par chacune des
+      composantes principales. Si on se fixe une proportion de variance
+      expliquée de $95\%$, on peut se contenter de 10 composantes principales.}
+    \label{fig:scree_plot_cumul}
+  \end{subfigure}
+  \caption{Pour choisir le nombre de composantes principales, on utilise le
+    pourcentage de variance expliquée.}
+\end{figure}
+
+\section{Factorisation de la matrice des données}
+Soit un nombre $m$ de composantes principales, calculées par une ACP,
+représentées par une matrice $W \in \RR^{p \times m}$. La représentation
+réduite des $n$ observations dans le nouvel espace de dimension $m$ s'obtient
+en projetant $X$ sur les colonnes de $W$, autrement dit en calculant
+\begin{equation}
+  \label{eq:reduced_rep}
+  H = W^\top X.
+\end{equation}
+
+La matrice $H \in \RR^{m \times n}$ peut être interprétée comme une
+\textbf{représentation latente} (ou cachée, {\it hidden} en anglais d'où la
+notation $H$) des données. C'est cette représentation que l'on a cherché à
+découvrir grâce à l'ACP.
+
+Les colonnes de $W$ étant des vecteurs orthonormés (il s'agit de vecteurs
+propres de $X X^\top$), on peut multiplier l'équation~\ref{eq:reduced_rep} à
+gauche par $W$ pour obtenir une {\it factorisation} de $X$ :
+\begin{equation}
+  \label{eq:pca_factor}
+  X = W H.
+\end{equation}
+On appelle ainsi les lignes de $H$ les \textbf{facteurs} de $X$.
+
+
+Cette factorisation s'inscrit dans le cadre plus général de \textbf{l'analyse
+  factorielle}.
+
+Supposons que les observations $\{\xx^1, \xx^2, \dots, \xx^n\}$ soient les
+réalisations d'une variable aléatoire $p$-dimensionnelle $\xx$, générée par le
+modèle
+\begin{equation}
+  \label{eq:fa_model}
+  \xx = W \hh + \epsilon,
+\end{equation}
+où $\hh$ est une variable aléatoire $m$-dimensionnelle qui est la
+représentation latente de $\xx$, et $\epsilon$ un bruit gaussien :
+$\epsilon \sim \Ncal(0, \Psi).$
+
+Supposons les données centrées en $0$, et les variables latentes
+$\hh^1, \hh^2, \dots, \hh^n$ (qui sont des réalisations de $\hh$) indépendantes
+et gaussiennes de variance unitaire, c'est-à-dire $\hh \sim \Ncal(0, I_m)$ où
+$I_m$ est la matrice identité de dimensions $m \times m$. Alors $W \hh$ est
+centrée en $0$, et sa covariance est $WW^\top.$ Alors
+$\xx \sim \Ncal(0, WW^\top + \Psi)$.
+
+Si on considère de plus que $\epsilon$ est {\it isotropique}, autrement dit que
+$\Psi = \sigma^2 I_p$, alors $\xx \sim \Ncal(0, WW^\top + \sigma^2 I_p)$, on
+obtient ce que l'on appelle \textbf{ACP probabiliste}. Les
+paramètres $W$ et $\sigma$ de ce modèle peuvent être obtenus par maximum de
+vraisemblance.
+
+L'ACP classique est un cas limite de l'ACP probabiliste, obtenu quand la
+covariance du bruit devient infiniment petite ($\sigma^2 \rightarrow 0$).
+
+Plus généralement, on peut faire l'hypothèse que les variables observées
+$x_1, x_2, \dots, x_p$ sont conditionnellement indépendantes étant données les
+variables latentes $h_1, h_2, \dots, h_m.$ Dans ce cas, $\Psi$ est une matrice
+diagonale, $\Psi = \text{diag}(\psi_1, \psi_2, \dots, \psi_p)$, où $\psi_j$
+décrit la variance spécifique à la variable $x_j$. Les valeurs de $W$, $\sigma$
+et $\psi_1, \psi_2, \dots, \psi_p$ peuvent encore une fois être obtenues par
+maximum de vraisemblance. C'est ce que l'on appelle \textbf{l'analyse
+  factorielle}.
+
+Dans l'analyse factorielle, nous ne faisons plus l'hypothèse que les nouvelles
+dimensions sont orthogonales. En particulier, il est donc possible d'obtenir
+des dimensions dégénérées, autrement dit des colonnes de $W$ dont toutes les
+coordonnées sont $0$.
+
+% \subsection{Approches non linéaires}
+% De nombreuses autres approches ont été proposées pour réduire la dimension des
+% données de manière non linéaire. Parmi elles, nous en abordons ici
+% quelques-unes parmi les plus populaires ; les expliquer de manière détaillée
+% dépasse le propos de cet ouvrage introductif.
+
+% \subsubsection{Analyse en composantes principales à noyau}
+% Nous commencerons par noter que l'analyse en composantes principales se prête à
+% l'utilisation de l'astuce du noyau (cf. section~\ref{sec:kernel_trick}). La
+% méthode qui en résulte est appelée {\it kernel PCA}, ou {\it kPCA}.
+
+% \subsubsection{Positionnement multidimensionnel}
+% Le {\it positionnement multidimensionnel}, ou {\it multidimensional scaling}
+% ({\it MDS})~\citep{cox1994}, se base sur une matrice de {\it dissimilarité}
+% $D \in \RR^{n \times n}$ entre les observations : il peut s'agir d'une distance
+% métrique, mais ce n'est pas nécessaire. Le but de l'algorithme est alors de
+% trouver une représentation des données qui préserve cette dissimilarité :
+% \begin{equation}
+%   \label{eq:mds}
+%   X^* = \argmin_{Z \in \RR^{n \times m}} \sum_{i=1}^n \sum_{l=i+1}^n \left( 
+%     \ltwonorm{\zz^i - \zz^l} - D_{il}\right)^2.
+% \end{equation}
+% Si l'on utilise la distance euclidienne comme dissimilarité, alors le MDS est
+% équivalent à une ACP.
+
+% Le positionnement multidimensionnel peut aussi s'utiliser pour positionner dans
+% un espace de dimension $m$ des points dont on ne connaît pas les
+% coordonnées. Il s'applique par exemple très bien à repositionner des villes sur
+% une carte à partir uniquement des distances entre ces villes.
+
+% Une des limitations de MDS est de ne chercher à conserver la distance entre les
+% observations que globalement. Une façon efficace de construire la matrice de
+% dissimilarité de MDS de sorte à conserver la structure locale des données est
+% l'algorithme {\it IsoMap}~\citep{tenenbaum2000}. Il s'agit de construire un
+% graphe de voisinage entre les observations en reliant chacune d'entre elles à
+% ses $k$ plus proches observations voisines. Ces arêtes peuvent être pondérée
+% par la distance entre les observations qu'elles relient. Une dissimilarité
+% entre observations peut ensuite être calculée sur ce graphe de voisinage, par
+% exemple via la longueur du plus court chemin entre deux points.
+
+% \subsubsection{t-SNE}
+% Enfin, l'algorithme {\it t-SNE}, pour {\it t-Student Neighborhood Embedding},
+% proposé en 2008 par Laurens van der Maaten and Geoff Hinton, propose
+% d'approcher la distribution des distances entre observations par une loi de
+% Student~\citep{vandermaaten2008}. Pour chaque observation $\xx^i$, on définit
+% $P_i$ comme la loi de probabilité définie par
+% \begin{equation}
+%   P_i(\xx) = \frac1{\sqrt{2 \pi \sigma^2}} \exp \left( - \frac{
+%       \ltwonorm{\xx - \xx^i}^2}{2 \sigma^2} \right).
+%   \label{eq:tsne_distr}    
+% \end{equation}
+% t-SNE consiste alors à résoudre
+% \begin{equation}
+%   \label{eq:tsne}
+%   \argmin_{Q} \sum_{i=1}^n KL(P_i||Q_i)
+% \end{equation}
+% où $KL$ dénote la divergence de Kullback-Leibler (voir
+% section~\ref{sec:cross_entropy}) et $Q$ est choisie parmi les distributions de
+% Student de dimension inférieure à $p$. Attention, cet algorithme trouve un
+% minimum local et non global, et on pourra donc obtenir des résultats différents
+% en fonction de son initialisation. De plus, sa complexité est quadratique en le
+% nombre d'observations.
+% \end{cours}
+
+% \begin{pointsclefs}
+% \item Réduire la dimension des données avant d'utiliser un algorithme
+%   d'apprentissage supervisé permet d'améliorer ses besoins en temps et en
+%   espace, mais aussi ses performances.
+% \item On distingue la sélection de variables, qui consiste à éliminer des
+%   variables redondantes ou peu informatives, de l'extraction de variable, qui
+%   consiste à générer une nouvelle représentation des données.
+% \item Projeter les données sur un espace de dimension 2 grâce à, par exemple,
+%   une ACP ou t-SNE, permet de les visualiser.
+% \item De nombreuses méthodes permettent de réduire la dimension des variables. 
+% \end{pointsclefs}
+
+\begin{plusloin}
+\item \todo{Plus de variantes de l'analyse factorielle, e.g. NMF}
+\item \todo{Representation learning}
+\item \todo{MDS, IsoMap, tSNE}
+% \item Le tutoriel de \citet{shlens2014} est une introduction détaillée à l'analyse en
+%   composantes principales.
+% \item Pour une revue des méthodes de sélection de variables, on pourra se
+%   réferer à~\citet{guyon2003}.
+% \item Pour plus de détails sur la NMF, on pourra par exemple se tourner
+%   vers~\citet{lee1999}
+% \item Pour plus de détails sur les méthodes des sélection de sous-ensemble de
+%   variables (wrapper methods), on pourra se référer à
+%   l'ouvrage de~\citet{miller1990}
+% \item Une page web est dédiée à Isomap:
+%   \url{http://web.mit.edu/cocosci/isomap/isomap.html}.
+% \item Pour plus de détails sur l'utilisation de t-SNE, on pourra se référer à
+%   la page \url{https://lvdmaaten.github.io/tsne/} ou à la publication
+%   interactive de~\citet{wattenberg2016}.
+\end{plusloin}
+
+% \section*{Bibliographie}
+% \vspace{-25pt}
+% \begin{thebibliography}{99}
+% \bibitem[\protect\astroncite{Cox et Cox}{1994}]{cox1994} Cox, T.~F. et Cox,
+%   M. A.~A. (1994).  \newblock {\em Multidimensional Scaling}.  \newblock
+%   Chapman and Hall., London.
+
+% \bibitem[\protect\astroncite{Guyon et Elisseeff}{2003}]{guyon2003} Guyon,
+%   I. et Elisseeff, A. (2003).  \newblock An introduction to variable and
+%   feature selection.  \newblock {\em Journal of Machine Learning Research},
+%   3:1157--1182.
+
+% \bibitem[\protect\astroncite{Hinton}{2002}]{hinton2002} Hinton, G.~E. (2002).
+%   \newblock Training product of experts by minimizing contrastive divergence.
+%   \newblock {\em Neural Computation}, 14:1771--1800.
+
+% \bibitem[\protect\astroncite{Hinton et Salakhutdinov}{2006}]{hinton2006}
+%   Hinton, G.~E. et Salakhutdinov, R.~R. (2006).  \newblock Reducing the
+%   dimensionality of data with neural networks.  \newblock {\em Science},
+%   313:504--507.
+
+% \bibitem[\protect\astroncite{Kozachenko et Leonenko}{1987}]{kozachenko1987}
+%   Kozachenko, L.~F. et Leonenko, N.~N. (1987).  \newblock A statistical
+%   estimate for the entropy of a random vector.  \newblock {\em Problemy
+%     Peredachi Informatsii}, 23:9--16.
+
+% \bibitem[\protect\astroncite{Lee et Seung}{1999}]{lee1999} Lee, D.~D. et
+%   Seung, H.~S. (1999).  \newblock Learning the parts of objects by non-negative
+%   matrix factorization.  \newblock {\em Nature}, 401(6755):788--791.
+
+% \bibitem[\protect\astroncite{Miller}{1990}]{miller1990} Miller, A.~J. (1990).
+%   \newblock {\em Subset Selection in Regression}.  \newblock Chapman and Hall.,
+%   London.
+
+% \bibitem[\protect\astroncite{Shlens}{2014}]{shlens2014} Shlens, J. (2014).
+%   \newblock A {Tutorial} on {Principal} {Component} {Analysis}.  \newblock {\em
+%     arXiv [cs, stat]}.  \newblock arXiv: 1404.1100.
+
+% \bibitem[\protect\astroncite{Smolensky}{1986}]{smolensky1986} Smolensky,
+%   P. (1986).  \newblock Information processing in dynamical systems:
+%   foundations of harmony theory.  \newblock In {\em Parallel Distributed
+%     Processing: Explorations in the Microstructure of Cognition}, volume 1:
+%   Foundations, chapter~6, pages 194--281. MIT Press, Cambridge, MA.
+
+% \bibitem[\protect\astroncite{Tenenbaum et~al.}{2000}]{tenenbaum2000} Tenenbaum,
+%   J.~B., de~Silva, V., et Langford, J.~C. (2000).  \newblock A global
+%   geometric framework for nonlinear dimensionality reduction.  \newblock {\em
+%     Science}, 290(5500):2319--2323.
+
+% \bibitem[\protect\astroncite{Tipping et Bishop}{1999}]{tipping1999} Tipping,
+%   M.~E. et Bishop, C.~M. (1999).  \newblock Probabilistic principal components
+%   analysis.  \newblock {\em Journal of the Royal Statistical Society Series B},
+%   61:611--622.
+
+% \bibitem[\protect\astroncite{van~der Maaten et Hinton}{2008}]{vandermaaten2008}
+%   van~der Maaten, L. et Hinton, G. (2008).  \newblock Visualizing data using
+%   t-{SNE}.  \newblock {\em Journal of Machine Learning Research}, 9:2579--2605.
+
+% \bibitem[\protect\astroncite{Wattenberg et~al.}{2016}]{wattenberg2016}
+%   Wattenberg, M., Viégas, F., et Johnson, I. (2016).  \newblock How to use
+%   t-{SNE} effectively.  \newblock {\em Distill}.  \newblock
+%   \url{http://distill.pub/2016/misread-tsne}.
+% \end{thebibliography}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "sdd_2020_poly"
+%%% End:
