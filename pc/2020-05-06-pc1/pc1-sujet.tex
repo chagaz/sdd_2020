@@ -1,0 +1,166 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+%\usepackage[gen]{eurosym}
+\usepackage{textcomp}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% SYMBOLS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+
+% Letters
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Bcal}{\mathcal{B}}
+\newcommand{\Ccal}{\mathcal{C}}
+\newcommand{\Ecal}{\mathcal{E}}
+\newcommand{\Gcal}{\mathcal{G}}
+\newcommand{\Ical}{\mathcal{I}}
+\newcommand{\Kcal}{\mathcal{K}}
+\newcommand{\Lcal}{\mathcal{L}}
+\newcommand{\Ncal}{\mathcal{N}}
+\newcommand{\Pcal}{\mathcal{P}}
+\newcommand{\Qcal}{\mathcal{Q}}
+\newcommand{\Rcal}{\mathcal{R}}
+\newcommand{\Scal}{\mathcal{S}}
+\newcommand{\Tcal}{\mathcal{T}}
+
+\newcommand{\DD}{\mathcal{D}}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\LL}{\mathcal{L}}
+\newcommand{\MM}{\mathcal{M}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\TT}{\mathcal{T}}
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\YY}{\mathcal{Y}}
+\newcommand{\ZZ}{\mathcal{Z}}
+
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\VV}{\mathbb{V}}
+
+
+% Vectors
+\makeatletter
+\newcommand{\avec}{\vec{a}\@ifnextchar{^}{\,}{}}
+\newcommand{\bb}{\vec{b}\@ifnextchar{^}{\,}{}}
+\newcommand{\cvec}{\vec{c}\@ifnextchar{^}{\,}{}}
+\newcommand{\gvec}{\vec{g}\@ifnextchar{^}{\,}{}}
+\newcommand{\hh}{\vec{h}\@ifnextchar{^}{\,}{}}
+\newcommand{\mm}{\vec{m}\@ifnextchar{^}{\,}{}}
+\newcommand{\oo}{\vec{o}\@ifnextchar{^}{\,}{}}
+\newcommand{\pp}{\vec{p}\@ifnextchar{^}{\,}{}}
+\newcommand{\rr}{\vec{r}\@ifnextchar{^}{\,}{}}
+\newcommand{\tvec}{\vec{t}\@ifnextchar{^}{\,}{}}
+\newcommand{\uu}{\vec{u}\@ifnextchar{^}{\,}{}}
+\newcommand{\uprime}{\vec{u'}\@ifnextchar{^}{\,}{}}
+\newcommand{\vv}{\vec{v}\@ifnextchar{^}{\,}{}}
+\newcommand{\vprime}{\vec{v'}\@ifnextchar{^}{\,}{}}
+\newcommand{\ww}{\vec{w}\@ifnextchar{^}{\,}{}}
+\newcommand{\xx}{\vec{x}\@ifnextchar{^}{\,}{}}
+\newcommand{\yy}{\vec{y}\@ifnextchar{^}{\,}{}}
+\newcommand{\zz}{\vec{z}\@ifnextchar{^}{\,}{}}
+\newcommand{\aalpha}{\vec{\alpha}\@ifnextchar{^}{\,}{}}
+\newcommand{\bbeta}{\vec{\beta}\@ifnextchar{^}{\,}{}}
+\newcommand{\ttheta}{\vec{\theta}\@ifnextchar{^}{\,}{}}
+\newcommand{\mmu}{\vec{\mu}\@ifnextchar{^}{\,}{}}
+\newcommand{\xxi}{\vec{\xi}\@ifnextchar{^}{\,}{}}
+\makeatother
+
+\newcommand{\thetamle}{{\hat \theta_{\text{MLE}}}}
+\newcommand{\Thetamle}{\Theta_n^{\text{MLE}}}
+\newcommand{\thetabayes}{{\hat \theta_{\text{Bayes}}}}
+\newcommand{\thetahat}{{\hat \theta}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Convergences
+\newcommand{\cvn}{\xrightarrow[n \rightarrow +\infty]{}}
+\newcommand{\cvproba}{\stackrel{\PP}{\longrightarrow}}
+\newcommand{\cvps}{\stackrel{\text{p.s.}}{\longrightarrow}}
+\newcommand{\cvltwo}{\stackrel{\Lcal^2}{\longrightarrow}}
+\newcommand{\cvloi}{\stackrel{\Lcal}{\longrightarrow}}
+
+% Paired delimiters
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\innerproduct}{\langle}{\rangle}
+
+\DeclarePairedDelimiter{\lzeronorm}{\lVert}{\rVert_0}
+\DeclarePairedDelimiter{\lonenorm}{\lVert}{\rVert_0}
+\DeclarePairedDelimiter{\ltwonorm}{\lVert}{\rVert_0}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE2.1: Science des données \hfill
+PC 1 -- Estimation et tests statistiques
+\end{center}
+
+\noindent
+\hfill 6 mai 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+\section{Estimateur du nombre de boules dans une urne}
+
+On considère une urne contenant $n$ boules, numérotées de $1$ à $n$. On ne
+connaît pas $n$ et on souhaite l'estimer. Pour cela, on procède à $m$ tirages
+avec remise.
+\begin{enumerate}
+\item Donner un estimateur simple de $n.$
+\item Calculer l'estimateur par maximum de vraisemblance de $n.$
+\item Calculer le biais de cet estimateur. Que vaut-il quand $m=1$ ? Quand $m  \rightarrow +\infty$ ? 
+\end{enumerate}
+
+\end{document}
