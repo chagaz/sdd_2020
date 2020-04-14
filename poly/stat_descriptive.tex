@@ -63,10 +63,10 @@ des âges est donnée dans le tableau ci-dessous : \par
   % \end{table}
   % \begin{table}[h]
     \centering
-    \begin{tabular}[h]{|l|c|c|c|c|c|c|} \hline 
-      Tranche d'âge (ans) 0 -- 19 & 20 -- 39 & 40 -- 59 & $>$ 60 \\ \hline     
-      Fréquence 7\% & 18\% & 31\% & 43\% \\ \hline
-    \end{tabular}
+    \begin{tabular}[h]{|l|c|c|c|c|} \hline 
+      Tranche d'âge (ans)   & 0 -- 19 & 20 -- 39  & 40 -- 59  & $>$ 60    \\ \hline     
+      Fréquence             & 7\%     & 18\%      & 31\%      & 43\%      \\ \hline
+    \end{tabular}    
     % \caption{Table des fréquences des âges parmi les 604 individus de \texttt{data/OPEN\_BIO\_2018\_7325.csv} 
     %   dont sont extraits les 20 individus du tableau~\ref{tab:remboursement_data}.}
     % \label{tab:remboursement_age_freq}
@@ -104,12 +104,12 @@ n'est pas appropriée, par exemple, si les valeurs s'étalent sur plusieurs
 % population observée.
 
 \begin{exemple}
-  Prenons par exemple, 31 observation de la température minimale (en
+  Prenons par exemple, 31 observations de la température minimale (en
   \si{\celsius}) pour la station météo de Paris-Montsouris, telles que relevées
   dans la première colonne de la table~\ref{tab:meteo_data}.
 
-  Nous disposons de $n=31$ observations, qu'il s'agit en appliquant la règle de
-  Sturges de grouper en 5 intervalles d'amplitude 2,24\si{\celsius}. La table
+  Nous disposons de $n=31$ observations, qu'il s'agit, en appliquant la règle de
+  Sturges, de grouper en 5 intervalles d'amplitude 2,24\si{\celsius}. La table
   des fréquences des températures minimales est donnée dans le
   tableau ci-dessous : \par % ~\ref{tab:meteo_tmin_freq}.
   % \begin{table}[h]
@@ -129,7 +129,7 @@ Pour une variable continue, la table des fréquences peut être traduite en
 Utiliser des fréquences plutôt que des comptes permet de comparer des
 populations de taille différente. De plus, la distribution des fréquences
 d'une série statistique de la variable $x$, représentée visuellement par un
-histogramme, peut être considéré comme une approximation de la distribution de
+histogramme, peut être considérée comme une approximation de la distribution de
 la probabilité de cette variable dans la population.
 
 \begin{figure}[h]
@@ -145,7 +145,7 @@ la probabilité de cette variable dans la population.
 On peut aussi choisir de représenter plutôt les \textbf{fréquences cumulées.} 
 
 \begin{exemple}
-  Pour notre série de températures minimales, la tables des fréquences cumulées
+  Pour notre série de températures minimales, la table des fréquences cumulées
   est donnée dans le tableau ci-dessous : \par % ~\ref{tab:meteo_tmin_cumul_freq}.
   % \begin{table}[h]
     \centering
@@ -183,7 +183,7 @@ l'étalement de ces valeurs.
 \begin{itemize}
 \item la \textbf{moyenne arithmétique} 
 \[\bar x = \frac1n \sum_{i=1}^n x_i,\]
-La  moyenne arithmétique peut être très sensible à la présente de valeurs aberrantes.
+La  moyenne arithmétique peut être très sensible à la présence de valeurs aberrantes.
 \item la \textbf{médiane,} qui correspond à une fréquence cumulée de 50\%, 
 \item le \textbf{mode,} qui est la valeur la plus fréquente dans la série
   statistique. Le mode n'a réellement de sens que pour une variable discrète ;
@@ -196,7 +196,7 @@ La  moyenne arithmétique peut être très sensible à la présente de valeurs aberra
   \begin{itemize}
   \item la moyenne arithmétique vaut $3,2 \si{\celsius}$ ;
   \item la médiane vaut $4 \si{\celsius}$ ;
-  \item la classe modale est $2,1 -- 4,4 \si{\celsius}$.
+  \item la classe modale est $2,1$ -- $4,4 \si{\celsius}$.
   \end{itemize}
 \end{exemple}
 
@@ -244,7 +244,7 @@ La  moyenne arithmétique peut être très sensible à la présente de valeurs aberra
 
 Enfin, les \textbf{quantiles} permettent aussi de déterminer la dispersion
 d'une variable. Les $q$-quantiles divisent les valeurs prises par la variable
-en $q$ intervales de mêmes fréquences. Le $p$-ème $q$-quantile de
+en $q$ intervalles de mêmes fréquences. Le $p$-ème $q$-quantile de
 $(x_1, x_2, \dots, x_n)$ est défini comme la valeur $Q_p^q$ telle que 
 \[\text{Freq}(x \leq Q_p) = \frac{p}{q}.\]
 
@@ -254,8 +254,8 @@ Lorsque $q=4,$ on parle de \textbf{quartiles.} Lorsque $q=10,$ on parle de
 \begin{exemple}
   Les trois quartiles de notre série de températures minimales sont
   $0,8 \si{\celsius}$, $4,0 \si{\celsius}$ et $5,6 \si{\celsius}$ : 25\% des
-  valeurs observées sont inférieures à 0,8 \si{\celsius}, 50\% sont inférieures
-  à 4,0 \si{\celsius} et 75\% sont inférieures à 5,6 \si{\celsius}. Le deuxième
+  valeurs observées sont inférieures à $0,8 \si{\celsius}$, 50\% sont inférieures
+  à 4,0 \si{\celsius} et 75\% sont inférieures à $5,6 \si{\celsius}$. Le deuxième
   quartile correspond bien à la médiane.
 \end{exemple}
 
