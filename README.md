@@ -23,7 +23,7 @@ __Modalités pédagogiques (en confinement)__
   * possibilité d'échanges sur slack en fin de séance (channel "#amphis") ;
   * un bref QCM en ligne (anonyme, non noté) à faire à la fin de chaque séance afin de vous aider à cerner si vous avez compris les points clés du cours, et m'aider à évaluer les points mal compris sur lesquels revenir. La solution du QCM est donnée quand vous validez vos réponses. (Attention, la question est posée en-dessous des réponses possibles, ce qui est inélégant.)
 * 7x1h30 de petites classes (2 séances de TD + 5 séances de TP sur machine) :
-  * sur slack (channel "groupe_pc_<votre numéro de PC>") ;
+  * sur slack (channel "#groupe_pc_<votre numéro de PC>") ;
   * le sujet de chaque PC sera disponible la veille de la séance ;
   * le corrigé sera disponible dans les jours qui suivent.
 
