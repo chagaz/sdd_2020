@@ -9,6 +9,7 @@
 % aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
 
 \usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
 
 
 % Fonts
@@ -19,8 +20,26 @@
 % SI units
 \usepackage{siunitx}
 
-%\usepackage[gen]{eurosym}
-\usepackage{textcomp}
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
 
 
 %%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,101 +60,7 @@
 % \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% SYMBOLS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Packages
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{bm}
-
-% Letters
-\newcommand{\Acal}{\mathcal{A}}
-\newcommand{\Bcal}{\mathcal{B}}
-\newcommand{\Ccal}{\mathcal{C}}
-\newcommand{\Ecal}{\mathcal{E}}
-\newcommand{\Gcal}{\mathcal{G}}
-\newcommand{\Ical}{\mathcal{I}}
-\newcommand{\Kcal}{\mathcal{K}}
-\newcommand{\Lcal}{\mathcal{L}}
-\newcommand{\Ncal}{\mathcal{N}}
-\newcommand{\Pcal}{\mathcal{P}}
-\newcommand{\Qcal}{\mathcal{Q}}
-\newcommand{\Rcal}{\mathcal{R}}
-\newcommand{\Scal}{\mathcal{S}}
-\newcommand{\Tcal}{\mathcal{T}}
-
-\newcommand{\DD}{\mathcal{D}}
-\newcommand{\FF}{\mathcal{F}}
-\newcommand{\HH}{\mathcal{H}}
-\newcommand{\LL}{\mathcal{L}}
-\newcommand{\MM}{\mathcal{M}}
-\newcommand{\OO}{\mathcal{O}}
-\newcommand{\TT}{\mathcal{T}}
-\newcommand{\UU}{\mathcal{U}}
-\newcommand{\XX}{\mathcal{X}}
-\newcommand{\YY}{\mathcal{Y}}
-\newcommand{\ZZ}{\mathcal{Z}}
-
-\newcommand{\CC}{\mathbb{C}}
-\newcommand{\EE}{\mathbb{E}}
-\newcommand{\NN}{\mathbb{N}}
-\newcommand{\PP}{\mathbb{P}}
-\newcommand{\RR}{\mathbb{R}}
-\newcommand{\VV}{\mathbb{V}}
-
-
-% Vectors
-\makeatletter
-\newcommand{\avec}{\vec{a}\@ifnextchar{^}{\,}{}}
-\newcommand{\bb}{\vec{b}\@ifnextchar{^}{\,}{}}
-\newcommand{\cvec}{\vec{c}\@ifnextchar{^}{\,}{}}
-\newcommand{\gvec}{\vec{g}\@ifnextchar{^}{\,}{}}
-\newcommand{\hh}{\vec{h}\@ifnextchar{^}{\,}{}}
-\newcommand{\mm}{\vec{m}\@ifnextchar{^}{\,}{}}
-\newcommand{\oo}{\vec{o}\@ifnextchar{^}{\,}{}}
-\newcommand{\pp}{\vec{p}\@ifnextchar{^}{\,}{}}
-\newcommand{\rr}{\vec{r}\@ifnextchar{^}{\,}{}}
-\newcommand{\tvec}{\vec{t}\@ifnextchar{^}{\,}{}}
-\newcommand{\uu}{\vec{u}\@ifnextchar{^}{\,}{}}
-\newcommand{\uprime}{\vec{u'}\@ifnextchar{^}{\,}{}}
-\newcommand{\vv}{\vec{v}\@ifnextchar{^}{\,}{}}
-\newcommand{\vprime}{\vec{v'}\@ifnextchar{^}{\,}{}}
-\newcommand{\ww}{\vec{w}\@ifnextchar{^}{\,}{}}
-\newcommand{\xx}{\vec{x}\@ifnextchar{^}{\,}{}}
-\newcommand{\yy}{\vec{y}\@ifnextchar{^}{\,}{}}
-\newcommand{\zz}{\vec{z}\@ifnextchar{^}{\,}{}}
-\newcommand{\aalpha}{\vec{\alpha}\@ifnextchar{^}{\,}{}}
-\newcommand{\bbeta}{\vec{\beta}\@ifnextchar{^}{\,}{}}
-\newcommand{\ttheta}{\vec{\theta}\@ifnextchar{^}{\,}{}}
-\newcommand{\mmu}{\vec{\mu}\@ifnextchar{^}{\,}{}}
-\newcommand{\xxi}{\vec{\xi}\@ifnextchar{^}{\,}{}}
-\makeatother
-
-\newcommand{\thetamle}{{\hat \theta_{\text{MLE}}}}
-\newcommand{\Thetamle}{\Theta_n^{\text{MLE}}}
-\newcommand{\thetabayes}{{\hat \theta_{\text{Bayes}}}}
-\newcommand{\thetahat}{{\hat \theta}}
-
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
-
-% Convergences
-\newcommand{\cvn}{\xrightarrow[n \rightarrow +\infty]{}}
-\newcommand{\cvproba}{\stackrel{\PP}{\longrightarrow}}
-\newcommand{\cvps}{\stackrel{\text{p.s.}}{\longrightarrow}}
-\newcommand{\cvltwo}{\stackrel{\Lcal^2}{\longrightarrow}}
-\newcommand{\cvloi}{\stackrel{\Lcal}{\longrightarrow}}
-
-% Paired delimiters
-\usepackage{mathtools}
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
-\DeclarePairedDelimiter{\innerproduct}{\langle}{\rangle}
-
-\DeclarePairedDelimiter{\lzeronorm}{\lVert}{\rVert_0}
-\DeclarePairedDelimiter{\lonenorm}{\lVert}{\rVert_0}
-\DeclarePairedDelimiter{\ltwonorm}{\lVert}{\rVert_0}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\input{../../poly/notations}
 
 \begin{document}
 
@@ -152,6 +77,27 @@ PC 1 -- Estimation et tests statistiques
 
 \medskip
 
+\paragraph{Se concentrer sur l'essentiel}
+\begin{itemize}
+\item On peut sauter le calcul du biais dans la question 3 du premier problème
+  et se concentrer sur l'interprétation quand $m = 1$ ou
+  $m \rightarrow +\infty.$
+% \item L'exercice 2 est une variante de l'exemple d'estimation de Bayes traité
+%   dans la section 3.6 du poly. On s'exerce ici à en reproduire le raisonnement
+%   pour estimer non pas le paramètre $p$ d'une Bernouilli mais les paramètre
+%   $\mu$ et $\sigma$ d'une gaussienne.
+\item Pour la question 2 de l'exercice 2, on pourra admettre que
+  $\PP(M=\mu | X_1, X_2, \dots, X_n)$ est proportionnelle à
+\[
+  \exp \left( -\frac12 \left( \frac{n}{\sigma^2} + \frac1{\tau^2}\right) \mu^2 - 
+    2 \left(\frac{\sum_{i=1}^n X_i}{\sigma^2} + \frac{m}{\tau^2} \right) \mu +  
+    \frac{\sum_{i=1}^n X_i^2}{\sigma^2} + \frac{m^2}{\tau^2} \right).
+\]
+\item On peut sauter le calcul de la question 2.c du troisième problème (la
+  réponse est 2) et se concentrer sur l'interprétation du résultat.
+\item On peut sauter la question 3 du troisième problème.
+\end{itemize}
+
 \section{Estimateur du nombre de boules dans une urne}
 
 On considère une urne contenant $n$ boules, numérotées de $1$ à $n$. On ne
@@ -160,7 +106,142 @@ avec remise.
 \begin{enumerate}
 \item Donner un estimateur simple de $n.$
 \item Calculer l'estimateur par maximum de vraisemblance de $n.$
-\item Calculer le biais de cet estimateur. Que vaut-il quand $m=1$ ? Quand $m  \rightarrow +\infty$ ? 
+\item Montrer que le biais de cet estimateur est 
+  \[
+    - \sum_{k=1}^{n-1} \left( \frac{k}{n} \right)^m.
+  \]
+  Que vaut-il quand $m=1$ ? Quand $m  \rightarrow +\infty$ ? 
 \end{enumerate}
+
+\section{Estimation de densité}
+Considérons une variable aléatoire $X$ suivant une loi normale de paramètres
+$\mu$ et $\sigma^2$.
+\begin{enumerate}
+\item Étant donné un échantillon de $n \in \NN^*$ observations de $X$, calculer
+  l'estimateur par maximum de vraisemblance de $\mu$ et $\sigma$.
+\item Supposons maintenant que $\mu$ est la réalisation d'une variable
+  aléatoire réelle $M$ qui suit une loi normale de moyenne $m$ et de variance
+  $\tau^2$. Calculer l'estimateur de Bayes de $\mu$.
+\item Décomposer l'estimateur de Bayes de $\mu$ en la somme d'un terme fonction
+  de la moyenne empirique de l'échantillon et un terme dépendant de la moyenne
+  a priori. Que se passe-t-il quand $n$ augmente ?
+\end{enumerate}
+
+\section{Test du Chi2}
+Un essai clinique sur 200 personnes, dont 92 ont été soumises au traitement
+évalué, a mis en évidence que 84 d'entre elles n'ont plus de symptômes après
+une semaine de traitement. 90 des personnes non traitées n'ont plus de
+symptômes après une semaine non plus.
+
+On cherche à déterminer si le traitement est efficace.
+
+\begin{enumerate}
+\item \textbf{Tables de contingence}
+  \begin{enumerate}
+  \item Établir la table de contingence observée correspondant à ces
+    données. Quelle proportion de personnes traitées guérissent ? Quelle
+    proportion de personnes non traitées guérissent ? Notre but sera de
+    déterminer si cette différence est significative.
+  \item Estimer la probabilité $p$ qu'une personne soit traitée. Estimer la
+    probabilité $q$ qu'une personne guérisse (indépendamment du traitement).
+  \item Supposer que le traitement n'a aucun effet. Quelle serait alors la
+    table de contingence ?
+  \item Interpréter la distance du chi2 de la table de contingence observée (cf
+    section 2.2.1 du poly) comme une distance entre la table de contingence
+    observée (a) et la table de contingence théorique (c).
+  \end{enumerate}
+\end{enumerate}
+
+Soient $Y_1, Y_2, \dots, Y_k$ $k$ variables aléatoires réelles iid, suivant une
+gaussienne standard. On pose
+\[
+  Z_k = \sum_{i=1}^k Y_i^2.
+\]
+On dit que $Z_k$ suit une loi du chi2 à $k$ degrés de liberté. On note
+$Z_k \sim \chi_k^2$. (Cette loi vous a déjà été présentée dans les exercices de Probabilités II.)
+Le tableau~\ref{tab:chi2} donne la valeur de $\PP(Z_k > z)$ pour quelques
+valeurs de $k$ et de $z$.
+
+
+On admettra\footnote{La question 3 de ce problème permet de démontrer
+cette propriété dans le cas où on compare les proportions observées d'une
+variable à deux modes aux proportions attendues.
+
+Pour une preuve, on pourra se reporter à l'article \textit{Seven proofs of the
+  Pearson Chi-squared independence test and its graphical interpretation} par
+É. Benhamou et V. Melot (2018),
+\href{https://arxiv.org/abs/1808.09171}{https://arxiv.org/abs/1808.09171}.
+} la proposition suivante : Soient deux variables aléatoires réelles
+$X$ et $Y$ indépendantes, ayant respectivement chacune $K$ et $L$ modes. Posons
+$d_{\chi^2}$ leur distance du chi2. Soit $n$ la taille d'un échantillon
+aléatoire de $(X, Y)$ et $d_{\chi^2}$ la distance du chi2 de la table de
+contingence de cet échantillon. Alors quand $n \rightarrow +\infty,$
+\[
+  d_{\chi^2} \cvloi Z_{(K-1)(L-1)}.
+\]
+
+
+\begin{enumerate}[resume]
+\item \textbf{Test du chi2}
+  \begin{enumerate}
+  \item Proposer un test statistique (hypothèses, statistique de test, région
+    critique) permettant de tester l'hypothèse selon laquelle le traitement est
+    efficace.
+  \item Que peut-on dire de notre traitement sous $\alpha = 10\%$ ? $\alpha = 1\%$ ?
+  \item \textbf{Fraude scientifique.} À un niveau de
+    signification de $5\%$, combien de personnes traitées faudrait-il trouver
+    une bonne raison d'exclure de l'étude afin de pouvoir rejeter l'hypothèse
+    nulle et affirmer le succès du test ?
+  \end{enumerate}
+\end{enumerate}
+
+Ce test s'appelle le test d'indépendance du chi2, et est implémenté dans \texttt{scipy.stats} :
+
+  \begin{lstlisting}[language=Python]
+    import scipy.stats as st
+    st.chi2_contingency(np.array([[a00, a01], [a10, a11]]), correction=False)
+  \end{lstlisting}
+  
+\begin{enumerate}[resume]
+\item \textbf{Loi du chi2} \\
+  \begin{enumerate}
+  \item Quelle sont l'espérance et la variance de $Z_k$ ? 
+  % \item Supposons $(X_1, X_2, \dots, X_n)$ un échantillon d'une variable
+  %   aléatoire gaussienne d'espérance $m$ et de variance $\sigma^2$. Montrer que 
+  %   \[
+  %     \sum_{i=1}^n \frac{(X_i - \mu)^2}{\sigma^2} \sim \chi^2_n.
+  %   \]
+  % \item En posant $M_n$ la moyenne empirique de $(X_1, X_2, \dots, X_n)$,
+  %   quelle loi pensez-vous que suive
+  %   \[
+  %     \sum_{i=1}^n \frac{(X_i - M_n)^2}{\sigma^2} ?
+  %   \]
+  \item Soit $n \in \NN^*$, $0 < 1 < p_0$, et $N_0$ une variable aléatoire qui
+    suit une loi binômiale de paramètres $n$ et $p_0$ : $N$ est la somme de $n$
+    variables aléatoires réelles iid dont la loi est une loi de Bernouilli de
+    paramètre $p_0$, et modélise le nombre de succès parmi $n$ tirages d'une
+    telle variable de Bernouilli. Posons $N_1 = n - N_0$ et $p_1 = 1 -
+    p_0$. Montrer que quand $n \rightarrow +\infty,$ 
+    \[
+      \frac{(N_0 - n p_0)^2}{n p_0}  + \frac{(N_1 - n p_1)^2}{n p_1} \cvloi Z_1.
+    \]
+  \end{enumerate}
+\end{enumerate}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|} \hline
+      & .995 & .990 & .975 & .950 & .900 & .100 & .050  & .025  & .010 & 0.005 & 0.002 & 0.001 \\ \hline
+    1 & 0.00 & 0.00 & 0.00 & 0.00 & 0.02 & 2.71 & 3.84  & 5.02  & 6.63 & 7.88 & 9.55 & 10.83 \\ \hline
+    2 & 0.01 & 0.02 & 0.05 & 0.10 & 0.21 & 4.61 & 5.99  & 7.38  & 9.21 & 10.60 & 12.43 & 13.82 \\ \hline
+    3 & 0.07 & 0.11 & 0.22 & 0.35 & 0.58 & 6.25 & 7.81  & 9.35  &  11.34 & 12.84 & 14.80 & 16.27 \\ \hline
+    4 & 0.21 & 0.30 & 0.48 & 0.71 & 1.06 & 7.78 & 9.49  & 11.14 &  13.28 & 14.86 & 16.92 & 18.47 \\ \hline
+    5 & 0.41 & 0.55 & 0.83 & 1.15 & 1.61 & 9.24 & 11.07 & 12.83 &  15.09 & 16.75 & 18.91 & 20.52 \\ \hline
+  \end{tabular}
+  \caption{Table du $\chi^2$ : Valeur de $z$ telle que $\PP(Z_k > z) = \alpha$ pour 
+    plusieurs valeurs de $\alpha$ et pour $Z_k \sim \chi^2_k$.}
+  \label{tab:chi2}
+\end{table}
+
 
 \end{document}
