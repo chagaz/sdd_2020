@@ -18,8 +18,14 @@ Ce cours a pour but de vous permettre d'acquérir les compétences suivantes :
 * Savoir valider et sélectionner un modèle d'apprentissage supervisé.
 
 __Modalités pédagogiques (en confinement)__
-* 9x1h30 de ~~cours au tableau~~ cours, sous forme de lecture en autonomie du poly, accompagnée d'un commentaire audio, et d'une possibilité d'échanges sur slack en fin de séance. Un bref QCM en ligne (non noté) clôturera chaque séance afin de vous aider à cerner si vous avez compris les points clés du cours, et sera corrigé la semaine suivante. Le pdf et le commentaire audio seront disponibles autant que possible la veille de la séance.
-* 7x1h30 de petites classes (2 séances de TD + 5 séances de TP sur machine), sur slack. Le sujet de chaque PC sera disponible la veille de la séance. Le corrigé sera disponible dans les jours qui suivent.
+* 9x1h30 de cours ~~au tableau~~ :
+  * lecture en autonomie du poly, accompagnée d'un commentaire audio (pdf et mp3 disponibles la veille au soir autant que possible) ;
+  * possibilité d'échanges sur slack en fin de séance (channel "#amphis") ;
+  * un bref QCM en ligne (anonyme, non noté) à faire à la fin de chaque séance afin de vous aider à cerner si vous avez compris les points clés du cours, et m'aider à évaluer les points mal compris sur lesquels revenir. La solution du QCM est donnée quand vous validez vos réponses. (Attention, la question est posée en-dessous des réponses possibles, ce qui est inélégant.)
+* 7x1h30 de petites classes (2 séances de TD + 5 séances de TP sur machine) :
+  * sur slack (channel "groupe_pc_<votre numéro de PC>") ;
+  * le sujet de chaque PC sera disponible la veille de la séance ;
+  * le corrigé sera disponible dans les jours qui suivent.
 
 __Modalités d'évaluation__
 * mini-projet numérique à réaliser en majorité sur les séances de TP du 20 mai et du 17 juin et à rendre le 1er juillet (30%).
