@@ -414,22 +414,22 @@ aléatoire.
 
 On appelle alors \textbf{estimation par maximum de vraisemblance} ({\it maximum
   likelihood estimate} ou {\it MLE} en anglais) de $\theta$ une valeur 
-$\thetamle$ qui maximise la vraisemblance, autrement dit la probabilité
+$\hatmle{\theta}$ qui maximise la vraisemblance, autrement dit la probabilité
 d'observer l'échantillon $(x_1, x_2, \dots, x_n)$ étant donné $\theta$:
 \begin{equation}
   \label{eq:mle_estimator}
-  \thetamle \in \argmax_{\thetahat \in \Scal} \prod_{i=1}^n \PP_X(X_i=x_i|\thetahat).
+  \hatmle{\theta} \in \argmax_{\thetahat \in \Scal} \prod_{i=1}^n \PP_X(X_i=x_i|\thetahat).
 \end{equation}
 
 \textbf{Un estimateur par maximum de vraisemblance} de $\theta$ est une
-variable aléatoire réelle $\Thetamle$ dont la valeur quand
-$X_1=x_1, X_2=x_2, \dots, X_n=x_n$ est donnée par $\thetamle$.
+variable aléatoire réelle $\hatmle{\Theta}$ dont la valeur quand
+$X_1=x_1, X_2=x_2, \dots, X_n=x_n$ est donnée par $\hatmle{\theta}$.
 
 Pour simplifier les calculs, on choisira souvent de maximiser non pas
 directement la vraisemblance mais son logarithme :
 \begin{equation}
   \label{eq:lmle_estimator} 
-  \thetamle \in \argmax_{\thetahat \in \Scal}\sum_{i=1}^n \log \PP_X(X_i=x_i|\thetahat).
+  \hatmle{\theta} \in \argmax_{\thetahat \in \Scal}\sum_{i=1}^n \log \PP_X(X_i=x_i|\thetahat).
 \end{equation}
 
 \begin{exemple}
@@ -437,7 +437,7 @@ directement la vraisemblance mais son logarithme :
   
   L'estimation par maximum de vraisemblance de $p$ est
   \begin{align*}
-    \hat p_{\text{MLE}} & = \argmax_{p \in [0, 1]} \sum_{i=1}^n \log \PP_X(X_i = x_i|p)
+    \hatmle{p} & = \argmax_{p \in [0, 1]} \sum_{i=1}^n \log \PP_X(X_i = x_i|p)
                           = \argmax_{p \in [0, 1]} \sum_{i=1}^n \log 
                           \left( p^{x_i} (1-p)^{1-x_i}  \right) \\
                         & = \argmax_{p \in [0, 1]} \sum_{i=1}^n x_i \log p + 
@@ -453,13 +453,13 @@ directement la vraisemblance mais son logarithme :
   \end{equation*}
   ce qui nous donne
   \begin{equation*}
-    (1 - \hat p_{\text{MLE}}) \sum_{i=1}^n x_i - \hat p_{\text{MLE}} \left( n - 
+    (1 - \hatmle{p}) \sum_{i=1}^n x_i - \hatmle{p} \left( n - 
       \sum_{i=1}^n x_i \right) = 0
   \end{equation*}
   et donc
   \begin{equation}
     \label{eq:mle_bernoulli}
-    \hat p_{\text{MLE}} = \frac{1}{n} \sum_{i=1}^n x_i = \frac{b}{n}.
+    \hatmle{p} = \frac{1}{n} \sum_{i=1}^n x_i = \frac{b}{n}.
   \end{equation}
   
   L'estimateur par maximum de vraisemblance de $p$ est ainsi tout simplement la
@@ -511,7 +511,7 @@ L'\textbf{estimation de Bayes pour l'erreur quadratique moyenne} de $\theta$
 est alors définie par
 \begin{equation}
   \label{eq:bayes_estimator}
-  \thetabayes \in \argmin_{\thetahat \in \Scal} \EE((\Theta - \thetahat)^2),
+  \hatbys{\theta} \in \argmin_{\thetahat \in \Scal} \EE((\Theta - \thetahat)^2),
 \end{equation}
 cette espérance étant prise sur les distributions jointes de $\Theta$ et de
 $(X_1, X_2, \dots, X_n)$.
@@ -520,7 +520,7 @@ $(X_1, X_2, \dots, X_n)$.
 est l'espérance de la distribution postérieure de $\Theta$ : 
 \begin{equation}
   \label{eq:bayes_estimator2}
-  \thetabayes  = \EE(\Theta|X_1 = x_1, X_2=x_2, \dots, X_n=x_n).
+  \hatbys{\theta}  = \EE(\Theta|X_1 = x_1, X_2=x_2, \dots, X_n=x_n).
 \end{equation}
 
 \paragraph{Preuve}
@@ -530,7 +530,7 @@ En effet, posons $\thetahat \in \Scal.$ Alors
   \EE(\Theta^2) - \EE(\Theta)^2.
 \end{equation*}
 Comme ni $\EE(\Theta^2)$ ni $\EE(\Theta)^2$ ne dépendent de $\thetahat,$
-$\thetabayes$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\thetabayes = 
+$\hatbys{\theta}$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\hatbys{\theta} = 
 \EE(\Theta) - \EE(\Theta|(X_1, X_2, \dots, X_n)). \hfill \square$
 
 \begin{exemple}
@@ -561,7 +561,7 @@ $\thetabayes$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\t
 
   L'estimation de Bayes de $p$ est ainsi
   \begin{equation*}
-    p_{\text{Bayes}} = \EE(\Theta|X_1=x_1, X_2=x_2, \dots, X_n=x_n) = \frac{(b + \alpha)}{
+    \hatbys{p} = \EE(\Theta|X_1=x_1, X_2=x_2, \dots, X_n=x_n) = \frac{(b + \alpha)}{
       (b + \alpha) + (n - b + \beta)}
     = \frac{b + \alpha}{n + \alpha + \beta}.
   \end{equation*}
@@ -571,8 +571,8 @@ $\thetabayes$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\t
   \textbf{Remarque importante}
   On peut réécrire cette estimation sous la forme
   \begin{equation*}
-    p_{\text{Bayes}} = \frac{\alpha + \beta}{n + \alpha + \beta} \EE[\Theta] + 
-    \frac{n}{n + \alpha + \beta} p_{\text{MLE}}.
+    \hatbys{p} = \frac{\alpha + \beta}{n + \alpha + \beta} \EE[\Theta] + 
+    \frac{n}{n + \alpha + \beta} \hatmle{p}.
   \end{equation*}
   Ainsi, l'estimation de Bayes du paramètre $p$ est une combinaison linéaire de
   l'espérance de sa distribution a priori et de son estimation par maximum de
