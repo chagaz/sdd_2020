@@ -95,7 +95,7 @@ où $\theta_0 \in \Scal$ est une valeur déterministe fixée à l'avance.
 L'hypothèse nulle peut cependant être de nature plus complexe, par exemple :
 \begin{itemize}
 \item « Deux variables statistique $X$ et $Y$ sont indépendantes » (c'est le
-  cas du test d'indépendance du $\chi^2$, \todo{cf. TD}).
+  cas du test d'indépendance du $\chi^2$ que nous verrons dans la PC1).
 \item « Deux échantillons $(x_1, x_2, \dots, x_n)$ et $(y_1, y_2, \dots, y_n)$
   sont des réalisations de la même distribution » (c'est le cas du test de
   Wilcoxon-Mann-Whitney, qui dépasse le cadre de ce programme) ;
@@ -228,7 +228,7 @@ différence entre un estimateur de ce paramètre et sa valeur sous $\HH_0$.
     \PP(T=k) = \PP\left(\sum_{i=1}^n X_i = k\right) \text{ pour } k=0, 1,
     \dots, n.
   \]
-  On reconnait ici une loi binômiale de paramètres $n$ et $\pi.$
+  On reconnait ici une loi binomiale de paramètres $n$ et $\pi.$
 \end{exemple}
 
 
@@ -288,7 +288,7 @@ $\PP_{T0}(T \in \Ical) = \alpha.$
   $n=5$ et $\alpha=0,05$, on obtient $t_l = 0$ et $t_r = 5$ et il n'est donc
   jamais possible de rejeter l'hypothèse nulle.
 
-  Le test que nous venons de définir s'appelle le test binomial. 
+  Le test que nous venons de définir s'appelle le \textbf{test binomial.}
 
   \paragraph{Remarque importante} On observe ici que, parmi les trois
   hypothèses alternatives envisagées, seul le test statistique unilatéral
@@ -416,7 +416,6 @@ variance.
 \subsection{Hypothèses de test}
 \paragraph{Question:} Comment modéliser ce problème ? Que poser pour $\HH_0$ et
 $\HH_1$ ?
-
 \begin{answer}
   Nous posons $n=40$ ; les poids des 40 pigeons, $(x_1, x_2, \dots, x_n)$, sont
   la réalisation de l'échantillon aléatoire $(X_1, X_2, \dots, X_n)$ composé de
@@ -438,9 +437,9 @@ $\HH_1$ ?
 
 \subsection{Statistique de test}
 Pour tester $\HH_0$, nous souhaitons déterminer la probabilité d'observer une
-moyenne empirique $\hat{m}$ de 312g si l'espérance de $X$ est de 300g.  En
+moyenne empirique $\hatm$ de 312g si l'espérance de $X$ est de 300g.  En
 posant $M_n$ la moyenne empirique de l'échantillon, nous souhaitons déterminer
-$\PP(M_n=\hat{m}|\mu=\mu_0)$.
+$\PP(M_n=\hatm|\mu=\mu_0)$.
 
 Le théorème central limite nous indique que 
 \[
@@ -454,26 +453,25 @@ d'être atteinte pour poser
 \]
 
 Nous ne connaissons pas la variance $\sigma^2$ de $X$ ; cependant nous pouvons
-l'estimer grâce à l'écart-type empirique $\hat{\sigma} = 31\si{g},$ et utiliser 
+l'estimer grâce à l'écart-type empirique $\hatsigma = 31\si{g},$ et utiliser 
 \begin{equation}
-  \frac{\sqrt{n} (M_n - \mu)}{\hat \sigma}  \sim \Ncal(0, 1).
+  \frac{\sqrt{n} (M_n - \mu)}{\hatsigma}  \sim \Ncal(0, 1).
 \label{eq:tcl_moyenne}
 \end{equation}
-Nous ne remplaçons pas $\mu$ par son estimation $\hat{m}$ : ce n'aurait aucun
+Nous ne remplaçons pas $\mu$ par son estimation $\hatm$ : ce n'aurait aucun
 sens, car nous cherchons justement à tester sa valeur.
 
-\paragraph{Question :} Comment utiliser l'équation~\ref{eq:tcl_moyenne} pour
+\paragraph{Question :} Comment utiliser l'équation~\eqref{eq:tcl_moyenne} pour
 définir une statistique de test ?
-
 \begin{answer}
   Si $\HH_0$ est vraie, alors $\mu = \mu_0$ et la variable aléatoire réelle
   \begin{equation}
     \label{eq:z_moyennes}
-    Z = \frac{\sqrt{n} (M_n - \mu_0)}{\hat \sigma}
+    Z = \frac{\sqrt{n} (M_n - \mu_0)}{\hatsigma}
   \end{equation}
   est une gaussienne standard : $Z \sim \Ncal(0, 1)$.
 
-  $Z$ est donc une variable aléatoire rélle dont nous connaissons la
+  $Z$ est donc une variable aléatoire réelle dont nous connaissons la
   distribution sous l'hypothèse nulle. Cela en fait une bonne candidate à être
   statistique de test.
 \end{answer}
@@ -487,7 +485,6 @@ une valeur prédéterminée consiste donc à rejeter $\HH_0$ si $\abs{Z} > z_0.$
 
 \paragraph{Question : } Étant donné un niveau de signification $\alpha$, quelle
 est la valeur critique $z_0$ ?
-
 \begin{answer}
   Nous souhaitons que la probabilité de rejeter $\HH_0$ alors qu'elle est vraie
   soit égale à $\alpha.$ En d'autres termes, nous cherchons $z_0$ tel que
@@ -511,7 +508,6 @@ est la valeur critique $z_0$ ?
 
 \paragraph{Question :} Peut-on rejeter l'hypothèse selon laquelle les pigeons
 du jardin du Luxembourg ont un poids moyen de 300g ?
-
 \begin{answer}
   Cela dépend du niveau de signification que l'on choisit.
 
@@ -543,7 +539,6 @@ du jardin du Luxembourg ont un poids moyen de 300g ?
 \subsection{p-valeur}
 \paragraph{Question :} Quelle est la p-valeur correspondant à la valeur de test
 $z=2,45$ ?
-
 \begin{answer}
   La p-valeur est
   \[
@@ -562,11 +557,10 @@ Luxembourg, qui nous semblent particulièrement bien nourris de restes des
 sandwhicheries environnantes, ne seraient pas plus lourds que la moyenne de
 300g. Il s'agit maintenant de faire un test unilatéral à droite, pour lequel
 \[
-  \HH_1 : \mu \neq \mu_0.
+  \HH_1 : \mu > \mu_0.
 \]
 
 \paragraph{Question :} Comment cela transforme-t-il notre test d'hypothèse ?
-
 \begin{answer}
   Le test statistique consiste maintenant à rejeter $\HH_0$ si $Z > z_r$ (sans
   valeur absolue). En particulier, toutes les valeurs négatives nous font
@@ -600,11 +594,8 @@ sandwhicheries environnantes, ne seraient pas plus lourds que la moyenne de
   \label{fig:z_pigeons_unilateral}
 \end{figure}
 
-TODO test pour comparer la moyenne de deux échantillons, par exemple cas et
-contrôles dans un essai clinique.
-
-
-\subsection{Intervalle de confiance}
+\subsection{Intervalle de confiance $\bigstar$}
+\label{sec:ic}
 Reprenons le test bilatéral.
 
 Étant donné $\alpha,$ nous avons déterminé $z_0$ de sorte à ce que
@@ -618,16 +609,16 @@ En d'autres termes,
 \]
 (On pourra se référer à la figure~\ref{fig:z_moyenne}.)
 
-D'après la définition de $Z$ (équation~\ref{eq:z_moyennes}), cela est équivalent à 
+D'après la définition de $Z$ (équation~\eqref{eq:z_moyennes}), cela est équivalent à 
 \[
-  \PP\left( M_n - \frac{\hat{\sigma}}{\sqrt{n}} z_0 \leq 
-    \mu \leq M_n + \frac{\hat{\sigma}}{\sqrt{n}}z_0 \right) = 1 - \alpha.
+  \PP\left( M_n - \frac{\hatsigma}{\sqrt{n}} z_0 \leq 
+    \mu \leq M_n + \frac{\hatsigma}{\sqrt{n}}z_0 \right) = 1 - \alpha.
 \]
 
 Ainsi l'intervalle 
 \[
-  \left[ M_n - \frac{\hat{\sigma}}{\sqrt{n}} z_0, \; M_n +
-    \frac{\hat{\sigma}}{\sqrt{n}} z_0 \right]
+  \left[ M_n - \frac{\hatsigma}{\sqrt{n}} z_0, \; M_n +
+    \frac{\hatsigma}{\sqrt{n}} z_0 \right]
 \]
 est un \textbf{intervalle de confiance} à $(1 - \alpha)$ pour la taille moyenne
 $\mu$ (voir Probabilités V).
@@ -641,22 +632,135 @@ L'intervalle de confiance à 99\% est $[299,4\si{g}~; 324,6\si{g}].$ Cet
 intervalle contient $\mu_0$. On ne peut pas rejeter l'hypothèse nulle.
 
 \paragraph{Exercice :} Calculer l'intervalle de confiance à 95\% et à 99\% pour
-le test d'hypothèse unilatéral à droite.
-\todo{Rédiger la solution}
-
+le test d'hypothèse unilatéral à droite. (Solution : cf section~\ref{sec:ic_sol}.)
 % \section{Test d'indépendance du $\chi^2$}
 % \label{sec:chi2}
 
+\subsection{Tests de comparaison de moyenne $\bigstar$} 
+Le test que nous avons étudié dans cette section, qui permet de comparer la
+moyenne d'un échantillon suffisamment large pour être dans la limite du
+théorème centrale limite ($n \geq 30$) à sa moyenne théorique, s'appelle un
+\textbf{test Z}, ou \textit{Z-test} en anglais, par référence à la notation $Z$
+couramment utilisée pour une variable normalement distribuée de moyenne 0 et
+variance 1.
+
+Dans le cas d'un échantillon de faible taille, le théorème central limite ne
+s'applique pas. Si l'on suppose $X$ normalement distribuée, on peut alors
+appliquer un test de Student, ou test t (\textit{t-test} en anglais), ainsi
+appelé car la statistique de test suit une loi de Student.
+
+Des variantes de ces tests Z et t peuvent aussi être utilisés pour comparer les
+moyennes de deux échantillons, appariés ou non. On dit que deux échantillons
+aléatoires $(X_1, X_2, \dots, X_n)$ et $(Y_1, Y_2, \dots, Y_n)$ sont appariés
+quand les variables $X_i$ et $Y_i$ décrivent le même individu $i$. Il peut par
+exemple s'agir de mesures répétées sur les mêmes individus, soit prises par
+deux appareils différents, soit prises avant et après un traitement.
+
+
+
 \section{Tests d'hypothèses multiples}
 \label{sec:mht}
-\todo{}
+\paragraph{Question} Imaginons l'expérience de pile ou face suivante : je lance
+15 fois une pièce équilibrée, et demande à une personne en face de moi de
+prédire avant chaque lancer si je vais obtenir pile ou face. Supposons que
+cette personne me donne la bonne réponse 12 fois. A-t-elle un don de voyance ?
+\begin{answer}
+  Pour répondre à cette question, posons $X$ une variable de Bernouilli de
+  paramètre $p$ modélisant, pour un lancer de pièce, le succès de la personne :
+  $X$ vaut 0 si la personne n'a pas donné la bonne prédiction et 1
+  sinon. L'hypothèse nulle est
+  \[
+    \HH_o : p = 0,5 \text{ (la personne n'a pas de don de voyance)}.
+  \]
+  Nous pouvons ici poser une hypothèse alternative unilatérale à droite :
+  \[
+    \HH_1 : p > 0,5 \text{ (la personne a un don de voyance)}.
+  \]
+  Il s'agit du test binomial que nous avons défini dans la
+  section~\ref{sec:formalisme_test}, mais ici la variable modélise non pas le
+  résultat du lancer de pièce mais la correction de la réponse donnée par mon
+  cobaye.
+
+  La statistique de test $T$ est le nombre de succès dans l'échantillon. Sous
+  $\HH_0$, $T \sim \Bcal(n, p).$ La p-valeur correspondant à 12 succès est donc
+  $\PP_{\HH_0}(T \geq 12) = 1 - \PP(T \leq 11) = 0,018$. Cette p-valeur est
+  significative pour $\alpha = 5\%$.
+\end{answer}
+
+\paragraph{Question} Supposons maintenant que je fasse ce test avec toute la
+classe. Vous êtes derrière votre ordinateur et ne communiquez pas entre
+vous. Trois élèves passent mon test de pyschisme, autrement dit tombent juste
+au moins 12 fois sur 15. Dois-je appeler la presse ?
+\begin{answer}
+  Supposons une promo de $m=125$ élèves. Nous posons maintenant $Y$ une
+  variable de Bernouilli de paramètre $\pi$ modélisant le succès d'une personne
+  sur 15 lancers. Nous faisons ici un nouveau test statistique sur $Y$,
+  \[
+    \HH_0^\prime : \pi = 0,018 \text { \qquad et \qquad} \HH_1^\prime : \pi >
+    0,018.
+  \]
+  Il s'agit toujours d'un test binomial. La statistique de test $U$ est le
+  nombre d'élèves passant le test. Sous $\HH_0^\prime$, $U \sim \Bcal(m,
+  \pi)$.
+  La p-valeur est ici
+  $\PP_{\HH_0^\prime}(T \geq 3) = 1 - \PP(T \leq 2) = 0,39.$ Cette p-valeur
+  n'est pas significative !
+\end{answer}
+
+Cet exemple illustre le principe suivant : plus on fait de tests, et plus on a
+de chances de voir apparaître une p-valeur significative. 
+
+Il est nécessaire de corriger cet effet : on parle de \textbf{correction} ou
+\textbf{ajustement de tests d'hypothèse multiples.} La plus simple et plus
+utilisées de ces corrections, proposée par la biostatisticienne Olive Jean
+Dunn, est connue sous le nom de \textbf{correction de Bonferroni} : il s'agit
+simplement de diviser le niveau de signification par le nombre de tests
+\[
+  \alpha \leftarrow \frac{\alpha}{m}.
+\]
+
+Cette correction se justifie de la façon suivante : notons
+$p_1, p_2, \dots, p_m$ les p-valeurs obtenue pour $m$ tests, testant chacun
+$\HH_0$ vs. $\HH_1$, et supposons que $\HH_0$ est
+vraie pour les $m_0$ premiers tests . Alors 
+\[
+  \PP(\bigcup_{i=1}^{m_0} \left( p_i \leq \frac{\alpha}{m} \right) \leq
+  \sum_{i=1}^{m_0} \left( p_i \leq \frac{\alpha}{m} \right) = \frac{m_0
+    \alpha}{m} \leq \alpha.
+\]
+
+
+
+\section{Compléments}
+\subsection{Solution de l'exercice section~\ref{sec:ic} $\bigstar$}
+\label{sec:ic_sol}
+Nous avons déterminé la valeur critique $z_r$ de sorte à ce que 
+  \[
+    \PP(Z \leq z_r) = 1-\alpha.
+  \]
+
+Comme $Z = \frac{\sqrt{n} (M_n - \mu_0)}{\hatsigma}$, cela est équivalent à 
+\[
+  \PP \left(\mu \geq M_n - \frac{\hatsigma}{\sqrt{n}} z_r \right) = 1 - \alpha.
+\]
+
+Ainsi l'intervalle 
+\[
+  \left[M_n - \frac{\hatsigma}{\sqrt{n}} z_r, +\infty \right]
+\]
+ est un intervalle de confiance unilatéral à $(1-\alpha)$ pour la taille moyenne $\mu$.
+
+ Dans notre exemple, l'intervalle de confiance unilatéral à droite à 95\% pour
+ la valeur moyenne du poids d'un pigeon est $[303,9\si{g}, +\infty]$. Cet
+ intervalle contient $\mu_0$ et on ne peut pas rejeter l'hypothèse nulle.  À
+ 99\%, cet intervalle est $[300,6\si{g}, +\infty[.$ Ces résultats sont
+ cohérents.
 
 \begin{plusloin}
-\item \todo{On dit d'un test statistique qu'il est sans biais si}
-\item \todo{On dit d'un test statistique qu'il converge si}
-\item \todo{Si la distribution de la statistique de test sous l'hypothèse nulle n'est
-  pas connue, on peut recourir à des méthodes empiriques pour la déterminer de
-  manière empirique.}
+\item On dit d'un test statistique qu'il est sans biais si sa puissance est
+  supérieure au niveau de signification : $1 - \beta > \alpha$.
+\item On dit d'un test statistique qu'il converge si la suite des erreurs de
+  deuxième espèce converge vers $0$ : $1 - \beta \cvn 0.$ 
 \item Pour plus de détails sur la sur-interprétation des p-valeurs en sciences
   et le \textit{p-hacking} (consistant à ne conserver, parmi de nombreux tests
   conduits sur les données, ceux qui donnent des p-valeurs significatives), on

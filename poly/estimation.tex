@@ -3,12 +3,12 @@
 
 \paragraph{Notions :} échantillon aléatoire, estimateur, estimation, biais d'un
 estimateur, convergence d'un estimateur, estimation par maximisation de la
-vraisemblance.
+vraisemblance, estimation de Bayes.
 \paragraph{Objectifs pédagogiques :}
 \begin{itemize}
 \setlength{\itemsep}{3pt}
 \item Choisir un estimateur, en particulier en déterminant des propriétés
-  telles que son biais, sa variance, ou sa convergence.
+  telles que son biais ou sa précision.
 \item Proposer un estimateur, en particulier par maximisation de la
   vraisemblance.
 \end{itemize}
@@ -304,9 +304,8 @@ On utilise pour quantifier la précision d'un estimateur ponctuel générique son
 estimateur biaisé ait une meilleure précision qu'un estimateur non-biaisé, si
 ce dernier a une plus grande variance !
 
-\subsection{Convergence d'un estimateur}
+\subsection{Convergence d'un estimateur $\bigstar$}
 \label{sec:convergence_estimateur}
-
 On souhaite aussi d'un estimateur qu'il permette de s'approcher d'autant mieux
 de la quantité qu'il estime que le nombre d'échantillons est grand. On parle
 ici de la convergence d'une série de variables aléatoires réelles,
@@ -470,7 +469,7 @@ directement la vraisemblance mais son logarithme :
 \paragraph{Propriété} L'estimateur par maximum de vraisemblance est convergent.
 
 
-\section{Estimation de Bayes}
+\section{Estimation de Bayes $\bigstar$}
 Supposons que plutôt que de ne pas connaître du tout la valeur du paramètre
 $\theta$, nous ayons une bonne idée des valeurs qu'il peut prendre. Cette
 information peut être très utile, surtout quand le nombre d'observations est
@@ -610,7 +609,7 @@ $\hatbys{\theta}$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc
 
 
 
-\section{Annexe}
+\section{Compléments}
 \subsection{Variance de la moyenne empirique} 
 \label{sec:variance_moyenne_empirique}
 

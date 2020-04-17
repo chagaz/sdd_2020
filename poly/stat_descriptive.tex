@@ -67,6 +67,7 @@ des âges est donnée dans le tableau ci-dessous : \par
       Tranche d'âge (ans)   & 0 -- 19 & 20 -- 39  & 40 -- 59  & $>$ 60    \\ \hline     
       Fréquence             & 7\%     & 18\%      & 31\%      & 43\%      \\ \hline
     \end{tabular}    
+
     % \caption{Table des fréquences des âges parmi les 604 individus de \texttt{data/OPEN\_BIO\_2018\_7325.csv} 
     %   dont sont extraits les 20 individus du tableau~\ref{tab:remboursement_data}.}
     % \label{tab:remboursement_age_freq}
@@ -113,11 +114,13 @@ n'est pas appropriée, par exemple, si les valeurs s'étalent sur plusieurs
   des fréquences des températures minimales est donnée dans le
   tableau ci-dessous : \par % ~\ref{tab:meteo_tmin_freq}.
   % \begin{table}[h]
+
     \centering
     \begin{tabular}[h]{|l|c|c|c|c|c|} \hline 
       T min (\si{\celsius}) & < -0,16 & -0,16 -- 2,08 & 2,08 -- 4,32 & 4,32 -- 6,56 & > 6,56 \\ \hline 
       Fréquence & 0,19 & 0,19 & 0,29 & 0,10 & 0,23 \\ \hline
     \end{tabular}
+
   %   \caption{Table des fréquences des températures minimales du tableau~\ref{tab:meteo_data}.}
   %   \label{tab:meteo_tmin_freq}
   % \end{table}
@@ -148,6 +151,7 @@ On peut aussi choisir de représenter plutôt les \textbf{fréquences cumulées.}
   Pour notre série de températures minimales, la table des fréquences cumulées
   est donnée dans le tableau ci-dessous : \par % ~\ref{tab:meteo_tmin_cumul_freq}.
   % \begin{table}[h]
+
     \centering
     \begin{tabular}[h]{|l|c|c|c|c|c|} \hline 
       T min (\si{\celsius}) & < -0,16 & < 2,08 & < 4,32 & < 6,56 & < 8,80 \\ \hline 
@@ -155,6 +159,7 @@ On peut aussi choisir de représenter plutôt les \textbf{fréquences cumulées.}
       T min (\si{\celsius}) & > -2,40 & > -0,16 & > 2,08 & > 4,32 & > 6,56 \\ \hline 
       Fréquence & 1,0 & 0,81 & 0,62 & 0,33 & 0,23 \\ \hline
     \end{tabular}
+
   %   \caption{Table des fréquences cumulées pour les températures minimales 
   %     du tableau~\ref{tab:meteo_data}.}
   %   \label{tab:meteo_tmin_cumul_freq}
@@ -474,6 +479,9 @@ d_{\chi^2} = \sum_{i=1}^K \sum_{j=1}^L  \frac{\left( A_{ij} -
   tableau~\ref{tab:remboursement_age_region}. La distance du chi2 pour cette
   table de contingence est de 11,21, ce qui suggère une dépendance entre les
   variables « âge » et « région » dans les données.
+\end{exemple}
+
+
   \begin{table}[h]
     \centering
     \begin{tabular}[h]{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
@@ -489,9 +497,8 @@ d_{\chi^2} = \sum_{i=1}^K \sum_{j=1}^L  \frac{\left( A_{ij} -
       de remboursement.}
     \label{tab:remboursement_age_region}
   \end{table}
-\end{exemple}
 
-Nous verrons au chapitre~\ref{chap:tests} comment transformer cette distance en
+Nous verrons dans la PC1 comment transformer cette distance en
 un test statistique de dépendance.
 
 % \begin{table}[h]

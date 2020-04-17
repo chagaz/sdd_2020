@@ -1,4 +1,5 @@
 %-*- coding: iso-latin-1 -*-
+%\PassOptionsToPackage{dvipsnames}{xcolor} % for compatibility with tikzsymbols
 \documentclass[french,11pt,openany]{book}
 \usepackage{babel}
 \DecimalMathComma
@@ -18,6 +19,8 @@
 
 %\usepackage[gen]{eurosym}
 \usepackage{textcomp}
+
+%\usepackage{tikzsymbols}
 
 % TODO
 \usepackage[dvipsnames]{xcolor}
@@ -41,12 +44,14 @@
 
 \usepackage{graphicx}
 
-\usepackage[colorlinks=true,allcolors=black]{hyperref}
+\usepackage[colorlinks=true,urlcolor=MidnightBlue,linkcolor=black,citecolor=black]{hyperref}
 
 
 
 %%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[tmargin=2cm,bmargin=2cm,lmargin=3cm,footnotesep=1cm]{geometry}
+
+\usepackage{changepage}
 
 % Vertical spaces
 \parskip=1ex\relax % space between paragraphs (incl. blank lines)
@@ -71,6 +76,13 @@
 \titlespacing*{\chapter}{0pt}{50pt}{30pt}
 \titleformat{\chapter}%[display]
   {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{15pt}{\huge}
+
+% \newpagestyle{mystyle}{%
+%   \headrule\sethead{\MakeUppercase {\chaptername\ } \thechapter~--~\chaptertitle}{}{}
+%   \setfoot{}{\thepage}{}}
+% \pagestyle{mystyle}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -111,7 +123,7 @@
 % Environnement "plusloin".
 %
 \forcedefenv{plusloin}
-\newenvironment{plusloin}[1][Pour aller plus loin]{\par\medbreak
+\newenvironment{plusloin}[1][Pour aller plus loin]{\par\bigbreak
 \noindent\makebox[\textwidth]{\hrulefill\quad#1\quad\hrulefill}\par\nobreak
 \@afterheading
 \def\labelitemi{\textbullet}
@@ -165,9 +177,20 @@
 
 \forcedefenv{exemple}
 \newenvironment{exemple}%[1][\relax]
-{\bigbreak\noindent\rule{10pt}{0.4pt} \; \textbf{Exemple} \; \hrulefill \par}
-{\par \noindent\rule[\baselineskip]{\textwidth}{0.4pt}\vspace{-\baselineskip}\par}
+{\par 
+\begin{adjustwidth}{2em}{2em}
+\noindent\rule{10pt}{0.4pt} \; \textbf{Exemple} \; \hrulefill \par}
+{\par \noindent\rule[\baselineskip]{\textwidth-4em}{0.4pt}\vspace{-\baselineskip}\par
+\end{adjustwidth}}
 
+% \newenvironment{exemple}%
+% {
+% \centering
+% \begin{flushright}    
+% \begin{minipage}{5cm}}%
+% {
+% \end{minipage}
+% \end{flushright}}
 
 % Environnement "answer". 
 %
@@ -181,7 +204,8 @@
 % %}{\makebox[\textwidth]{\hrulefill}\nobreak}
 \forcedefenv{answer}
 \newenvironment{answer}%[1][\relax]
-{\bigbreak\noindent\rule{10pt}{0.4pt} \; \textbf{Réponse} \; \hrulefill \par}
+{\par\noindent% \rule{10pt}{0.4pt} \;
+  \textbf{Réponse} \hrulefill \par}
 {\par \noindent\rule[\baselineskip]{\textwidth}{0.4pt}\vspace{-\baselineskip}\par}
 
 
@@ -219,7 +243,7 @@
   \vfill
   
   \LARGE
-  ECUE2.1 Science des données \\ 
+  ECUE21.1 Science des données (DATA)\\ 
   
   \Large
   Chloé-Agathe Azencott (CBIO) \\
@@ -232,7 +256,7 @@
   \textbf{Compétences} 
 
 
-  \begin{tabular}[h]{|p{0.2\textwidth}|p{0.8\textwidth}|}
+  \begin{tabular}[h]{|p{0.025\textwidth}|p{0.975\textwidth}|}
     \hline
     C1 & Maîtriser des méthodes statistiques usuelles permettant de traiter convenablement des cas simples d'analyse de données \\ \hline
     C2 & Maîtriser des méthodes usuelles d'exploration des données \\ \hline
@@ -250,7 +274,7 @@
 
 
 \clearpage 
-\chapter{Intro}
+\chapter{Introduction}
 \input{intro}
 
 \part{Notions de statistique}

@@ -1,13 +1,55 @@
 %-*- coding: iso-latin-1 -*-
 \label{chap:intro}
 
-\section{Continuité pédagogique}
-\todo{Mise au point sur les modalités d'enseignement à distance.}
+\paragraph{Notions :} statistique descriptive, statistique inférentielle,
+apprentissage statistique, population
+
+\paragraph{Objectifs pédagogiques :}
+\begin{itemize}
+\item Donner une définition de la science des données
+\item Donner une définition de la statistique 
+\item Donner une définition de l'apprentissage statistique, ou apprentissage
+  automatique, ou encore \textit{machine learning}
+\end{itemize}
+
 
 
 \section{Qu'est-ce que la science des données ?}
-\todo{Définir données, science des données, donner des exemples d'application
-  diverses et variées.}
+La science des données, ou \textit{data science}, est un domaine dont la
+définition dépend des personnes qui la donnent. On s'accorde néanmoins
+généralement sur l'idée qu'il s'agit d'une science interdisciplinaire, qui
+s'appuie sur les mathématiques (et notamment les probabilités, la statistique
+et l'optimisation) et l'informatique (et notamment l'algorithmique, les bases
+de données, l'architecture distribuée, et l'analyse numérique) mais aussi sur
+des connaissances spécifiques au domaine d'application, autrement dit à la
+nature des données étudiées (finance, commerce, physique, biologie, sociologie,
+etc.).
+
+C'est un domaine multiforme qui fait beaucoup parler de lui, et on se réfère
+souvent à un article du \textit{Harvard Business Review} intitulé «
+\textit{Data Scientist: the Sexiest Job of the 21st Century}
+»\footnote{\href{https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century}{https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century}}.
+
+La science des données permet par exemple de mieux comprendre les besoins de la
+clientèle d'une entreprise ; de dimensionner des serveurs ; d'améliorer la
+distribution de l'électricité ; d'analyser des données génomiques pour suggérer
+de nouvelles hypothèses biologiques ; d'optimiser la livraison de colis ; de
+détecter des fraudes ; de recommander des livres, films, ou autres produits
+adaptés à nos goûts ; ou de personnaliser des publicités.
+
+Dans les années à venir, la science des données, et en particulier le
+\textit{machine learning}, nous permettra vraisemblablement d'améliorer la
+sécurité routière (y compris grâce aux véhicules autonomes), la réponse
+d'urgence aux catastrophes naturelles, le développement de nouveaux
+médicaments, ou l'efficacité énergétique de nos bâtiments et industries.
+
+
+
+\section{Objectifs de ce cours}
+Ce cours se concentre sur les aspects mathématiques (statistique et
+modélisation) et informatiques (utilisation pratique) de la science des
+données. Il fait appel à des notions que vous avez découvertes en Probabilités,
+en Optimisation, et en Outils Numériques pour les Mathématiques.
 
 Le premier but de ce cours est de démystifier la science des données, le Big
 Data, l'intelligence artificielle telle qu'on en parle de nos jours et de vous
@@ -20,14 +62,58 @@ inférentielle et de l'apprentissage automatique sont vastes, et vous aurez, si
 vous le souhaitez, amplement l'occasion de les explorer en deuxième et troisième
 année.
 
+\paragraph{Socle minimal} 
+À l'issue de ce cours, vous devriez avoir acquis
+\textit{a minima} les compétences suivantes :
+\begin{enumerate}
+\item Interpréter une p-valeur ;
+\item Éviter les principaux écueils de visualisation de données ;
+\item Expliciter le principe de la minimisation du risque empirique, et
+  l'illustrer sur un ou deux exemples d'algorithme d'apprentissage automatique ;
+\item Expliquer comment un algorithme d'apprentissage automatique peut
+  reproduire un biais  ;
+\item Reconnaître une situation pouvant prêter au surapprentissage ;
+\item Sélectionner et valider un modèle d'apprentissage automatique ;
+\item Décrire un réseau de neurones artificiel comme un modèle paramétrique ;
+\item Lister quelques succès et limites de l'apprentissage profond ;
+\item Donner des exemples d'algorithmes d'apprentissage automatique permettant
+  d'apprendre des modèles non linéaires ;
+\item Expliquer quelques uns des enjeux éthiques liés à l'intelligence artificielle.
+\end{enumerate}
+
+Les sections marquées d'une étoile ($\bigstar$) dans le poly sont celles qui ne
+font pas partie de ce socle minimal. Ne pensez pas cependant qu'elles soient
+plus difficiles !
+
+\paragraph{Acquisition de données}
+Aucune approche statistique ne pourra créer un bon modèle à partir de données
+qui ne sont pas pertinentes -- c'est le concept {\it garbage in, garbage out}
+qui stipule qu'un algorithme d'apprentissage auquel on fournit des données de
+mauvaise qualité ne pourra rien en faire d'autre que des prédictions de
+mauvaise qualité.
+
+Bien que ce cours soit consacré aux outils mathématiques et, dans une moindre
+mesure, informatiques de la science des données, il ne faut pas négliger qu'une
+part importante du de {\it machine learner} ou de {\it data scientist} est un
+travail d'ingénierie consistant à préparer les données afin d'éliminer les
+données aberrantes, gérer les données manquantes, choisir une représentation
+pertinente, etc.
+
+\paragraph{Big data} De plus en plus, les quantités de données disponibles
+imposent de transformer les algorithmes utilisés et de faire appel à des
+architectures de calcul et de base de données distribuées. Nous n'abordons pas
+non plus ce point dans ce cours. Le cours optionnel Large Scale Machine
+Learning, proposé en semaine bloquée au printemps, vous permettra de découvrir
+ce domaine.
+
 \section{Qu'est-ce que la statistique ?}
 
 Le terme de « statistique » est dérivé du latin « \textit{status} » (signifiant
 « état »). Historiquement, \textbf{les statistiques} concernent l'étude
 méthodique, par des procédés numériques (inventaires, recensements, etc.) des
-faits sociaux qui définissent un état. Elles sont désormais utilisées dans tous
-les secteurs où l'on dispose de données : sciences sociales mais aussi santé,
-environnement, industrie, économie, recherche scientifique, etc.
+faits sociaux qui définissent un état. % Elles sont désormais utilisées dans tous
+% les secteurs où l'on dispose de données : sciences sociales mais aussi santé,
+% environnement, industrie, économie, recherche scientifique, etc.
 
 Par contraste, \textbf{la statistique} est un ensemble de méthodes des
 mathématiques appliquées permettant de décrire et d'analyser des phénomènes
@@ -36,7 +122,7 @@ méthodes permettent d'étudier des données, ou observations, consistant en la
 mesure d'une ou plusieurs caractéristiques d'un ensemble de personnes ou objets
 équivalents.
 
-\section{Vocabulaire}
+\subsection{Vocabulaire}
 
 L'ensemble de personnes ou d'objets équivalents étudiés est appelé \textbf{la
   population.} Il peut s'agir d'une population au sens « courant » du terme
@@ -66,8 +152,8 @@ Lorsque la population à étudier est trop grande pour qu'il soit possible
 d'observer chacun de ses individus, on étudie alors une partie seulement de la
 population. Cette partie est appelée \textbf{échantillon}. On parle alors de
 \textbf{sondage}, par opposition à un \textbf{recensement}, qui consiste à
-étudier tous les individus d'une population. Nous parlerons plus en détails de
-la construction d'un échantillon dans le chapitre~\ref{chap:estimation}.
+étudier tous les individus d'une population. Nous reviendrons sur la notion
+d'échantillon dans le chapitre~\ref{chap:estimation}.
 
 Par exemple, la population des élèves de première année des Mines est
 composée de 125 individus. Si je recueille l'âge, le département de naissance
@@ -113,10 +199,6 @@ montants des variables quantitatives. On pourra choisir de traiter le nombre de
 remboursements comme une variable discrète ou continue.
 
 
-
-
-\section{Types de questions statistiques}
-
 \subsection{Statistique descriptive} 
 La \textbf{statistique descriptive,} aussi appelée \textbf{statistique
   exploratoire,} consiste à caractériser une population par la détermination
@@ -126,14 +208,10 @@ en évidence des propriétés de cet ensemble. Elle permet aussi de suggérer des
 hypothèses relatives à la population dont sont issues les observations. Il
 s'agit principalement de calculer des indicateurs (par exemple des moyennes) et
 de visualiser les données par des graphiques. La visualisation peut être
-enrichie par des techniques de réduction de dimension (voir
-chapitre~\ref{chap:dimred}), qui permettent de créer un petit nombre de
-variables qui résument les mesures prises sur les observations, et des
-techniques de partitionnement, ou clustering, qui permettent de réduire la
-taille d'un échantillon en regroupant les individus présentant des
-caractéristiques homogènes (ce sujet sera abordé plus en détail dans \todo{nom
-  du cours ML avancé}). Nous détaillons la statistique descriptive dans le
-chapitre~\ref{chap:stat_descr}.
+enrichie par des techniques d'apprentissage non-supervisé (cf
+section~\ref{sec:nonsup_ml}) qui permettent de réduire le nombre de variables
+ou de regrouper ensemble les individus semblables.  La statistique descriptive
+est traitée au chapitre 2~\ref{chap:stat_descr}.
 
 \subsection{Statistique inférentielle} 
 Aussi appelée \textbf{statistique décisionnaire,} ou encore \textbf{inférence
@@ -148,36 +226,153 @@ probabilistes de ces variables aléatoires à l'aide d'indicateurs calculés sur
 l'échantillon. Les chapitres~\ref{chap:estimation} et~\ref{chap:tests} traîtent
 de statistique inférentielle.
 
+\section{Qu'est-ce que l'apprentissage statistique ?}
+Qu'est-ce qu'apprendre, comment apprend-on, et que cela signifie-t-il pour une
+machine ? La question de l'{\it apprentissage} fascine les spécialistes de
+l'informatique et des mathématiques tout autant que neurologues, pédagogues,
+philosophes ou artistes.
 
-\subsection{L'apprentissage statistique} 
-\todo{Introduire le ML + notions d'apprentissage non-supervisé / exploratoire /
-  analyse exploratoire de données ; vs apprentissage supervisé.}
+Dans le cas d'un programme informatique, on parle d'\textbf{apprentissage
+  statistique,} ou \textbf{apprentissage automatique}, ou encore {\it machine
+  learning}, quand ce programme a la capacité d'apprendre sans que cette
+modification ne soit explicitement programmée. Cette définition est celle
+donnée par Arthur Samuel en 1959. On peut ainsi opposer un programme {\it
+  classique}, qui utilise une procédure et les données qu'il reçoit en entrée
+pour produire en sortie des réponses, à un programme {\it d'apprentissage
+  automatique}, qui utilise les données et les réponses afin de produire la
+procédure qui permet d'obtenir les secondes à partir des premières.
 
+Supposons par exemple qu'une entreprise veuille connaître le montant total
+dépensé par un client ou une cliente à partir de ses factures. Il suffit
+d'appliquer un algorithme classique, à savoir une simple addition : un
+algorithme d'apprentissage n'est pas nécessaire.
 
-\section{Déroulé du cours et évaluation}
-Le document que vous êtes en train de lire vit sur GitHub :
-\href{https://github.com/chagaz/sdd\_2020}{\texttt{https://github.com/chagaz/sdd\_2020}}.
+Par contraste, supposons maintenant que l'on veuille utiliser ces factures pour
+déterminer quels produits le client est le plus susceptible d'acheter dans un
+mois. Bien que cela soit vraisemblablement lié, nous n'avons manifestement pas
+toutes les informations nécessaires pour ce faire. Cependant, si nous disposons
+de l'historique d'achat d'un grand nombre d'individus, il devient possible
+d'utiliser un algorithme d'apprentissage automatique pour qu'il en tire un
+modèle prédictif nous permettant d'apporter une réponse à notre question.
 
-Dans ce même répertoire, vous trouverez aussi les dossiers
+Ce point de vue informatique sur l'apprentissage automatique justifie que l'on considère qu'il s'agisse d'un domaine différent de celui de la statistique. Cependant, nous aurons l'occasion de voir que la frontière entre inférence statistique et apprentissage est souvent mince.
+Il s'agit ici, fondamentalement, de \textbf{modéliser} un phénomène à partir de
+données considérées comme autant d'observations de celui-ci.
+\begin{attention}
+  Bien que l'usage soit souvent d'appeler les deux du même nom, il faut
+  distinguer l'\textbf{algorithme d'apprentissage} automatique du
+  \textbf{modèle appris} : le premier utilise les données pour produire le
+  second, qui peut ensuite être appliqué comme un programme classique.
+\end{attention}
+
+On distingue plusieurs types de problèmes en apprentissage automatique. Nous nous intéresserons dans ce cours à l'apprentissage supervisé et à l'apprentissage non-supervisé, en ignorant entre autres l'apprentissage par renforcement principalement utilisé en robotique.
+\subsection{Apprentissage supervisé}
+L'\textbf{apprentissage supervisé,} ou \textbf{apprentissage prédictif,} est peut-être le type de problèmes de machine
+learning le plus facile à appréhender : son but est d'apprendre à faire des
+{\it prédictions}, à partir d'une liste d'exemples \textbf{étiquetés},
+c'est-à-dire accompagnés de la valeur à prédire. Les étiquettes servent de \og
+prof \fg~et supervisent l'apprentissage de l'algorithme. Un exemple classique est celui de l'annotation d'images : il s'agit par exemple de déterminer si une image représente ou non un chat.
+
+Étant données $n$ {observations} $\{x_i\}_{i=1, \dots, n}$ décrites dans un
+espace $\XX$, et leurs {étiquettes} $\{y_i\}_{i=1, \dots, n}$ décrites dans un
+espace $\YY$, on suppose que les étiquettes peuvent être obtenues à partir des
+observations grâce à une fonction $\phi: \XX \rightarrow \YY$ fixe et inconnue
+: $y_i = \phi(x_i) + \epsilon_i$, où $\epsilon_i$ est un bruit aléatoire.  Il
+s'agit alors d'utiliser les données pour déterminer une fonction
+$f: \XX \rightarrow \YY$ telle que, pour tout couple
+$(x, \phi(x)) \in \XX \times \YY$, $f(x) \approx \phi(x)$. On suppose généralement pour cela que les couples $(x_i, y_i)$ sont les réalisations d'un vecteur aléatoire $(X, Y)$ vérifiant $Y = \phi(X) + \epsilon$ et l'on cherche à déterminer $\phi$.
+
+Nous aborderons en détail l'apprentissage supervisé dans les chapitres~\ref{chap:erm} à~\ref{chap:nonlin}.
+
+\subsection{Apprentissage non supervisé}
+\label{sec:nonsup_ml}
+Dans le cadre de l'\textbf{apprentissage non supervisé}, les données ne sont
+pas étiquetées. Il s'agit alors de modéliser les observations pour mieux les
+comprendre. Ces techniques sont ainsi complémentaires de celles de la
+statistique exploratoire.
+
+Parmi les exemples d'apprentissage non supervisé, on compte notamment 
 \begin{itemize}
-\item \texttt{notebooks/}, contenant les notebooks jupyter utilisés pour
-  générer les tables et figures de ce document ;
-\item \texttt{data/}, contenant les jeux de données utilisés dans le cours ou
-  pour les TP ;
-\item \texttt{pc/}, contenant les sujets des petites classes et du mini-projet
-  numérique.
+\item la \textbf{réduction de dimension}, que nous aborderons au
+  chapitre~\ref{chap:dimred}), qui permet de créer un petit nombre de variables
+  qui résument les mesures prises sur les observations. Il s'agit de trouver
+  une représentation des données dans un espace de dimension plus faible que
+  celle de l'espace dans lequel elles sont représentées à l'origine. Cela
+  permet de réduire les temps de calcul et l'espace mémoire nécessaire au
+  stockage les données, mais aussi souvent d'améliorer les performances d'un
+  algorithme d'apprentissage supervisé entraîné par la suite sur ces données.
+\item le \textbf{partitionnement}, ou \textbf{clustering}, qui permet de
+  réduire la taille d'un échantillon en regroupant les individus présentant des
+  caractéristiques homogènes. Nous ne traiterons pas de ce sujet dans ce
+  cours. Il sera notamment abordé dans le cours optionnel d'apprentissage
+  automatique proposé en semaine bloquée à l'automne.
 \end{itemize}
 
-Vous pouvez bien sûr cloner ce répertoire et proposer des corrections ou
-ajouts via des pull-requests.
 
-\section{Remerciements}
-Les contenus de ce poly s'appuient en partie sur des documents mis à
-disposition par Stéphane Canu, Laure Reboul, Joseph Salmon, \todo{compléter} ainsi que les
-ouvrages \textit{Probabilités, analyse des données et Statistique} (Technip) de
-Gilbert Saporta et \textit{Introduction au Machine Learning} (Dunod InfoSup) de
-Chloé-Agathe Azencott.
+\section{Et l'intelligence artificielle, dans tout ça ?}
+Le machine learning est une branche de l'intelligence
+artificielle. En effet, un système incapable d'apprendre peut difficilement
+être considéré comme intelligent. % La capacité à apprendre et à tirer parti de
+% ses expériences est en effet essentielle à un système conçu pour s'adapter à un
+% environnement changeant.
+L'intelligence artificielle, définie comme l'ensemble des techniques mises en
+{\oe}uvre afin de construire des machines capables de faire preuve d'un
+comportement que l'on peut qualifier d'intelligent, fait aussi appel aux
+sciences cognitives, à la neurobiologie, à la logique, à l'électronique, à
+l'ingénierie et bien plus encore.
 
+Le terme d'\og intelligence artificielle \fg~stimulant plus
+l'imagination, il est de plus en plus souvent employé en lieu et
+place de celui d'apprentissage automatique.
+
+\section{Bonnes pratiques}
+L'essor récent de l'intelligence artificielle, à travers notamment les
+développements en apprentissage profond que nous aborderons brièvement au
+chapitre~\ref{chap:nonlin}, suscite de vifs débats philosophiques, éthiques et
+moraux dans notre société. Sans entrer en profondeur dans ces débats, ce qui
+relèverait d'un cours d'éthique ou de philosophie et non plus d'un cours de
+mathématiques appliquées, nous en aborderons quelques points clés dans le
+chapitre~\ref{chap:pratiques}, dédiée aux bonnes pratiques en science des
+données. En science des données, il serait malhonnête de prétendre pouvoir
+détacher les mathématiques et l'informatique du contexte de leur utilisation.
+
+
+
+
+
+% \section{Déroulé du cours et évaluation}
+% Le document que vous êtes en train de lire vit sur GitHub :
+% \href{https://github.com/chagaz/sdd\_2020}{\texttt{https://github.com/chagaz/sdd\_2020}}.
+
+% Dans ce même répertoire, vous trouverez aussi les dossiers
+% \begin{itemize}
+% \item \texttt{notebooks/}, contenant les notebooks jupyter utilisés pour
+%   générer les tables et figures de ce document ;
+% \item \texttt{data/}, contenant les jeux de données utilisés dans le cours ou
+%   pour les TP ;
+% \item \texttt{pc/}, contenant les sujets des petites classes et du mini-projet
+%   numérique.
+% \end{itemize}
+
+% Vous pouvez bien sûr cloner ce répertoire et proposer des corrections ou
+% ajouts via des pull-requests.
+
+
+
+
+\section{Sources}
+Le contenu de ce poly s'appuie en partie sur des documents mis à disposition en
+ligne par Stéphane Canu, Laure Reboul, et Joseph Salmon, que je remercie
+vivement, ainsi que les ouvrages \textit{Probabilités, analyse des données et
+  Statistique} (Technip) de Gilbert Saporta et \textit{Introduction au Machine
+  Learning} (Dunod InfoSup) de Chloé-Agathe Azencott.
+
+
+\begin{plusloin}
+  \item L'article \href{https://www.tandfonline.com/doi/full/10.1080/10618600.2017.1384734}{\textit{50 Years of Data Science} de David Donaho}
+aborde les différences entre statistique, science des données, et apprentissage
+automatique et donne une vision d'ensemble de ces domaines.
+\end{plusloin}
 
 %\section{Tableaux de données}
 \begin{table}
