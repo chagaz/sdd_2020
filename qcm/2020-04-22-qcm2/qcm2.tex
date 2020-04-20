@@ -1,0 +1,137 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../../poly/notations}
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE2.1: Science des données \hfill
+QCM 2 -- Estimation
+\end{center}
+
+\noindent
+\hfill 22 avril 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+
+% \paragraph{Question 1.} 
+% \begin{itemize}
+% \item[$\square$] 
+% \item[$\square$] 
+% \item[$\square$] 
+% \end{itemize}
+
+\paragraph{Question 1.} Soit $X$ une variable aléatoire réelle suivant une loi
+de Poisson de paramètre $\lambda$. Étant donné un échantillon aléatoire
+$(X_1, X_2, \dots, X_n)$ de $X$, et une de ses réalisations
+$(x_1, x_2, \dots, x_n)$, cocher le(s) estimateur(s) non biaisé(s) de $\lambda$
+parmi les propositions ci-dessous :
+\begin{itemize}
+\item[$\square$] $L_1 = \frac1n \sum_{i=1}^n x_i.$
+\item[$\square$] $L_2 = \frac1n \sum_{i=1}^n X_i.$
+\item[$\square$] $L_3 = \frac1n \sum_{i=1}^n \left( X_i^2 - \left( \frac1n \sum_{j=1}^n X_j \right)^2 \right).$
+\item[$\square$] $L_4 = \frac1n \sum_{i=1}^n \left( x_i^2 - \left( \frac1n \sum_{j=1}^n x_j \right)^2 \right).$
+\end{itemize}
+
+
+\paragraph{Question 2.} Un estimateur biaisé peut être plus précis qu'un estimateur non-biaisé.
+\begin{itemize}
+\item[$\square$] Vrai.
+\item[$\square$] Faux.
+\end{itemize}
+
+\vfill 
+
+\paragraph{Indice pour la question 1.} Quelles sont l'espérance et la variance d'une loi de Poisson de paramètre $\lambda$ ?
+
+\newpage
+
+\section*{Solution}
+\paragraph{Question 1.} Il y a ici tout d'abord une question de vocabulaire :
+un estimateur est une variable aléatoire, tandis qu'une estimation est sa
+réalisation. Ainsi nous ne considérons que les formules avec $X$ et non pas
+avec $x$.
+
+Les deux sont des estimateurs sans biais de $\lambda$.
+
+En effet, les $X_i$ étant i.i.d. de même loi que $X,$ et on rappelle que
+$\EE(X) = \lambda$ et $\VV(X) = \lambda.$ Alors
+\[
+  \text{B}(L_2) = \EE(L_1) - \lambda = \frac1n \sum_{i=1}^n \EE(X_i) - \lambda = 0.
+\]
+
+De même, 
+\[
+  \text{B}(L_3) = \frac1n \sum_{i=1}^n \left( \EE(X_i)^2 - \lambda^2 \right)  - \lambda = 0.
+\]
+On a utilisé ici que, par définition de la variance, $\EE(X^2) = \VV(X) + \EE(X)^2.$
+
+
+\paragraph{Question 2.} Vrai. C'est le concept du compromis biais-variance
+(cf. section 3.4.3 du poly).
+
+\end{document}

@@ -1,0 +1,121 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../../poly/notations}
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE2.1: Science des données \hfill
+QCM 1 -- Statistique descriptive
+\end{center}
+
+\noindent
+\hfill 22 avril 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+
+\paragraph{Question 1.} On s'intéresse aux hospitalisation pour une certaine
+maladie. Comment visualiser la liaison entre la durée du séjour à l'hôpital et
+l'âge des patients, la première étant donnée en nombre de jours et le second
+par tranches ?
+\begin{itemize}
+\item[$\square$] un nuage de point 
+\item[$\square$] un diagramme en barres
+\item[$\square$] une série de boîtes à moustaches
+\end{itemize}
+
+\paragraph{Question 2.} L'image ci-dessous représente un nuage de points entre
+le diamètre de fleurs et la hauteur de leur tige. Leur coefficient de
+corrélation de Pearson est plutôt proche de...
+\begin{itemize}
+\item[$\square$] $- 0,35$
+\item[$\square$] $+ 0,35$
+\item[$\square$] $- 0,85$
+\item[$\square$] $+ 0,85$
+\item[$\square$] $- 0,95$
+\item[$\square$] $+ 0,95$
+\item[$\square$] $- 0,50$
+\item[$\square$] $- 0,50$
+\end{itemize}
+
+
+\begin{center}
+  \includegraphics[width=0.35\textwidth]{pearson_example}
+\end{center}
+
+\newpage
+
+\section*{Solution}
+\paragraph{Question 1.} Une série de boîtes à moustaches est plus appropriée
+pour visualiser la relation entre une variable quantitative (durée du séjour)
+et une variable qualitative (âge par tranches). Cf. figure 2.7 dans le poly.
+
+\paragraph{Question 2.} $r \approx 0,85.$ On peut voir à la « pente » que la
+corrélation est positive. La situation est intermédiaire entre celle des
+figures 2.6(c) $(r=0,50)$ et 2.6(d) $(r=1,00)$. Une corrélation de $0,95$
+serait plus proche de la figure 2.6(d) que de celle donnée ci-dessus.
+\end{document}
