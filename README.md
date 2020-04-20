@@ -21,7 +21,7 @@ __Modalités pédagogiques (en confinement)__
 * 9x1h30 de cours ~~au tableau~~ :
   * lecture en autonomie du poly, accompagnée d'un commentaire audio (pdf et mp3 disponibles la veille au soir autant que possible) ;
   * possibilité d'échanges sur slack en fin de séance (channel "#amphis") ;
-  * un bref QCM en ligne (anonyme, non noté) à faire à la fin de chaque séance afin de vous aider à cerner si vous avez compris les points clés du cours, et m'aider à évaluer les points mal compris sur lesquels revenir. La solution du QCM est donnée quand vous validez vos réponses. (Attention, la question est posée en-dessous des réponses possibles, ce qui est inélégant.)
+  * un bref QCM à faire à la fin de chaque séance afin de vous aider à cerner si vous avez compris les points clés du cours, et m'aider (si vous posez des questions dessus) à évaluer les points mal compris sur lesquels revenir. La solution du QCM est donnée.
 * 7x1h30 de petites classes (2 séances de TD + 5 séances de TP sur machine) :
   * sur slack (channel "#groupe_pc_<votre numéro de PC>") ;
   * le sujet de chaque PC sera disponible la veille de la séance ;
