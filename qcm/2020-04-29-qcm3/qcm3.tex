@@ -1,0 +1,150 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../../poly/notations}
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE21.1: Science des données \hfill
+QCM 3 -- Construction d'estimateurs
+\end{center}
+
+\noindent
+\hfill 29 avril 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+
+\paragraph{Question 1.} Soit $(x_1, x_2, \dots, x_n)$ un échantillon d'une
+variable aléatoire $X$. On suppose que $X$ suit une loi paramétrisée
+par $\gamma$. La vraisemblance de $(x_1, x_2, \dots, x_n)$ est donnée par
+\begin{itemize}
+\item[$\square$] $\PP(x_1, x_2, \dots, x_n, \gamma)$
+\item[$\square$] $\PP(x_1, x_2, \dots, x_n | \gamma)$
+\item[$\square$] $\PP(\gamma | x_1, x_2, \dots, x_n)$
+\item[$\square$] $\prod_{i=1}^n \PP(x_i|\gamma)$
+\item[$\square$] $\prod_{i=1}^n \PP(\gamma|x_i)$
+\end{itemize}
+
+\paragraph{Question 2.} Soit $X$ une loi exponentielle de paramètre
+$\lambda$. L'estimateur par maximum de vraisemblance de $\lambda$ est donné par
+\begin{itemize}
+\item[$\square$] $L_n = n \ln(\lambda) - \lambda \sum_{i=1}^n X_i,$ où $(X_1, X_2, \dots, X_n)$ est un échantillon aléatoire de $X$
+\item[$\square$] $\widehat{\lambda} = n \ln(\lambda) - \lambda \sum_{i=1}^n x_i,$ où $(x_1, x_2, \dots, x_n)$ est un échantillon aléatoire de $X$
+\item[$\square$] $L_n = \frac{n}{\sum_{i=1}^n X_i},$ où $(X_1, X_2, \dots, X_n)$ est un échantillon aléatoire de $X$
+\item[$\square$] $\widehat{\lambda} = \frac{n}{\sum_{i=1}^n x_i},$ où $(x_1, x_2, \dots, x_n)$ est un échantillon aléatoire de $X$.
+\end{itemize}
+
+\paragraph{Question 3. $\bigstar$} L'estimateur de Bayes est plus proche de l'espérance a
+priori que de l'estimateur par maximum de vraisemblance quand la taille de
+l'échantillon est
+\begin{itemize}
+\item[$\square$] grande
+\item[$\square$] petite
+\item[$\square$] ça dépend.
+\end{itemize}
+
+
+\newpage
+
+\section*{Solution}
+
+\paragraph{Question 1.} Par définition (cf. équation~(3.7) du poly),
+\[
+L(x_1, x_2, \dots, x_n; \gamma) = \PP(x_1, x_2, \dots, x_n | \gamma) = \prod_{i=1}^n \PP(x_i|\gamma).
+\]
+
+\paragraph{Question 2.} 
+Par définition la vraisemblance d'un échantillon $(x_1, x_2, \dots, x_n)$ est donnée par
+\[
+  L(x_1, x_2, \dots, x_n; \lambda) = \prod_{i=1}^n \lambda e^{- \lambda x_i}
+  = \lambda^n \prod_{i=1}^n e^{- \lambda x_i},
+\] 
+et donc sa \textit{log-vraisemblance} vaut 
+\[
+  \ell(x_1, x_2, \dots, x_n; \lambda) = \ln \left(\lambda^n \prod_{i=1}^n e^{- \lambda x_i}\right)
+  = n \ln(\lambda) - \lambda \sum_{i=1}^n x_i.
+\]
+La fonction $\lambda \mapsto n \ln(\lambda) - \lambda \sum_{i=1}^n x_i$ est
+concave sur $]0, +\infty[ \rightarrow \RR$ et on peut donc la maximiser en
+annulant sa dérivée.
+
+On obtient \textit{l'estimation par maximum de vraisemblance} de $\lambda$ suivante :
+\[
+  \hatmle{\lambda} = \frac{n}{\sum_{i=1}^n x_i}
+\]
+et, si on appelle $(X_1, X_2, \dots, X_n)$ un échantillon aléatoire de $X$, on
+obtient \textit{l'estimateur par maximum de vraisemblance} de $\lambda$ :
+\[
+  L_n = \frac{n}{\sum_{i=1}^n X_n}.
+\]
+
+
+\paragraph{Question 3.} La tendance que nous avons observée sur l'exemple de la
+section 3.6 (cf. « Remarque importante ») se vérifie en général : plus on
+observe d'échantillons, plus on s'éloigne de l'a priori pour se rapprocher d'un
+estimateur issu uniquement des données.
+\end{document}
