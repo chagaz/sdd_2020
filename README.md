@@ -1,5 +1,5 @@
 # UE 21 EC Science des données
-Cours « science des données » à Mines ParisTech (2019-2020). **Ce répertoire est encore en chantier !!**
+Cours « science des données » à Mines ParisTech (2019-2020). 
 
 __Équipe pédagogique__
 * Responsable de cours : Chloé-Agathe Azencott
