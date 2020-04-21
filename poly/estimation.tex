@@ -428,7 +428,7 @@ Pour simplifier les calculs, on choisira souvent de maximiser non pas
 directement la vraisemblance mais son logarithme :
 \begin{equation}
   \label{eq:lmle_estimator} 
-  \hatmle{\theta} \in \argmax_{\thetahat \in \Scal}\sum_{i=1}^n \log \PP_X(X_i=x_i|\thetahat).
+  \hatmle{\theta} \in \argmax_{\thetahat \in \Scal}\sum_{i=1}^n \ln \PP_X(X_i=x_i|\thetahat).
 \end{equation}
 
 \begin{exemple}
@@ -436,15 +436,15 @@ directement la vraisemblance mais son logarithme :
   
   L'estimation par maximum de vraisemblance de $p$ est
   \begin{align*}
-    \hatmle{p} & = \argmax_{p \in [0, 1]} \sum_{i=1}^n \log \PP_X(X_i = x_i|p)
-                          = \argmax_{p \in [0, 1]} \sum_{i=1}^n \log 
+    \hatmle{p} & = \argmax_{p \in [0, 1]} \sum_{i=1}^n \ln \PP_X(X_i = x_i|p)
+                          = \argmax_{p \in [0, 1]} \sum_{i=1}^n \ln 
                           \left( p^{x_i} (1-p)^{1-x_i}  \right) \\
-                        & = \argmax_{p \in [0, 1]} \sum_{i=1}^n x_i \log p + 
-                          \left( n - \sum_{i=1}^n x_i \right) \log (1-p).
+                        & = \argmax_{p \in [0, 1]} \sum_{i=1}^n x_i \ln p + 
+                          \left( n - \sum_{i=1}^n x_i \right) \ln (1-p).
   \end{align*}
   La fonction
-  $L: p \mapsto \sum_{i=1}^n x_i \log p + \left( n - \sum_{i=1}^n x_i \right)
-  \log (1-p)$
+  $L: p \mapsto \sum_{i=1}^n x_i \ln p + \left( n - \sum_{i=1}^n x_i \right)
+  \ln (1-p)$
   est concave, nous pouvons donc la maximiser en annulant sa dérivée :
   \begin{equation*}
     \frac{\partial L}{\partial p} = \sum_{i=1}^n x_i \frac{1}{p} - 
