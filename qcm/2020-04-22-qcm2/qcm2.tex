@@ -116,19 +116,19 @@ un estimateur est une variable aléatoire, tandis qu'une estimation est sa
 réalisation. Ainsi nous ne considérons que les formules avec $X$ et non pas
 avec $x$.
 
-Les deux sont des estimateurs sans biais de $\lambda$.
+On rappelle que $\EE(X) = \lambda$ et $\VV(X) = \lambda.$
 
-En effet, les $X_i$ étant i.i.d. de même loi que $X,$ et on rappelle que
-$\EE(X) = \lambda$ et $\VV(X) = \lambda.$ Alors
+Seul $L_2$ est un estimateur sans biais de $\EE(X) = \lambda$ : c'est la moyenne
+empirique de $X$.
+
+On peut refaire le calcul : les $X_i$ étant i.i.d. de même loi que $X,$ 
 \[
-  \text{B}(L_2) = \EE(L_1) - \lambda = \frac1n \sum_{i=1}^n \EE(X_i) - \lambda = 0.
+  \text{B}(L_2) = \EE(L_2) - \lambda = \frac1n \sum_{i=1}^n \EE(X_i) - \lambda = 0.
 \]
 
-De même, 
-\[
-  \text{B}(L_3) = \frac1n \sum_{i=1}^n \left( \EE(X_i)^2 - \lambda^2 \right)  - \lambda = 0.
-\]
-On a utilisé ici que, par définition de la variance, $\EE(X^2) = \VV(X) + \EE(X)^2.$
+$L_3$ est la variance empirique de $X$ et $L_3$ est donc un estimateur
+biaisé de $\VV(X) = \lambda$. 
+
 
 
 \paragraph{Question 2.} Vrai. C'est le concept du compromis biais-variance
