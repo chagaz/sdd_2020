@@ -466,7 +466,26 @@ directement la vraisemblance mais son logarithme :
 \end{exemple}
 
 
-\paragraph{Propriété} L'estimateur par maximum de vraisemblance est convergent.
+\paragraph{Propriété $\bigstar$} L'estimateur par maximum de vraisemblance est
+(sous des hypothèses généralement vérifiées) convergent. La démonstration,
+plutôt pénible, repose sur l'application de la loi des grands nombres : le
+paramètre maximisant la vraisemblance maximise aussi la log-vraisemblance ainsi
+que la log-vraisemblance divisée par $n$.
+
+\subsection{Exercice} 
+\label{sec:rayleigh_exo}
+Soit $X$ une variable aléatoire réelle dont la densité de probabilité est donnée par 
+\[
+  f(x; \sigma^2) = \frac{x}{\sigma^2} \exp \left( - \frac{x^2}{2 \sigma^2} \right).
+\]
+On pourra vérifier\footnote{Par exemple sur \href{https://fr.wikipedia.org/wiki/Loi_de_Rayleigh}{https://fr.wikipedia.org/wiki/Loi\_de\_Rayleigh}.} qu'il s'agit d'une loi de Rayleigh de paramètre d'échelle
+$\lambda = \sqrt{2} \sigma$. Ainsi son espérance et sa variance sont données par 
+\[
+  \EE(X) = \sqrt{\frac{\pi}{2}} \sigma \text{\qquad et \qquad} \VV(X) =
+  \frac{4-\pi}{2} \sigma^2.
+\]
+Donner l'estimateur par maximum de vraisemblance de $\sigma^2$.
+Solution : voir section~\ref{sec:rayleigh_sol}.
 
 
 \section{Estimation de Bayes $\bigstar$}
@@ -690,7 +709,6 @@ la première égalité étant obtenue par indépendance de $X_n$ et $X_{n-1}$.
 
 $Z_n$ est ainsi un estimateur bien moins précis que $M_n$ dès que $n>2.$
 
-
 \subsection{Loi Beta}
 \label{sec:loi_beta}
 La densité de probabilité de la {\it loi bêta} de paramètres
@@ -704,6 +722,35 @@ $B(\alpha, \beta) = \frac{\Gamma(\alpha) \Gamma(\beta)}{\Gamma(\alpha+\beta)}$
 et $\Gamma$ est la fonction gamma. L'espérance de cette loi est
 $\frac{\alpha}{\alpha + \beta}$.
 
+\subsection{Solution de l'exercice~\ref{sec:rayleigh_exo}}
+\label{sec:rayleigh_sol}
+Soit $(x_1, x_2, \dots, x_n)$ un échantillon de $X$ de taille $n \in \NN^*.$ La
+log-vraisemblance de l'échantillon est donnée par
+\[
+  \ell(x_1, x_2, \dots, x_n; \sigma^2) = \sum_{i=1}^n \ln \left(
+    \frac{1}{\sigma^2} x_i \exp\left(- \frac{x_i^2}{2\sigma^2} \right)\right) 
+  = -n \ln(\sigma^2) + \sum_{i=1}^n \ln(x_i) - \frac{1}{2\sigma^2} \sum_{i=1}^n x_i^2.
+\]
+Ainsi, l'estimation par maximum de vraisemblance de $\sigma^2$ est donnée par :
+\[
+  \hatmle{\sigma^2} \in \argmax_{s \in \RR_+} \left(-n \ln(s) + \sum_{i=1}^n \ln(x_i) - 
+\frac{1}{2s} \sum_{i=1}^n x_i^2\right).
+\]
+La fonction de $\RR_+$ dans $\RR$ qui à $s$ associe
+$-n \ln(s) + \sum_{i=1}^n \ln(x_i) - \frac{1}{2s} \sum_{i=1}^n x_i^2$ est une
+fonction concave en $s$. On obtient donc son maximum en annulant sa dérivée, qui vaut :
+\[
+  s \mapsto - \frac{n}{s} + \frac12 \sum_{i=1}^n x_i^2 \frac{1}{s^2},
+\]
+et donc 
+\[
+  \hatmle{\sigma^2} = \frac{1}{2n} \sum_{i=1}^n x_i^2.
+\]
+Ainsi, étant donné un échantillon aléatoire $(X_1, X_2, \dots, X_n)$ de $X$,
+l'estimateur par maximum de vraisemblance de $\sigma^2$ est donné par
+\[
+  S_n = \frac{1}{2n} \sum_{i=1}^n X_i^2.
+\]
 
 
 \begin{plusloin}
