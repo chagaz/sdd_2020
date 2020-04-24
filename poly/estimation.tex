@@ -517,12 +517,13 @@ de \textbf{l'inférence bayésienne.}
 
 Là où l'estimation par maximum de vraisemblance cherche à maximiser la
 vraisemblance, l'estimation de Bayes cherche à minimiser l'erreur
-postérieure. La formulation est générique ; on peut imaginer utiliser plusieurs
+a posteriori. La formulation est générique ; on peut imaginer utiliser plusieurs
 définitions de cette erreur.
 
-Une des définitions les plus fréquentes, qui est celle que nous
-utiliserons par la suite, consite à considérer comme fonction d'erreur l'erreur
-quadratique moyenne (définie section~\ref{sec:precision_estimateur}).
+Une des définitions les plus fréquentes, qui est celle que nous utiliserons par
+la suite, consite à considérer comme fonction d'erreur l'erreur quadratique
+moyenne (définie section~\ref{sec:precision_estimateur}). Cela nous permet de
+garantir la précision de notre estimateur.
 
 
 L'\textbf{estimation de Bayes pour l'erreur quadratique moyenne} de $\theta$
@@ -535,7 +536,7 @@ cette espérance étant prise sur les distributions jointes de $\Theta$ et de
 $(X_1, X_2, \dots, X_n)$.
 
 \paragraph{Propriété} L'estimation de Bayes pour l'erreur quadratique moyenne
-est l'espérance de la distribution postérieure de $\Theta$ : 
+est l'espérance de la distribution a posteriori de $\Theta$ : 
 \begin{equation}
   \label{eq:bayes_estimator2}
   \hatbys{\theta}  = \EE(\Theta|X_1 = x_1, X_2=x_2, \dots, X_n=x_n).
@@ -549,7 +550,7 @@ En effet, posons $\thetahat \in \Scal.$ Alors
 \end{equation*}
 Comme ni $\EE(\Theta^2)$ ni $\EE(\Theta)^2$ ne dépendent de $\thetahat,$
 $\hatbys{\theta}$ est obtenu en minimisant $(\EE(\Theta) - \thetahat)^2$ et donc $\hatbys{\theta} = 
-\EE(\Theta) - \EE(\Theta|(X_1, X_2, \dots, X_n)). \hfill \square$
+\EE(\Theta) = \EE(\Theta|(X_1, X_2, \dots, X_n)). \hfill \square$
 
 \begin{exemple}
   Reprenons notre exemple de taux de réussite au baccalauréat.  Nous supposons
