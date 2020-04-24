@@ -18,8 +18,33 @@ filtrage ; analyse en composantes principales ; analyse en composantes principal
 \item Expliquer l'intérêt de réduire la dimension d'un jeu de données ;
 \item Faire la différence entre la sélection de variables et l'extraction de variables ;
 \item Mettre en \oe{}uvre des méthodes de sélection de variable par filtrage ;
-\item Projeter des données sur un espace de plus petite dimension par factorisation de matrice ; 
+\item Projeter des données sur un espace de plus petite dimension ;%par factorisation de matrice ; 
 \item Mettre en \oe{}uvre des méthodes d'extraction de variables.
+\end{itemize}
+
+\section{Notations}
+Nous avons jusqu'à présent travaillé sur des séries statistiques contenant une
+seule variable. Cependant, dans la majorité des problèmes de sciences des
+données, nous disposons de plusieurs variables pour décrire chaque individu.
+
+À partir de maintenant, l'objet de nos études ne sera plus un échantillon
+$(x_1, x_2, \dots, x_n),$ mais une matrice $X \in \RR^{n \times p}$
+représentant $n$ individus, ou observations, décrites chacune par $p$
+variables.
+
+Nous essaierons de nous en tenir aux notations suivantes :
+\begin{itemize}
+\item Les lettres minuscules ($x$) représentent un scalaire ;
+\item les lettres minuscules surmontées d'une flèche ($\xx$) représentent un
+  vecteur ;
+\item les lettres majuscules ($X$) représentent une matrice, un événement ou
+  une variable aléatoire ;
+\item les lettres calligraphiées ($\XX$) représentent un ensemble ou un espace ;
+\item les {\it indices} correspondent à une variable tandis que les {\it
+    exposants} correspondent à une observation : $x^i_j$ est la $j$-ème
+  variable de la $i$-ème observation, et correspond à l'entrée $X_{ij}$ de la
+  matrice $X$ ;
+\item $n$ est un nombre d'observations et $p$ un nombre de variables.
 \end{itemize}
 
 \section{Motivation}
@@ -29,88 +54,26 @@ $X^* \in \RR^{n \times m}$ où $m \ll p$. Les raisons de cette démarche sont
 multiples : 
 
 \begin{itemize}
-\item \todo{Visualiser les données}
-% Bien que le but de l'apprentissage automatique soit justement d'automatiser le
-% traitement des données, il est essentiel pour appliquer les méthodes présentées
-% dans cet ouvrage à bon escient de bien comprendre le problème particulier que
-% l'on cherche à résoudre et les données dont on dispose. Cela permet de mieux
-% définir les variables à utiliser, d'éliminer éventuellement les données
-% aberrantes, et de guider le choix des algorithmes. Dans ce but, il est très
-% utile de pouvoir {\it visualiser} les données ; mais ce n'est pas tâche aisée
-% avec $p$ variables. Ainsi, limiter les variables à un faible nombre de
-% dimensions permet de visualiser les données plus facilement, quitte à perdre un
-% peu d'information lors de la transformation.
-\item \todo{Réduire les coûts algorithmiques d'un modèle supervisé}
-% Cet aspect-là est purement computationnel : réduire la dimension des données
-% permet de réduire d'une part l'espace qu'elles prennent en mémoire et d'autre
-% part les temps de calcul. De plus, si certaines variables sont inutiles, ou
-% redondantes, il n'est pas nécessaire de les obtenir pour de nouvelles
-% observations : cela permet de réduire le coût d'acquisition des données.
-\item \todo{Améliorer la qualité d'un modèle supervisé + fléau de la dimension}
-% \label{sec:dimcurse}
-%   Notre motivation principale pour réduire la dimension des données est de
-%   pouvoir construire de meilleurs modèles d'apprentissage supervisé. Par
-%   exemple, un modèle paramétrique construit sur un plus faible nombre de
-%   variables est moins susceptible de sur-apprendre, comme nous l'avons vu avec
-%   le lasso au chapitre~\ref{chap:regularisation}.
-
-%   De plus, si certaines des variables mesurées ne sont pas pertinentes pour le
-%   problème d'apprentissage qui nous intéresse, elles peuvent induire
-%   l'algorithme d'apprentissage en erreur. Prenons comme exemple l'algorithme
-%   des plus proches voisins (chapitre~\ref{chap:knn}), qui base ses prédictions
-%   sur les étiquettes des exemples d'entraînement les plus proches de
-%   l'observation à étiqueter. Supposons que l'on utilise une distance de
-%   Minkowski ; toutes les variables ont alors la même importance dans le calcul
-%   des plus proches voisins. Ainsi les variables qui ne sont pas pertinentes
-%   peuvent biaiser la définition du plus proche voisin, et introduire du bruit
-%   dans le modèle, comme illustré sur la figure~\ref{fig:dimred_improves_algo}.
-
-%   \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=0.4\textwidth]{figures/dimred/dimred_improves_algo}
-%     \caption{En utilisant les deux dimensions, les trois plus proches voisins de
-%       l'étoile sont majoritairement des (x). En utilisant seulement la
-%       variable en abscisse, ses trois plus proches voisins sont majoritairement des
-%       (+). Si la variable en ordonnée n'est pas pertinente, elle
-%       fausse le résultat de l'algorithme des trois plus proches voisins.}
-%     \label{fig:dimred_improves_algo}
-%   \end{figure}
-
-%   Enfin, nous faisons face en haute dimension à un phénomène connu sous le nom
-%   de {\it fléau de la dimension}, ou {\it curse of dimensionality} en
-%   anglais. Ce terme qualifie le fait que les intuitions développées en faible
-%   dimension ne s'appliquent pas nécessairement en haute dimension.
-
-%   En effet, en haute dimension, les exemples d'apprentissage ont tendance à
-%   tous être éloignés les uns des autres. Pour comprendre cette assertion,
-%   plaçons-nous en dimension $p$ et considérons l'hypersphère $\Scal(\xx, R)$ de
-%   rayon $R \in \RR_+^*$ centrée sur une observation $\xx$, ainsi que l'hypercube
-%   $\Ccal(\xx, R)$ circonscrit à cette hypersphère. Le volume de $\Scal(\xx)$
-%   vaut $\frac{2 R^p \pi^{p/2}}{p \Gamma(p/2)}$, tandis que celui de
-%   $\Ccal(\xx, R)$, dont le côté a pour longueur $2R$, vaut $2^p R^p$. Ainsi
-%   \begin{equation*}
-%     \lim_{p \rightarrow \infty} \frac{\text{Vol}(\Ccal(\xx, R))}{
-%       \text{Vol}(\Scal(\xx, R))} = 0.
-%   \end{equation*}
-%   Cela signifie que la probabilité qu'un exemple situé dans $\Ccal(\xx, R)$
-%   appartienne à $\Scal(\xx, R)$, qui vaut $\frac{\pi}4 \approx 0.79$ lorsque
-%   $p=2$ et $\frac{\pi}6 \approx 0.52$ lorsque $p=3$
-%   (cf. figure~\ref{fig:sphere_in_cube}), devient très faible quand $p$ est
-%   grand : les données ont tendance à être éloignées les unes des autres.
-
-%   Cela implique que les algorithmes développés en utilisant une notion de
-%   similarité, comme les plus proches voisins, les arbres de décision ou les
-%   SVM, ne fonctionnent pas nécessairement en grande dimension. Ainsi, réduire
-%   la dimension peut être nécessaire à la construction de bons modèles.
-
-%   \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=0.3\textwidth]{figures/dimred/sphere_in_cube}
-%     \caption{Ici en dimension 3, on considère la proportion du volume du cube
-%       de côté $a=2R$ située à l'intérieur de la sphère de rayon $R$ inscrite
-%       dans ce cube.}
-%     \label{fig:sphere_in_cube}
-%   \end{figure}
+\item \textbf{Visualiser les données :} ce n'est pas tâche aisée avec un nombre
+  très grand de variables. Comment visualiser $n$ points en plus de 2 ou 3
+  dimensions ? Limiter les variables à un faible nombre de dimensions permet de
+  visualiser les données plus facilement, quitte à perdre un peu d'information
+  lors de la transformation.
+\item \textbf{Réduire les coûts algorithmiques du traitement des données :} d'un
+  point de vue purement computationnel, réduire la dimension des données permet
+  de réduire d'une part l'espace qu'elles prennent en mémoire et d'autre part
+  les temps de calcul. De plus, si certaines variables sont inutiles, ou
+  redondantes, il n'est pas nécessaire de les obtenir pour de nouvelles
+  observations : cela permet de réduire le coût d'acquisition des données.
+\item \textbf{Améliorer la qualité du traitement des données :} les algorithmes
+  d'apprentissage supervisé ou de clustering sont généralement plus performants
+  sur un faible nombre de variables. Tout d'abord, si certaines des variables
+  ne sont pas pertinentes, elles risquent d'induire du biais dans les modèles
+  appris. De plus, les raisonnements développés en faible dimension pour
+  construire un algorithme d'apprentissage supervisé ne s'appliquent pas
+  nécessairement en haute dimension. C'est un phénomène connu sous le nom de
+  {\it fléau de la dimension}, ou {\it curse of dimensionality} en
+  anglais. Pour plus de détails, reportez-vous à la section~\ref{sec:dimcurse}.
 \end{itemize}
 
 
@@ -123,178 +86,30 @@ Deux possibilités s'offrent à nous pour réduire la dimension de nos données :
   initialement.
 \end{itemize}
 
-La suite de ce chapitre détaille des exemples de ces deux approches.
+\paragraph{Sélection de variables} La sélection de variables consiste à
+éliminer des variables peu informatives. Dans le cas non-supervisé, il s'agit
+par exemple d'éliminer des variables dont la variance est très faible (leur
+valeur étant à peu près la même pour chaque individu, elle n'apporte aucune
+information permettant de distinguer deux individus) ou qui sont corrélées à
+une autre variable (elles apportent alors la même information).
 
-\section{Sélection de variables non-supervisée}
-\todo{Méthodes de filtrage pour éliminer des variables du jeu de données.}
+Dans le cas supervisé, il s'agit aussi d'éliminer des variables qui ne sont pas
+pertinentes par rapport à la tâche de prédiction. On peut par exemple
+\begin{itemize}
+\item éliminer, par exemple à l'aide d'un test du chi2 comme vu dans la PC1,
+  les variables indépendantes de l'étiquette à prédire. Remarquez néanmoins que
+  deux variables chacune indépendante de l'étiquette peuvent être très
+  informatives quand on les considère simultanément\footnote{Considérez par exemple, en deux dimensions, un problème de classification dans lequel l'étiquette $y$ est donnée par $y = x_1 \oplus x_2$} ;
+\item chercher à éliminer des variables qui n'améliorent pas la performance
+  d'un algorithme précis.
+\end{itemize}
+Nous reviendrons sur la
+sélection de variables supervisée quand nous parlerons du lasso
+(section~\ref{sec:lasso}).
 
-\todo{Donner quelques éléments pour le supervisé, auxquels se référer de nouveau plus tard.}
 
-% \section{Sélection de variables supervisée} 
-% Les approches de {\it sélection de variables} consistent à choisir $m$
-% variables à conserver parmi les $p$ existantes, et à ignorer les $p-m$
-% autres. On peut les séparer en trois catégories : les méthodes de {\it
-%   filtrage}, les méthodes de {\it conteneur}, et les méthodes {\it
-%   embarquées}. Les méthodes que nous allons voir ici sont des méthodes
-% supervisées : nous supposons disposer d'un jeu de données étiqueté
-% $\DD = \{(\xx^i, y^i)\}_{i=1, \dots, n}$ où $\xx^i \in \RR^p$.
+%La suite de ce chapitre détaille des exemples de ces deux approches.
 
-%   \subsection{Méthodes de filtrage}
-%   La sélection de variable par {\it filtrage} consiste à appliquer un {\it
-%     critère de sélection} indépendamment à chacune des $p$ variables
-%    ; il s'agit de quantifier la pertinence de la $p$-ème variable
-%   du jeu de donnée par rapport à $y$.
-
-%   Quelques exemples d'un tel critère sont la corrélation avec l'étiquette, un
-%   test statistique comme celui du $\chi^2$ dans le cas d'un problème de
-%   classification, ou l'information mutuelle.
-
-%   La {\it corrélation} entre la variable $j$ et l'étiquette $y$ se calcule
-%   comme celle entre une étiquette prédite et une étiquette réelle
-%   (cf. équation~\ref{eq:pearson}) :
-%   \begin{equation}
-%     R_j = \frac{\sum_{i=1}^n \left( y^i -  \frac1n \sum_{i=1}^n y^i \right)
-%       \left( x^i_j -  \frac1n \sum_{i=1}^n f(\xx^i) \right)}{
-%       \sqrt{\sum_{i=1}^n \left( y^i -  \frac1n \sum_{i=1}^n y^i \right)^2}
-%       \sqrt{\sum_{i=1}^n \left( x^i_j -  \frac1n \sum_{l=1}^n x^l_j \right)^2}.
-%     }
-%   \end{equation}
-
-%   \begin{definition}[(Information mutuelle)]
-%     L'{\it information mutuelle} entre deux variables aléatoires $X_j$ et $Y$ mesure
-%     leur dépendance au sens probabiliste ; elle est nulle si et seulement si
-%     les variables sont indépendantes, et croît avec leur degré de
-%     dépendance. Elle est définie, dans le cas discret, par
-%     \begin{equation*}
-%       I(X_j, Y) = \sum_{x_j, y} \PP(X_j=x_j, Y=y) \log \frac{\PP(X_j=x_j, Y=y)}{
-%       \PP(X_j=x_j) \PP(Y=y)},
-%     \end{equation*}
-%     et dans le cas continu par
-%     \begin{equation*}
-%       I(X_j, Y) = \int_{x_j} \int_y p(x_j, y) \log \frac{p(x_j, y)}{
-%       p(x_j) p(y)} \mathrm{d}x_j \; \mathrm{d}y.
-%     \end{equation*}
-%   \end{definition}
-%   L'estimateur de Kozachenko-Leonenko est l'un des plus fréquemment utilisés
-%   pour estimer l'information mutuelle~\citep{kozachenko1987}.
-  
-%   Les méthodes de filtrage souffrent de traiter les variables individuellement
-%   : elles ne peuvent pas prendre en compte leurs effets combinés. Un exemple
-%   classique pour illustrer ce problème est celui du \og ou exclusif \fg~(XOR) :
-%   prise individuellement, $x_1$ (resp. $x_2$) est décorrélée de $y = x_1 \text{
-%     XOR } x_2$, alors qu'ensemble, ces deux variables expliqueraient
-%   parfaitement l'étiquette $y$.
-
-%   \subsection{Méthodes de conteneur}
-%   Les méthodes de {\it conteneur}, ou {\it wrapper methods} en anglais,
-%   consistent à essayer de déterminer le meilleur sous-ensemble de variables
-%   {\it pour un algorithme d'apprentissage donné.} On parle alors souvent non
-%   pas de sélection de variables mais de {\it sélection de sous-ensemble}, ou
-%   {\it subset selection} en anglais.
-
-%   Ces méthodes sont le plus souvent des méthodes heuristiques. En effet, il est
-%   généralement impossible de déterminer la performance d'un algorithme sur un
-%   jeu de données sans l'avoir entraîné. Il n'est pas raisonnable d'adopter une
-%   stratégie exhaustive, sauf pour un très faible nombre de variables, car le
-%   nombre de sous-ensembles de $p$ variables est de $2^p-1$ (en excluant
-%   $\emptyset$). On adoptera donc une approche gloutonne.
-
-%   Quelques exemples de ces approches sont la {\it recherche ascendante}, la
-%   {\it recherche descendante}, et la {\it recherche flottante} que nous
-%   détaillons ci-dessous.
-
-%   Étant donnés un jeu de données $\DD = (X, \yy)$ où $X \in \RR^{n \times p}$,
-%   un sous-ensemble de variables $\Ecal \subset \{1, 2, \dots, p\}$, et un
-%   algorithme d'apprentissage, on notera $X_\Ecal \in \RR^{n \times |\Ecal|}$ la
-%   matrice $X$ restreinte aux variables apparaissant dans $\Ecal$, et $E_\DD(\Ecal)$
-%   l'estimation de l'erreur de généralisation de cet algorithme d'apprentissage,
-%   entraîné sur $(X_\Ecal, \yy)$. Cette estimation est généralement obtenue sur
-%   un jeu de test ou par validation croisée.
-
-%   La recherche ascendante consiste à partir d'un ensemble de variables vide, et
-%   à lui ajouter variable par variable celle qui améliore au mieux sa
-%   performance, jusqu'à ne plus pouvoir l'améliorer.
-
-%   \begin{definition}[(Recherche ascendante)]
-%     On appelle {\it recherche ascendante}, ou {\it forward search} en anglais,
-%     la procédure gloutonne de sélection de variables suivante :
-%     \begin{enumerate}
-%     \item Initialiser $\FF = \emptyset$
-%     \item Trouver la meilleure variable à ajouter à $\FF$ : 
-%       \begin{equation*}
-%         j^* = \argmin_{j \in \{1, \dots, p\} \setminus \FF}  E_\DD(\FF \cup \{j\})
-%       \end{equation*}
-%     \item Si $E_\DD(\FF \cup \{j\}) >  E_\DD(\FF)$ : s'arrêter
-%     \item[] sinon :  $\FF \leftarrow \FF \cup \{j\}$ ; recommencer 2-3.
-%     \end{enumerate}
-%   \end{definition}
-%   Dans le pire des cas (celui où on devra itérer jusqu'à ce que $\FF = \{1, 2,
-%   \dots, p\}$), cet algorithme requiert de l'ordre de $\OO(p^2)$ évaluations de
-%   l'algorithme d'apprentissage sur un jeu de données, ce qui peut être
-%   intensif, mais est bien plus efficace que $\OO(2^p)$ comme requis par l'approche
-%   exhaustive.
-
-%   À l'inverse, la recherche descendante consiste à partir de l'ensemble de
-%   toutes les variables, et à lui retirer variable par variable celle qui
-%   améliore au mieux sa performance, jusqu'à ne plus pouvoir l'améliorer.
-%   \begin{definition}[(Recherche descendante)]
-%     On appelle {\it recherche descendante}, ou {\it backward search} en anglais,
-%     la procédure gloutonne de sélection de variables suivante :
-%     \begin{enumerate}
-%     \item Initialiser $\FF = \{1, \dots, p\}$
-%     \item Trouver la meilleure variable à retirer de $\FF$ : 
-%       \begin{equation*}
-%         j^* = \argmin_{j \in \FF} E_\DD(\FF \setminus \{j\})
-%       \end{equation*}
-%     \item Si $E_\DD(\FF \setminus \{j\}) >  E_\DD(\FF)$ : s'arrêter
-%     \item[] sinon :  $\FF \leftarrow \FF \setminus \{j\}$ ; recommencer 2-3.
-%     \end{enumerate}
-%   \end{definition}
-
-%   L'avantage de l'approche descendante sur l'approche ascendante est qu'elle
-%   fournit nécessairement un sous-ensemble de variables meilleur que
-%   l'intégralité des variables. En effet, ce n'est pas parce qu'on ne peut pas,
-%   à une étape de la méthode ascendante, trouver de variable à ajouter à $\FF$,
-%   que la performance de l'algorithme est meilleure sur $(X_\FF, \yy)$ que sur
-%   $(X, \yy)$.
-
-%   La recherche flottante permet d'explorer un peu différemment 
-%   l'espace des possibles en combinant les deux approches.
-%   \begin{definition}[(Recherche flottante)]
-%     Étant donné deux paramètres entiers strictement positifs $q$ et $r$, on
-%     appelle {\it recherche flottante}, ou {\it floating search} en anglais, la
-%     procédure gloutonne de sélection de variables suivante :
-%     \begin{enumerate}
-%     \item Initialiser $\FF = \emptyset$
-%     \item Trouver les $q$ meilleures variables à ajouter à $\FF$ : 
-%       \begin{equation*}
-%         \Scal^* = \argmin_{\Scal \subseteq \{1, \dots, p\} \setminus \FF, \;|\Scal|=q} E_\DD(\FF \cup \Scal)
-%       \end{equation*}
-%     \item Si $E_\DD(\FF \cup \Scal) <  E_\DD(\FF)$ : 
-%     $\FF \leftarrow \FF \cup \Scal$ 
-%     \item Trouver les $r$ meilleures variables à retirer de $\FF$ : 
-%       \begin{equation*}
-%         \Scal^* = \argmin_{\Scal \subseteq \{1, \dots, p\} \setminus \FF, \; |\Scal|=r} 
-%         E_\DD(\FF \setminus \Scal)
-%       \end{equation*}
-%     \item Si $E_\DD(\FF \setminus \Scal) >  E_\DD(\FF)$ : s'arrêter
-%     \item[] sinon :  $\FF \leftarrow \FF \setminus \Scal$ ; recommencer 2-5.
-%     \end{enumerate}
-%   \end{definition}
-
-%   \subsection{Méthodes embarquées}
-%   Enfin, les {\it méthodes embarquées}, ou {\it embedded approaches} en
-%   anglais, apprennent en même temps que le modèle les variables à y inclure. Il
-%   s'agit généralement de modèles paramétriques parcimonieux, c'est-à-dire tels
-%   que les coefficients affectés à certaines variables soient nuls. Ces
-%   variables sont alors éliminées du modèle. L'exemple le plus prégnant de ces
-%   techniques est le lasso, que nous avons vu dans la section~\ref{sec:lasso}.
-
-%   Dans le même ordre d'idée, la mesure d'importance des variables dans les
-%   forêts aléatoires (voir chapitre~\ref{chap:arbres}) peut être utilisée pour
-%   décider quelles variables éliminer.
-
-% \section{Extraction de variables}
 \section{Analyse en composantes principales}
 \label{sec:pca}
 La méthode la plus classique pour réduire la dimension d'un jeu de données par
@@ -670,6 +485,31 @@ coordonnées sont $0$.
 %   une ACP ou t-SNE, permet de les visualiser.
 % \item De nombreuses méthodes permettent de réduire la dimension des variables. 
 % \end{pointsclefs}
+
+\section{Compléments}
+\subsection{Fléau de la dimension}
+\label{sec:dimcurse}
+En haute dimension, les individus ont tendance à tous être éloignés les uns des
+autres. Pour comprendre cette assertion, plaçons-nous en dimension $p$ et
+considérons l'hypersphère $\Scal(\xx, R)$ de rayon $R \in \RR_+^*$ centrée sur
+une observation $\xx$, ainsi que l'hypercube $\Ccal(\xx, R)$ circonscrit à
+cette hypersphère. Le volume de $\Scal(\xx)$ vaut
+$\frac{2 R^p \pi^{p/2}}{p \Gamma(p/2)}$, tandis que celui de $\Ccal(\xx, R)$,
+dont le côté a pour longueur $2R$, vaut $2^p R^p$. Ainsi
+\begin{equation*}
+  \lim_{p \rightarrow \infty} \frac{\text{Vol}(\Ccal(\xx, R))}{
+    \text{Vol}(\Scal(\xx, R))} = 0.
+\end{equation*}
+Cela signifie que la probabilité qu'un exemple situé dans $\Ccal(\xx, R)$
+appartienne à $\Scal(\xx, R)$, qui vaut $\frac{\pi}4 \approx 0.79$ lorsque
+$p=2$ et $\frac{\pi}6 \approx 0.52$ lorsque $p=3$, devient très faible quand
+$p$ est grand : les données ont tendance à être éloignées les unes des autres.
+
+Cela implique que les algorithmes développés en utilisant une notion de
+similarité ou distance entre individus ne fonctionnent pas nécessairement en
+grande dimension. Ainsi, réduire la dimension peut être nécessaire à la
+construction de bons modèles d'apprentissage.
+
 
 \begin{plusloin}
 \item \todo{Plus de variantes de l'analyse factorielle, e.g. NMF}
