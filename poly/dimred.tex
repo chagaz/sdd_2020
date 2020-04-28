@@ -99,7 +99,11 @@ pertinentes par rapport à la tâche de prédiction. On peut par exemple
 \item éliminer, par exemple à l'aide d'un test du chi2 comme vu dans la PC1,
   les variables indépendantes de l'étiquette à prédire. Remarquez néanmoins que
   deux variables chacune indépendante de l'étiquette peuvent être très
-  informatives quand on les considère simultanément\footnote{Considérez par exemple, en deux dimensions, un problème de classification dans lequel l'étiquette $y$ est donnée par $y = x_1 \oplus x_2$} ;
+  informatives quand on les considère simultanément\footnote{Considérez par
+    exemple, en deux dimensions, un problème de classification dans lequel
+    l'étiquette $y$ est donnée par $y = x_1 \oplus x_2$ : les deux variables
+    ensemble déterminent parfaitement $y$ mais chacune d'entre elle est
+    uninformative.} ;
 \item chercher à éliminer des variables qui n'améliorent pas la performance
   d'un algorithme précis.
 \end{itemize}
