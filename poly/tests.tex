@@ -108,7 +108,7 @@ $\HH_0$. Il s'agit donc de savoir si l'échantillon observé (les preuves) est
 suffisant pour rejeter $\HH_0$, ce dont on conclura $\HH_1.$ Par contre, si
 l'on ne rejette pas $\HH_0$, cela peut venir soit de ce que $\HH_0$ est vraie,
 soit de ce que nous n'avons pas suffisamment de données pour rejeter
-$\HH_1$. Ainsi, $\HH_0$ doit être une hypothèse raisonnable, mais que l'on
+$\HH_0$. Ainsi, $\HH_0$ doit être une hypothèse raisonnable, mais que l'on
 aimerait avoir des raisons de réfuter.  
 
 Dans le cadre d'une expérience scientifique, l'hypothèse $\HH_0$ correspond
@@ -316,7 +316,7 @@ le domaine de rejet sera de la forme
 \end{itemize}
 
 On cherchera souvent à utiliser une statistique de test symmétrique, de sorte à
-pouvoir utiliser $t_r = - t_l$.  Dans ce cas $t_0 = t_t$ est appelée
+pouvoir utiliser $t_r = - t_l$.  Dans ce cas $t_0 = t_r$ est appelée
 \textbf{valeur critique} du test et est telle que
 \begin{itemize}
 \item $\PP_{T0}(T > t_0) = \alpha$ pour le test unilatéral à droite ; 
@@ -555,7 +555,7 @@ $z=2,45$ ?
 \subsection{Test unilatéral à droite}
 Supposons maintenant que nous nous demandons si les pigeons du Jardin du
 Luxembourg, qui nous semblent particulièrement bien nourris de restes des
-sandwhicheries environnantes, ne seraient pas plus lourds que la moyenne de
+sandwicheries environnantes, ne seraient pas plus lourds que la moyenne de
 300g. Il s'agit maintenant de faire un test unilatéral à droite, pour lequel
 \[
   \HH_1 : \mu > \mu_0.
@@ -725,8 +725,8 @@ $p_1, p_2, \dots, p_m$ les p-valeurs obtenue pour $m$ tests, testant chacun
 $\HH_0$ vs. $\HH_1$, et supposons que $\HH_0$ est
 vraie pour les $m_0$ premiers tests . Alors 
 \[
-  \PP(\bigcup_{i=1}^{m_0} \left( p_i \leq \frac{\alpha}{m} \right) \leq
-  \sum_{i=1}^{m_0} \left( p_i \leq \frac{\alpha}{m} \right) = \frac{m_0
+  \PP\left(\bigcup_{i=1}^{m_0} \left( p_i \leq \frac{\alpha}{m} \right)\right)  \leq
+  \sum_{i=1}^{m_0} \PP \left( p_i \leq \frac{\alpha}{m} \right)= \frac{m_0
     \alpha}{m} \leq \alpha.
 \]
 
