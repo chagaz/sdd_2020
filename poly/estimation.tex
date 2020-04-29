@@ -411,6 +411,9 @@ $(x_1, x_2, \dots, x_n)$ la fonction de $\theta$ définie comme :
 cette dernière égalité étant dûe à l'indépendance des éléments de l'échantillon
 aléatoire.
 
+\erratum{Voir fichier erratum\_estimation.pdf pour une définition correcte de la
+  vraisemblance dans le cas d'une variable aléatoire à densité.}
+
 On appelle alors \textbf{estimation par maximum de vraisemblance} ({\it maximum
   likelihood estimate} ou {\it MLE} en anglais) de $\theta$ une valeur 
 $\hatmle{\theta}$ qui maximise la vraisemblance, autrement dit la probabilité
@@ -504,6 +507,9 @@ Il va maintenant s'agir d'utiliser la loi de Bayes pour exprimer la
   \PP(\Theta | X_1, X_2, \dots, X_n) = \frac{\PP(X_1, X_2, \dots, X_n | \Theta) \PP(\Theta) }{ \PP(X_1, X_2, \dots, X_n)}.
 \label{eq:bayes_estimateur}
 \end{equation}
+\erratum{Voir fichier erratum\_estimation.pdf pour une définition correcte de la
+  distribution a posteriori dans le cas d'une variable aléatoire à
+  densité.}
 
 La distribution a posteriori de $\Theta$, $\PP(\Theta | X_1, X_2, \dots, X_n)$,
 s'exprime en fonction de sa distribution a priori $\PP(\Theta),$ de la
@@ -530,10 +536,14 @@ L'\textbf{estimation de Bayes pour l'erreur quadratique moyenne} de $\theta$
 est alors définie par
 \begin{equation}
   \label{eq:bayes_estimator}
-  \hatbys{\theta} \in \argmin_{\thetahat \in \Scal} \EE((\Theta - \thetahat)^2),
+  \hatbys{\theta} \in \argmin_{\thetahat \in \Scal} \EE((\Theta - \thetahat)^2).
 \end{equation}
-cette espérance étant prise sur les distributions jointes de $\Theta$ et de
-$(X_1, X_2, \dots, X_n)$.
+% cette espérance étant prise sur les distributions jointes de $\Theta$ et de
+% $(X_1, X_2, \dots, X_n)$.
+Il s'agit ici de maximiser cette espérance pour toutes les valeurs possibles de
+l'échantillon aléatoire, donc en conditionnant par rapport à
+$X_1, X_2, \dots, X_n$.
+
 
 \paragraph{Propriété} L'estimation de Bayes pour l'erreur quadratique moyenne
 est l'espérance de la distribution a posteriori de $\Theta$ : 

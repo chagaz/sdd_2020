@@ -1,0 +1,196 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{notations}
+
+\begin{document}
+\begin{center}
+  \LARGE Errata du chapitre 3
+\end{center}
+
+
+\subsection*{Vraisemblance dans le cas $X$ discrète}
+Soit $p_\theta : \NN \rightarrow [0, 1]$ la fonction de masse de $X$ : 
+$
+  \PP(X=k) = p_\theta(k).
+$
+
+La vraisemblance d'un échantillon $(x_1, x_2, \dots, x_n) \in \RR^n$ est 
+\[
+  L(x_1, x_2, \dots, x_n; \theta) = \prod_{i=1}^n  p_\theta(x_i).
+\]
+
+\subsection*{Vraisemblance dans le cas $X$ continue}
+Soit $f_\theta : \RR \rightarrow \RR$ la densité de $X$.
+
+La vraisemblance d'un échantillon $(x_1, x_2, \dots, x_n) \in \RR^n$ est 
+\[
+  L(x_1, x_2, \dots, x_n; \theta) = \prod_{i=1}^n  f_\theta(x_i).
+\]
+
+\subsection*{Distribution a posteriori dans le cas $X$ discrète et $\Theta$ discrète}
+Soit $p_\theta : \NN \rightarrow [0, 1]$ la fonction de masse de $X$ 
+et
+$q: \NN \rightarrow [0, 1]$ la fonction de masse a priori de $\Theta$.
+
+La fonction de masse a posteriori de $\Theta$ est donnée, en utilisant Bayes, par 
+\[
+  q_{x_1, x_2, \dots, x_n}^\prime: \theta \in \NN \mapsto \frac{q(\theta) \prod_{i=1}^n
+    p_\theta(x_i)}{\sum_{t \in \NN} q(t) \prod_{i=1}^n p_t(x_i)}
+\]
+
+Plus précisément, par rapport à la formule de Bayes donnée dans le poly Probabilités I, on utilise 
+\begin{itemize}
+\item $A = \{X_1=x_1 \text{ et } X_2=x_2 \text{ et } \dots X_n=x_N\}$
+\item $B_i = \{\Theta = \theta\}$ ; $\PP(B_i) = q(\theta)$
+\item $B_n = \{\Theta = n\}$ ; $\PP(B_n) = q(n)$
+\end{itemize}
+
+
+\subsection*{Distribution a posteriori dans le cas $X$ continue et $\Theta$ continue}
+Soit $f_\theta : \RR \rightarrow \RR$ la densité de $X$ et
+$g: \RR \rightarrow \RR$ la densité a priori de $\Theta$.
+
+La densité 
+a posteriori de $\Theta$ est donnée, en utilisant Bayes, par
+\[
+  g_{x_1, x_2, \dots, x_n}^\prime: \theta \in \RR \mapsto \frac{g(\theta) \prod_{i=1}^n
+    f_\theta(x_i)}{\int_{\RR} g(t) \prod_{i=1}^n f_t(x_i) dt}
+\]
+
+Plus précisément, par rapport à la formule de Bayes pour les densités donnée dans le poly Probabilités IV, on utilise 
+\begin{itemize}
+\item $Y = (X_1, X_2, \dots, X_n)$ et $y = (x_1, x_2, \dots, x_n)$
+\item $X = \Theta$ et $x = \theta$,
+\end{itemize}
+la formule permettant de calculer la densité marginale étant donnée juste au-dessus.
+
+\subsection*{Distribution a posteriori dans le cas $X$ discrète et $\Theta$ continue}
+Soit $p_\theta : \NN \rightarrow [0, 1]$ la fonction de masse de $X$ et
+$g: \RR \rightarrow \RR$ la densité a priori de $\Theta$.
+
+
+La densité 
+a posteriori de $\Theta$ est donnée, en utilisant Bayes, par
+\[
+  g_{x_1, x_2, \dots, x_n}^\prime: \theta \in \RR \mapsto \frac{g(\theta) \prod_{i=1}^n
+    p_\theta(x_i)}{\int_{\RR} g(t) \prod_{i=1}^n p_t(x_i) dt}
+\]
+Ce cas a été traité dans la question 2 de l'exercice « Lois conjuguées » du poly
+de Probabilités IV. 
+
+
+\subsection*{Distribution a posteriori dans le cas $X$ continue et $\Theta$ discrète}
+Soit $f_\theta : \RR \rightarrow \RR$ la densité de $X$ et
+$q: \NN \rightarrow [0, 1]$ la fonction de masse a priori de $\Theta$.
+
+La fonction de masse a posteriori de $\Theta$ est donnée, en utilisant Bayes, par 
+\[
+  q_{x_1, x_2, \dots, x_n}^\prime: \theta \in \NN \mapsto \frac{q(\theta) \prod_{i=1}^n
+    f_\theta(x_i)}{\sum_{t \in \NN} q(t) \prod_{i=1}^n f_t(x_i)}
+\]
+Ce cas peut être traité de manière symmétrique à celui de la question 2 de
+l'exercice « Lois conjuguées » du poly de Probabilités IV.
+
+
+\subsection*{A priori bêta sur le paramètre d'une Bernoulli}
+Pour calculer l'estimateur de Bayes de $p$, il nous faut connaître la densité a
+posteriori de $\Theta$, $g^\prime_{x_1, x_2, \dots, x_n}$.
+
+On pose $p_\theta$ la fonction de masse d'une Bernouilli : 
+\[
+  p_\theta(k) =
+  \begin{cases}
+    \theta^k (1-\theta)^{1-k} & \text{ si } k \in \{0, 1\} \\
+    0 & \text{ sinon,}
+  \end{cases}
+\]
+
+et $g$ la densité d'une distribution bêta de paramètres $(\alpha, \beta)$ :
+\[
+   g_{\alpha, \beta} (\theta) = \frac{\theta^{\alpha -1} (1-\theta)^{\beta-1}}{B(\alpha, \beta)}.
+\]
+
+La loi de Bayes, combinée à l'hypothèse d'indépendance et de distribution
+identique des $X_i$, nous permet d'écrire la densité a posteriori de $\Theta$ comme :
+\begin{align*}
+  g^\prime_{x_1, x_2, \dots, x_n}(p) & = \frac{g(p) \prod_{i=1}^n  p_\theta(x_i)}{\int_{\RR} g(t) \prod_{i=1}^n p_t(x_i) dt} \\
+  & = \frac1{B(\alpha, \beta) \int_{\RR} g(t) \prod_{i=1}^n p_t(x_i) dt} 
+                                       \prod_{i=1}^{n} p^{x_i} (1-p)^{1-x_i}  p^{\alpha-1} (1-p)^{\beta-1} \\
+                     & = \frac{1}{\Kcal} p^{b + \alpha - 1} (1-p)^{n - b + \beta - 1},
+\end{align*}
+où $K$ ne dépend pas de $p$.
+
+On reconnaît ici la densité d'une nouvelle loi bêta.  Ainsi
+$\Theta|X_1, X_2, \dots, X_n$ suit une loi bêta de paramètres $(b + \alpha)$ et
+$(n - b + \beta).$
+
+L'estimation de Bayes de $p$ est ainsi
+\begin{equation*}
+  \hatbys{p} = \EE_{g^\prime_{x_1, x_2, \dots, x_n}}(\Theta) = \frac{(b + \alpha)}{
+    (b + \alpha) + (n - b + \beta)}
+  = \frac{b + \alpha}{n + \alpha + \beta}.
+\end{equation*}
+
+
+
+\end{document}
