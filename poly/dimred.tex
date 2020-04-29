@@ -1,38 +1,46 @@
 %-*- coding: iso-latin-1 -*-
 \label{chap:dimred}
 
-\todo{
-  \begin{itemize}
-  \item Cohérence des notations avec les chapitres précédents.
-  \item Lien avec le cours d'optimisation.
-  \item Alléger / élaguer.
-  \end{itemize}
-}
-
-
 \paragraph{Notions :} sélection de variables ; extraction de variables ;
-filtrage ; analyse en composantes principales ; analyse en composantes principales probabiliste.
+ analyse en composantes principales ; analyse en composantes principales probabiliste.
 \paragraph{Objectifs pédagogiques :} 
 \begin{itemize}      
   \setlength{\itemsep}{3pt}
 \item Expliquer l'intérêt de réduire la dimension d'un jeu de données ;
 \item Faire la différence entre la sélection de variables et l'extraction de variables ;
-\item Mettre en \oe{}uvre des méthodes de sélection de variable par filtrage ;
+% \item Mettre en \oe{}uvre des méthodes de sélection de variable par filtrage ;
 \item Projeter des données sur un espace de plus petite dimension ;%par factorisation de matrice ; 
 \item Mettre en \oe{}uvre des méthodes d'extraction de variables.
 \end{itemize}
 
-\section{Notations}
+\section{Des séries statistiques aux jeux de données}
 Nous avons jusqu'à présent travaillé sur des séries statistiques contenant une
 seule variable. Cependant, dans la majorité des problèmes de sciences des
 données, nous disposons de plusieurs variables pour décrire chaque individu.
 
-À partir de maintenant, l'objet de nos études ne sera plus un échantillon
-$(x_1, x_2, \dots, x_n),$ mais une matrice $X \in \RR^{n \times p}$
-représentant $n$ individus, ou observations, décrites chacune par $p$
-variables.
+L'objet de nos études, à savoir le jeu de données, n'est donc plus un
+échantillon $(x_1, x_2, \dots, x_n)$ d'une variable aléatoire rélle $X$, mais
+un échantillon d'un vecteur aléatoire à valeurs dans un espace $\XX$. Nous
+considèrerons en général que $\XX = \RR^p$ et que notre jeu de données peut
+être décrit par une matrice $X \in \XX^{n \times p}$.  C'est par exemple la
+matrice de taille $31 \times 8$ des entrées du tableau~\ref{tab:meteo_data}.
 
-Nous essaierons de nous en tenir aux notations suivantes :
+Cela suppose que nous disposions d'une représentation $p$-dimensionnelle
+pertinente de nos données. Si celle-ci est assez évidente pour des données
+comme celles du tableau~\ref{tab:meteo_data}, ce n'est pas toujours le cas. En
+particulier, les variables qualitatives (comme la colonne « âge » du
+tableau~\ref{tab:remboursement_data}) doivent être représentées par un (ou
+plusieurs) nombres réels. Nous verrons comment faire en pratique dans la PC3. 
+
+Enfin, nous supposons dans ce cours que nos données sont \textbf{structurées},
+c'est-à-dire présentées sous forme vectorielle. Ce n'est pas le cas de nombreux
+types de données telles que du texte, des images, des séquences d'ADN, ou des
+molécules chimiques. La question de la représentation de ces données dites
+non-structurées dépasse le cadre de ce cours mais est très importante.
+
+\section{Notations}
+Nous essaierons à partir de maintenant de nous en tenir aux notations suivantes
+:
 \begin{itemize}
 \item Les lettres minuscules ($x$) représentent un scalaire ;
 \item les lettres minuscules surmontées d'une flèche ($\xx$) représentent un
@@ -47,51 +55,77 @@ Nous essaierons de nous en tenir aux notations suivantes :
 \item $n$ est un nombre d'observations et $p$ un nombre de variables.
 \end{itemize}
 
-\section{Motivation}
+\section{Motivation $\bigstar$}
 Le but de la réduction de dimension est de transformer une représentation
 $X \in \RR^{n \times p}$ des données en une représentation
 $X^* \in \RR^{n \times m}$ où $m \ll p$. Les raisons de cette démarche sont
-multiples : 
+multiples.
 
-\begin{itemize}
-\item \textbf{Visualiser les données :} ce n'est pas tâche aisée avec un nombre
-  très grand de variables. Comment visualiser $n$ points en plus de 2 ou 3
-  dimensions ? Limiter les variables à un faible nombre de dimensions permet de
-  visualiser les données plus facilement, quitte à perdre un peu d'information
-  lors de la transformation.
-\item \textbf{Réduire les coûts algorithmiques du traitement des données :} d'un
-  point de vue purement computationnel, réduire la dimension des données permet
-  de réduire d'une part l'espace qu'elles prennent en mémoire et d'autre part
-  les temps de calcul. De plus, si certaines variables sont inutiles, ou
-  redondantes, il n'est pas nécessaire de les obtenir pour de nouvelles
-  observations : cela permet de réduire le coût d'acquisition des données.
-\item \textbf{Améliorer la qualité du traitement des données :} les algorithmes
-  d'apprentissage supervisé ou de clustering sont généralement plus performants
-  sur un faible nombre de variables. Tout d'abord, si certaines des variables
-  ne sont pas pertinentes, elles risquent d'induire du biais dans les modèles
-  appris. De plus, les raisonnements développés en faible dimension pour
-  construire un algorithme d'apprentissage supervisé ne s'appliquent pas
-  nécessairement en haute dimension. C'est un phénomène connu sous le nom de
-  {\it fléau de la dimension}, ou {\it curse of dimensionality} en
-  anglais. Pour plus de détails, reportez-vous à la section~\ref{sec:dimcurse}.
-\end{itemize}
+\paragraph{Visualiser les données.} Ce n'est pas tâche aisée avec un nombre
+très grand de variables. Comment visualiser $n$ points en plus de 2 ou 3
+dimensions ? Limiter les variables à un faible nombre de dimensions permet de
+visualiser les données plus facilement, quitte à perdre un peu d'information
+lors de la transformation.
 
+\paragraph{Réduire les coûts algorithmiques du traitement des données.} D'un
+point de vue purement computationnel, réduire la dimension des données permet
+de réduire d'une part l'espace qu'elles prennent en mémoire et d'autre part les
+temps de calcul. De plus, si certaines variables sont inutiles, ou redondantes,
+il n'est pas nécessaire de les obtenir pour de nouvelles observations : cela
+permet de réduire le coût d'acquisition des données.
+
+\paragraph{Améliorer la qualité du traitement des données.} Les algorithmes
+d'apprentissage supervisé ou de clustering sont généralement plus performants
+sur un faible nombre de variables. En effet, si certaines des variables
+ne sont pas pertinentes, elles risquent de biaiser les modèles appris.\\
+De plus, les raisonnements développés en faible dimension pour construire un
+algorithme d'apprentissage supervisé ne s'appliquent pas nécessairement en
+haute dimension. C'est un phénomène connu sous le nom de \textbf{fléau de la
+  dimension}, ou \textit{curse of dimensionality} en anglais. \\
+En effet, en haute dimension, les individus ont tendance à tous être éloignés
+les uns des autres. Pour comprendre cette assertion, plaçons-nous en dimension
+$p$ et considérons l'hypersphère $\Scal(\xx, R)$ de rayon $R \in \RR_+^*$
+centrée sur une observation $\xx$, ainsi que l'hypercube $\Ccal(\xx, R)$
+circonscrit à cette hypersphère. Le volume de $\Scal(\xx)$ vaut
+$\frac{2 R^p \pi^{p/2}}{p \Gamma(p/2)}$, tandis que celui de $\Ccal(\xx, R)$,
+dont le côté a pour longueur $2R$, vaut $2^p R^p$. Ainsi
+\begin{equation*}
+  \lim_{p \rightarrow \infty} \frac{\text{Vol}(\Ccal(\xx, R))}{
+    \text{Vol}(\Scal(\xx, R))} = 0.
+\end{equation*}
+Cela signifie que la probabilité qu'un exemple situé dans $\Ccal(\xx, R)$
+appartienne à $\Scal(\xx, R)$, qui vaut $\frac{\pi}4 \approx 0.79$ lorsque
+$p=2$ et $\frac{\pi}6 \approx 0.52$ lorsque $p=3$, devient très faible quand
+$p$ est grand : les données ont tendance à être éloignées les unes des autres.
+
+% Cela implique que les algorithmes développés en utilisant une notion de
+% similarité ou distance entre individus ne fonctionnent pas nécessairement en
+% grande dimension. Ainsi, réduire la dimension des données peut être nécessaire
+% à la construction de bons modèles d'apprentissage.
 
 Deux possibilités s'offrent à nous pour réduire la dimension de nos données :
 \begin{itemize}
-\item la \textbf{sélection de variables}, qui consiste à éliminer un nombre
-  $p-m$ de variables de nos données ;
+\item la \textbf{sélection de variables}, qui consiste à \textit{éliminer} un nombre
+  $(p-m)$ de variables de nos données ;
 \item l'\textbf{extraction de variables}, qui consiste à {\it créer} $m$
   nouvelles variables à partir des $p$ variables dont nous disposons
   initialement.
 \end{itemize}
 
-\paragraph{Sélection de variables} La sélection de variables consiste à
-éliminer des variables peu informatives. Dans le cas non-supervisé, il s'agit
-par exemple d'éliminer des variables dont la variance est très faible (leur
-valeur étant à peu près la même pour chaque individu, elle n'apporte aucune
-information permettant de distinguer deux individus) ou qui sont corrélées à
-une autre variable (elles apportent alors la même information).
+
+
+\section{Sélection de variables $\bigstar$} 
+
+La sélection de variables consiste à éliminer des variables peu informatives.
+
+Dans le cas non-supervisé, il s'agit par exemple d'éliminer des variables
+\begin{itemize}
+\item dont la variance est très faible : leur valeur étant à peu près la même
+  pour chaque individu, elle n'apporte aucune information permettant de
+  distinguer deux individus ;
+\item qui sont corrélées à une autre variable : elles apportent alors la même
+  information et sont redondantes.
+\end{itemize}
 
 Dans le cas supervisé, il s'agit aussi d'éliminer des variables qui ne sont pas
 pertinentes par rapport à la tâche de prédiction. On peut par exemple
@@ -99,11 +133,11 @@ pertinentes par rapport à la tâche de prédiction. On peut par exemple
 \item éliminer, par exemple à l'aide d'un test du chi2 comme vu dans la PC1,
   les variables indépendantes de l'étiquette à prédire. Remarquez néanmoins que
   deux variables chacune indépendante de l'étiquette peuvent être très
-  informatives quand on les considère simultanément\footnote{Considérez par
-    exemple, en deux dimensions, un problème de classification dans lequel
-    l'étiquette $y$ est donnée par $y = x_1 \oplus x_2$ : les deux variables
-    ensemble déterminent parfaitement $y$ mais chacune d'entre elle est
-    uninformative.} ;
+  informatives quand on les considère simultanément. Considérez par exemple,
+  pour $\XX = \{0, 1\}^2$, un problème de classification binaire dans lequel
+  l'étiquette $y$ est donnée par $y = x_1 \oplus x_2$ : les deux variables
+  ensemble déterminent parfaitement $y,$ mais chacune d'entre elle est
+  uninformative ;
 \item chercher à éliminer des variables qui n'améliorent pas la performance
   d'un algorithme précis.
 \end{itemize}
@@ -114,7 +148,7 @@ sélection de variables supervisée quand nous parlerons du lasso
 
 %La suite de ce chapitre détaille des exemples de ces deux approches.
 
-\section{Analyse en composantes principales}
+\section{Analyse en composantes principales $\bigstar$}
 \label{sec:pca}
 La méthode la plus classique pour réduire la dimension d'un jeu de données par
 extraction de variables est l'\textbf{analyse en composantes principales}, ou
@@ -122,84 +156,101 @@ extraction de variables est l'\textbf{analyse en composantes principales}, ou
   Principal Component Analysis}.
 
 \subsection{Maximisation de la variance}
-L'idée centrale d'une ACP est de représenter les données de sorte à maximiser
-leur variance selon les nouvelles dimensions, afin de pouvoir continuer à
-distinguer les exemples les uns des autres dans leur nouvelle représentation
+L'idée est de représenter les données de sorte à maximiser leur variance selon
+les nouvelles dimensions. Cela permet de pouvoir continuer à distinguer les
+individus les uns des autres dans leur nouvelle représentation
 (cf. figure~\ref{fig:data_variance}).
-\begin{figure}[h]
+Ainsi, une ACP de la matrice $X \in \RR^{n \times p}$ est une
+transformation linéaire orthogonale qui permet d'exprimer $X$ dans une nouvelle
+base orthonormée, de sorte que la plus grande variance de $X$ par projection
+s'aligne sur le premier axe de cette nouvelle base, la seconde plus grande
+variance sur le deuxième axe, et ainsi de suite. Les axes de cette nouvelle base
+sont appelés les \textbf{composantes principales}, abrégées en {PC} pour {\it
+  Principal Components}.
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=0.4\textwidth]{figures/dimred/data_variance}
+  \includegraphics[width=0.3\textwidth]{figures/dimred/data_variance}
   \caption{La variance des données en deux dimensions est maximale selon l'axe
     indiqué par la flèche.}
   \label{fig:data_variance}
 \end{figure}
 
-Formellement, une nouvelle représentation de $\XX$ est définie par une base
-orthonormée sur laquelle projeter la matrice de données $X$.
 
-Une \textbf{analyse en composantes principales}, ou {\it ACP}, de la matrice
-$X \in \RR^{n \times p}$ est une transformation linéaire orthogonale qui permet
-d'exprimer $X$ dans une nouvelle base orthonormée, de sorte que la plus grande
-variance de $X$ par projection s'aligne sur le premier axe de cette nouvelle
-base, la seconde plus grande variance sur le deuxième axe, et ainsi de suite.
+\subsection{Standardisation}
+Dans la suite de cette section, nous supposons que les variables ont été
+\textbf{standardisées} de sorte à toutes avoir une moyenne de 0 et une variance
+de 1, pour éviter que les variables qui prennent de grandes valeurs aient plus
+d'importance que celles qui prennent de faibles valeurs. C'est un pré-requis de
+l'application de l'ACP.  Cette standardisation s'effectue par :
+\begin{equation}
+  \label{eq:standardization}
+  x^i_j \leftarrow \frac{x^i_j - \overline{x_j}}{\sqrt{\frac1n 
+      \sum_{l=1}^n (x^l_j - \overline{x_j})^2}},
+\end{equation}
+où $\overline{x_j} = \frac1n \sum_{l=1}^n x^l_j.$ On dira alors que $X$ est
+\textbf{centrée} : chacune de ses colonnes a pour moyenne 0 et \textbf{réduite} :
+chacune de ses colonnes a pour variance 1.
 
-Les axes de cette nouvelle base sont appelés les \textbf{composantes
-  principales}, abrégées en {PC} pour {\it Principal Components}.
+\begin{exemple}
+  Considérons la matrice de données 
+  \[
+    X = \begin{bmatrix} 1.0 & 20.0 \\
+      2.0 & 10.0 \\
+      3.0 & 50.0 \\
+      4.0 & 30.0 \\
+      5.0 & 40.0 \\
+    \end{bmatrix}.
+  \]
+  La variance de la première colonne vaut $2.0$ tandis que celle de la deuxième
+  colonne vaut $200.0$. Peut-on pour autant en conclure que la deuxième
+  variable « varie » plus que la première, alors que les valeurs qu'elle prend
+  sont simplement proportionnelles à celles prises par la première ?
 
-\begin{attention}
-  Dans la suite de cette section, nous supposons que les variables ont été {\it
-    standardisées} de sorte à toutes avoir une moyenne de 0 et une variance de
-  1, pour éviter que les variables qui prennent de grandes valeurs aient plus
-  d'importance que celles qui prennent de faibles valeurs. C'est un pré-requis
-  de l'application de l'ACP.  Cette standardisation s'effectue en centrant la
-  moyenne et en réduisant la variance de chaque variable :
-  \begin{equation}
-    \label{eq:standardization}
-    x^i_j \leftarrow \frac{x^i_j - \bar{x_j}}{\sqrt{\frac1n 
-        \sum_{l=1}^n (x^l_j - \bar{x_j})^2}},
-  \end{equation}
-  où $\bar{x_j} = \frac1n \sum_{l=1}^n x^l_j.$ On dira alors que $X$ est {\it
-    centrée} : chacune de ses colonnes a pour moyenne 0.
-\end{attention}
+  La version standardisée de $X$ est
+  \[
+    \begin{bmatrix} -1.414 & -0.707 \\
+      -0.707 & -1.414 \\
+      0.0 & 1.414 \\
+      0.707 & 0.0 \\
+      1.414 & 0.707 
+    \end{bmatrix}.
+  \]
+\end{exemple}
 
-\paragraph{Théorème} 
-Soit $X \in \RR^{n \times p}$ une matrice {\it centrée} de covariance
+
+\subsection{Décomposition spectrale de la covariance}
+\paragraph{Proposition} 
+Soit $X \in \RR^{n \times p}$ une matrice centrée de covariance empirique
 $\Sigma = \frac1n X^\top X$. Les composantes principales de $X$ sont les
-vecteurs propres de $\Sigma$, ordonnés par valeur propre décroissante.
+vecteurs propres de $\Sigma$, ordonnés par valeurs propres décroissantes.
 
 \paragraph{Preuve}
-Commençons par démontrer que, pour tout vecteur $\ww \in \RR^p$, la variance de
-la projection de $X$ sur $\ww$ vaut $w^\top \Sigma w.$
-
-La projection de $X \in \RR^{n \times p}$ sur $\ww \in \RR^p$ est le vecteur
-$\zz = X w.$ Comme $X$ est centrée, la moyenne de $\zz$ vaut
+Considérons un vecteur $\ww \in \RR^p$. La projection de de $X$ sur $\ww$ est
+le vecteur $X \ww \in \RR^n$.
+La moyenne de $X \ww$ vaut $0$ car les variables $(\xx_1, \dots, \xx_p)$ sont
+elles-mêmes de moyenne nulle ($X$ étant centrée).
+La variance de $X \ww$ vaut alors 
 \begin{equation*}
-  \frac1n \sum_{i=1}^n z_i = \frac1n \sum_{i=1}^n \sum_{j=1}^p x^i_j w_j = 
-  \frac1n \sum_{j=1}^p  w_j \sum_{i=1}^n x^i_j = 0.
-\end{equation*}
-Sa variance vaut
-\begin{equation*}
-  \text{Var}[\zz] = \frac1n \sum_{i=1}^n zz_i^2 = \frac1n \ww^\top X^\top X \ww
-  = \ww^\top \Sigma \ww.
+  \text{Var}(X \ww) = \frac1n \sum_{i=1}^n \left( \sum_{j=1}^p x_j^i w_j \right)^2 = \ww^\top \Sigma \ww.
 \end{equation*}    
 
-Appelons maintenant $\ww_1 \in \RR^p$ la première composante
-principale. $\ww_1$ est orthonormé et tel que la variance de $X \ww_1$ soit
-maximale :
+Appelons maintenant $\ww_1 \in \RR^p$ la première composante principale de $X$.
+$\ww_1$ est de norme $1$ et tel que la variance de $X \ww_1$ est maximale :
 \begin{equation}
   \label{eq:pc1}
-  \ww_1 = \argmax_{\ww \in \RR^p} \ww^\top \Sigma \ww \text{ avec } \ltwonorm{\ww_1}=1.
+  \ww_1 \in \argmax_{\ww \in \RR^p} \left( \ww^\top \Sigma \ww \right)  \text{\qquad avec } \ltwonorm{\ww_1}=1.
 \end{equation}
 Il s'agit d'un problème d'optimisation quadratique sous contrainte d'égalité,
-que l'on peut résoudre en introduisant le multiplicateur de Lagrange
-$\alpha_1 > 0$ et en écrivant le lagrangien
+que l'on peut résoudre (cf section 2.2.1 du poly d'Optimisation) en
+introduisant le multiplicateur de Lagrange $\alpha_1 > 0$ et en écrivant le
+lagrangien
 \begin{equation*}
   L(\alpha_1, \ww) = \ww^\top \Sigma \ww - \alpha_1 
   \left( \ltwonorm{\ww} - 1 \right).
 \end{equation*}
-Par dualité forte, % $\min_{\ww \in \RR^p} w^\top \Sigma w = \max_{\alpha_1}
+%Par dualité forte, % $\min_{\ww \in \RR^p} w^\top \Sigma w = \max_{\alpha_1}
     % \inf_{\ww \in \RR^p} L(\alpha_1, \ww).$
-le maximum de $\ww^\top \Sigma \ww$ sous la contrainte $\ltwonorm{\ww_1}=1$ est
+Le maximum de $\ww^\top \Sigma \ww$ sous la contrainte $\ltwonorm{\ww_1}=1$ est
 égal à $\min_{\alpha_1} \sup_{\ww \in \RR^p} L(\alpha_1, \ww).$ Le supremum du
 lagrangien est atteint en un point où son gradient s'annule, c'est-à-dire qui
 vérifie
@@ -218,7 +269,7 @@ ses valeurs propres sont positives.)
 La deuxième composante principale de $X$ vérifie
 \begin{equation}
   \label{eq:pc2}
-  \ww_2 = \argmax_{\ww \in \RR^p} \ww^\top \Sigma \ww \text{ avec } \ltwonorm{\ww_2}=1
+  \ww_2 = \argmax_{\ww \in \RR^p} \left( \ww^\top \Sigma \ww \right) \text{ \qquad; avec } \ltwonorm{\ww_2}=1
   \text{ et } \ww^\top\ww_1=0.
 \end{equation}
 Cette dernière contrainte nous permet de garantir que la base des composantes
@@ -251,8 +302,8 @@ Le raisonnement se poursuit de la même manière pour les composantes principales
 suivantes. \hfill $\square$
 
   
-\paragraph{Remarque} Alternativement, on peut prouver ce théorème
-en observant que $\Sigma$, qui est par construction définie positive, est
+\paragraph{Preuve alternative} Alternativement, on peut prouver ce théorème
+en observant que $\Sigma$, étant définie positive, est
 diagonalisable par un changement de base orthonormée :
 $\Sigma = Q^\top \Lambda Q$, où $\Lambda \in \mathbb{R}^{p \times p}$ est une
 matrice diagonale dont les valeurs diagonales sont les valeurs propres de
@@ -261,28 +312,31 @@ $\Sigma$.  Ainsi,
   \ww_1^\top \Sigma \ww_1 = \ww_1^\top Q^\top \Lambda Q \ww_1 = 
   \left(Q \ww_1 \right)^\top \Lambda \left(Q \ww_1 \right).
 \end{equation*}
-Si l'on pose $\vv = Q \ww_1$, il s'agit donc de trouver $\vv$ de norme 1 ($Q$
-étant orthonormée et $\ww_1$ de norme 1) qui maximise
-$\sum_{j=1}^p v_j^2 \lambda_j$.  Comme $\Sigma$ est définie positive,
-$\lambda_j \geq 0 \; \forall j=1, \dots, p$. De plus, $\ltwonorm{\vv} = 1$
-implique que $0 \leq v_j^1 \leq 1 \; \forall j=1, \dots, p.$ Ainsi,
-$\sum_{j=1}^p v_j^2 \lambda_j \leq \max_{j=1, \dots, p} \lambda_j \sum_{j=1}^p
-v_j^2 \leq \max_{j=1, \dots, p} \lambda_j$
+Si l'on pose $\vv = Q \ww_1$, il s'agit donc pour maximiser
+$\ww_1^\top \Sigma \ww_1$ de trouver $\vv$ de norme 1 ($Q$ étant orthonormée et
+$\ww_1$ de norme 1) qui maximise
+\[\sum_{j=1}^p v_j^2 \lambda_j.\]  
+
+Pour tout $j=1, \dots, p$, on a $\lambda_j \geq 0$ (car $\Sigma$ est définie
+positive) et $0 \leq v_j^2 \leq 1$ car $\ltwonorm{\vv} = 1$. Ainsi, 
+\[\sum_{j=1}^p v_j^2 \lambda_j \leq 
+\left(\max_{j=1, \dots, p} \lambda_j \right)\sum_{j=1}^p
+v_j^2 \leq \max_{j=1, \dots, p} \lambda_j,\]
 et ce maximum est atteint quand $v_j=1$ et $v_k=0 \; \forall k \neq j$. On
 retrouve ainsi que $\ww_1$ est le vecteur propre correspondant à la plus grande
-valeur propre de $\Sigma$, et ainsi de suite.
+valeur propre de $\Sigma$, et ainsi de suite. \hfill $\square$
 
 
-\subsection{Décomposition en valeurs singulières}
-\paragraph{Théorème} 
-Soit $X \in \RR^{n \times p}$ une matrice {\it centrée}. Les composantes
-principales de $X$ sont ses vecteurs singuliers à droite ordonnés par valeur
-singulière décroissante.
+\subsection{Décomposition en valeurs singulières $\bigstar$}
+\paragraph{Proposition} 
+Soit $X \in \RR^{n \times p}$ une matrice centrée. Les composantes principales
+de $X$ sont ses vecteurs singuliers à droite ordonnés par valeur singulière
+décroissante.
 
 \paragraph{Preuve}
-Si l'on écrit $X$ sous la forme $U D V^\top$ où $U \in \RR^{n \times n}$ et
-$V \in \RR^{p \times p}$ sont orthogonales, et $D \in \RR^{n \times p}$ est
-diagonale, alors
+Factorisons $X$ sous la forme $U D V^\top$ avec $U \in \RR^{n \times n}$ et
+$V \in \RR^{p \times p}$ orthogonales, et $D \in \RR^{n \times p}$ 
+diagonale. Alors
 \begin{equation*}
   \Sigma = X^\top X = V D U^\top U D V^\top = V D^2 V^\top
 \end{equation*}
@@ -292,11 +346,10 @@ $X$ (les colonnes de $V$) sont les vecteurs propres de $\Sigma$. \hfill $\square
 
   
 En pratique, les implémentations de la décomposition en valeurs singulières (ou
-SVD) sont numériquement plus stables que celles de décomposition spectrale. On
-préfèrera donc calculer les composantes principales de $X$ en calculant la SVD
-de $X$ plutôt que la décomposition spectrale de $X^\top X$.
+SVD) sont numériquement plus stables que celles de décomposition spectrale, et
+c'est ainsi que l'ACP est implémentée.
 
-\subsection{Choix du nombre de composantes principales}
+\subsection{Choix du nombre de composantes principales $\bigstar$}
 Réduire la dimension des données par une ACP implique de {\it choisir} un
 nombre de composantes principales à conserver. Pour ce faire, on utilise la
 \textbf{proportion de variance expliquée} par ces composantes : la variance de $X$
@@ -313,20 +366,23 @@ de $\Sigma$ par ordre décroissant.
   
 Il est classique de s'intéresser à l'évolution, avec le nombre de composantes,
 soit de la proportion de variance expliquée par chacune d'entre elles, soit à
-cette proportion cumulée, que l'on peut représenter visuellement sur un {\it
-  scree plot} (figure~\ref{fig:scree_plot}). Ce graphe peut nous servir à
-déterminer :
-\begin{itemize}
-\item soit le nombre de composantes principales qui explique un pourcentage de
-  la variance que l'on s'est initialement fixé (par exemple, sur la
-  figure~\ref{fig:scree_plot_cumul}, $95\%$) ;
-\item soit le nombre de composantes principales correspondant au « coude » du
-  graphe, à partir duquel ajouter une nouvelle composante principale ne semble
-  plus informatif.
-\end{itemize}
+cette proportion cumulée. On peut représenter visuellement ces proportions sur
+un {\it scree plot} (figure~\ref{fig:scree_plots}), utilisé pour déterminer le
+nombre de composantes qui expliquent ensemble un pourcentage de la variance
+fixé a priori ($95\%$ sur la figure~\ref{fig:scree_plot_cumul}), ou le nombre
+de composantes à partir duquel ajouter une nouvelle composante n'est plus
+informatif (« coude » sur la
+figure~\ref{fig:scree_plot}). % Ce graphe peut nous servir
+% à déterminer visuellement soit le nombre de composantes principales qui
+% expliquent un pourcentage de la variance que l'on s'est initialement fixé
+% ($95\%$ sur la figure~\ref{fig:scree_plot}, soit le nombre de composantes
+% principales correspondant au « coude » du scree plot cumulatif
+% (figure~\ref{fig:scree_plot_cumul}), à partir duquel ajouter une nouvelle
+% composante ne semble plus informatif.
+
 
 \begin{figure}[h]
-  \begin{subfigure}[t]{0.48\textwidth}
+  \begin{subfigure}[t]{0.43\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/dimred/scree_plot}
     \caption{Pourcentage de variance expliqué par chacune des composantes
@@ -334,85 +390,85 @@ déterminer :
       composantes n'est plus vraiment informatif.}
     \label{fig:scree_plot}
   \end{subfigure} \hfill
-  \begin{subfigure}[t]{0.48\textwidth}
+  \begin{subfigure}[t]{0.43\textwidth}
     \includegraphics[width=\textwidth]{figures/dimred/scree_plot_cumul}  
     \caption{Pourcentage cumulé de variance expliquée par chacune des
       composantes principales. Si on se fixe une proportion de variance
       expliquée de $95\%$, on peut se contenter de 10 composantes principales.}
     \label{fig:scree_plot_cumul}
   \end{subfigure}
-  \caption{Pour choisir le nombre de composantes principales, on utilise le
+  \caption{Choix du nombre de PC à l'aide du
     pourcentage de variance expliquée.}
+  \label{fig:scree_plots}
 \end{figure}
 
-\section{Factorisation de la matrice des données}
+\section{Factorisation de la matrice des données $\bigstar$}
 Soit un nombre $m$ de composantes principales, calculées par une ACP,
 représentées par une matrice $W \in \RR^{p \times m}$. La représentation
 réduite des $n$ observations dans le nouvel espace de dimension $m$ s'obtient
 en projetant $X$ sur les colonnes de $W$, autrement dit en calculant
 \begin{equation}
   \label{eq:reduced_rep}
-  H = W^\top X.
+  H = X W.
 \end{equation}
 
-La matrice $H \in \RR^{m \times n}$ peut être interprétée comme une
+La matrice $H \in \RR^{n \times m}$ peut être interprétée comme une
 \textbf{représentation latente} (ou cachée, {\it hidden} en anglais d'où la
 notation $H$) des données. C'est cette représentation que l'on a cherché à
 découvrir grâce à l'ACP.
 
 Les colonnes de $W$ étant des vecteurs orthonormés (il s'agit de vecteurs
 propres de $X X^\top$), on peut multiplier l'équation~\ref{eq:reduced_rep} à
-gauche par $W$ pour obtenir une {\it factorisation} de $X$ :
+droite par $W$ pour obtenir une {\it factorisation} de $X$ :
 \begin{equation}
   \label{eq:pca_factor}
-  X = W H.
+  X = H W^\top.
 \end{equation}
-On appelle ainsi les lignes de $H$ les \textbf{facteurs} de $X$.
-
-
 Cette factorisation s'inscrit dans le cadre plus général de \textbf{l'analyse
   factorielle}.
 
-Supposons que les observations $\{\xx^1, \xx^2, \dots, \xx^n\}$ soient les
-réalisations d'une variable aléatoire $p$-dimensionnelle $\xx$, générée par le
-modèle
+Elle correspond en effet à considérer que les données sont les réalisation d'un
+vecteur aléatoire $(X_1, X_2, \dots, X_p)$ obtenues par
+% \begin{equation}
+%   \label{eq:fa_model}
+%   (X_1, X_2, \dots, X_p)^\top = (H_1, H_2, \dots, H_m)^\top W + \epsilon,
+% \end{equation}
 \begin{equation}
   \label{eq:fa_model}
-  \xx = W \hh + \epsilon,
+  (X_1, X_2, \dots, X_p) = W (H_1, H_2, \dots, H_m) + \epsilon,
 \end{equation}
-où $\hh$ est une variable aléatoire $m$-dimensionnelle qui est la
-représentation latente de $\xx$, et $\epsilon$ un bruit gaussien :
-$\epsilon \sim \Ncal(0, \Psi).$
+où $(H_1, H_2, \dots, H_m)$ est le vecteur aléatoire latent qui génère les
+données et $\epsilon$ un bruit gaussien : $\epsilon \sim \Ncal(0, \Psi),$ avec
+$\Psi \in \RR^{p \times p}$.
 
-Supposons les données centrées en $0$, et les variables latentes
-$\hh^1, \hh^2, \dots, \hh^n$ (qui sont des réalisations de $\hh$) indépendantes
-et gaussiennes de variance unitaire, c'est-à-dire $\hh \sim \Ncal(0, I_m)$ où
-$I_m$ est la matrice identité de dimensions $m \times m$. Alors $W \hh$ est
-centrée en $0$, et sa covariance est $WW^\top.$ Alors
-$\xx \sim \Ncal(0, WW^\top + \Psi)$.
+Supposons maintenant que $(H_1, H_2, \dots, H_m)$ est un vecteur aléatoire
+gaussien $m$-dimensionnel, d'espérance $0$ (les variables latentes sont elles
+aussi centrées) et de covariance $I_m$ où $I_m$ est la matrice identité de
+dimensions $m \times m$. Alors $(X_1, X_2, \dots, X_p)$ est lui-même un vecteur
+aléatoire gaussien, d'espérance nulle et de covariance $WW^\top + \Psi$.
 
-Si on considère de plus que $\epsilon$ est {\it isotropique}, autrement dit que
-$\Psi = \sigma^2 I_p$, alors $\xx \sim \Ncal(0, WW^\top + \sigma^2 I_p)$, on
-obtient ce que l'on appelle \textbf{ACP probabiliste}. Les
-paramètres $W$ et $\sigma$ de ce modèle peuvent être obtenus par maximum de
-vraisemblance.
+Si l'on suppose de plus que $\epsilon$ est un bruit isotropique, autrement dit
+que $\Psi = \sigma^2 I_p$, alors 
+\[
+  (X_1, X_2, \dots, X_p) \sim \Ncal (0, WW^\top + \sigma^2 I_p).
+\] 
+On peut alors estimer les paramètres $W$ et $\sigma^2$ par maximum de
+vraisemblance ; c'est ce qu'on appelle l'\textbf{ACP probabiliste}.
 
-L'ACP classique est un cas limite de l'ACP probabiliste, obtenu quand la
-covariance du bruit devient infiniment petite ($\sigma^2 \rightarrow 0$).
+L'ACP que nous venons de voir est un cas limite de l'ACP probabiliste, obtenu
+quand la covariance du bruit devient infiniment petite
+($\sigma^2 \rightarrow 0$)\footnote{Vous en trouverez la preuve dans l'article
+  \textit{Probabilistic principal components analysis}, M.~E. Tipping \&
+  C.~M. Bishop,  Journal of the Royal
+    Statistical Society Series B, 61:611--622 (1999).}.
 
-Plus généralement, on peut faire l'hypothèse que les variables observées
-$x_1, x_2, \dots, x_p$ sont conditionnellement indépendantes étant données les
-variables latentes $h_1, h_2, \dots, h_m.$ Dans ce cas, $\Psi$ est une matrice
-diagonale, $\Psi = \text{diag}(\psi_1, \psi_2, \dots, \psi_p)$, où $\psi_j$
-décrit la variance spécifique à la variable $x_j$. Les valeurs de $W$, $\sigma$
-et $\psi_1, \psi_2, \dots, \psi_p$ peuvent encore une fois être obtenues par
-maximum de vraisemblance. C'est ce que l'on appelle \textbf{l'analyse
-  factorielle}.
-
-Dans l'analyse factorielle, nous ne faisons plus l'hypothèse que les nouvelles
-dimensions sont orthogonales. En particulier, il est donc possible d'obtenir
-des dimensions dégénérées, autrement dit des colonnes de $W$ dont toutes les
-coordonnées sont $0$.
+On peut plutôt faire la supposition plus générale que $\Psi$ est une matrice
+diagonale. Les valeurs de $W$, $\Psi$ et $\sigma^2$ peuvent une fois de plus
+être obtenues par maximum de vraisemblance. C'est ce que l'on appelle
+\textbf{l'analyse factorielle}.  Dans l'analyse factorielle, les composantes
+principales (les colonnes de $W$) ne sont pas nécessairement orthogonales. En
+particulier, il est donc possible d'obtenir des composantes dégénérées,
+autrement dit des colonnes de $W$ dont toutes les coordonnées sont $0$.
 
 % \subsection{Approches non linéaires}
 % De nombreuses autres approches ont été proposées pour réduire la dimension des
@@ -490,35 +546,59 @@ coordonnées sont $0$.
 % \item De nombreuses méthodes permettent de réduire la dimension des variables. 
 % \end{pointsclefs}
 
-\section{Compléments}
-\subsection{Fléau de la dimension}
-\label{sec:dimcurse}
-En haute dimension, les individus ont tendance à tous être éloignés les uns des
-autres. Pour comprendre cette assertion, plaçons-nous en dimension $p$ et
-considérons l'hypersphère $\Scal(\xx, R)$ de rayon $R \in \RR_+^*$ centrée sur
-une observation $\xx$, ainsi que l'hypercube $\Ccal(\xx, R)$ circonscrit à
-cette hypersphère. Le volume de $\Scal(\xx)$ vaut
-$\frac{2 R^p \pi^{p/2}}{p \Gamma(p/2)}$, tandis que celui de $\Ccal(\xx, R)$,
-dont le côté a pour longueur $2R$, vaut $2^p R^p$. Ainsi
-\begin{equation*}
-  \lim_{p \rightarrow \infty} \frac{\text{Vol}(\Ccal(\xx, R))}{
-    \text{Vol}(\Scal(\xx, R))} = 0.
-\end{equation*}
-Cela signifie que la probabilité qu'un exemple situé dans $\Ccal(\xx, R)$
-appartienne à $\Scal(\xx, R)$, qui vaut $\frac{\pi}4 \approx 0.79$ lorsque
-$p=2$ et $\frac{\pi}6 \approx 0.52$ lorsque $p=3$, devient très faible quand
-$p$ est grand : les données ont tendance à être éloignées les unes des autres.
+% \section{Compléments}
+% \subsection{Fléau de la dimension}
+% \label{sec:dimcurse}
+% En haute dimension, les individus ont tendance à tous être éloignés les uns des
+% autres. Pour comprendre cette assertion, plaçons-nous en dimension $p$ et
+% considérons l'hypersphère $\Scal(\xx, R)$ de rayon $R \in \RR_+^*$ centrée sur
+% une observation $\xx$, ainsi que l'hypercube $\Ccal(\xx, R)$ circonscrit à
+% cette hypersphère. Le volume de $\Scal(\xx)$ vaut
+% $\frac{2 R^p \pi^{p/2}}{p \Gamma(p/2)}$, tandis que celui de $\Ccal(\xx, R)$,
+% dont le côté a pour longueur $2R$, vaut $2^p R^p$. Ainsi
+% \begin{equation*}
+%   \lim_{p \rightarrow \infty} \frac{\text{Vol}(\Ccal(\xx, R))}{
+%     \text{Vol}(\Scal(\xx, R))} = 0.
+% \end{equation*}
+% Cela signifie que la probabilité qu'un exemple situé dans $\Ccal(\xx, R)$
+% appartienne à $\Scal(\xx, R)$, qui vaut $\frac{\pi}4 \approx 0.79$ lorsque
+% $p=2$ et $\frac{\pi}6 \approx 0.52$ lorsque $p=3$, devient très faible quand
+% $p$ est grand : les données ont tendance à être éloignées les unes des autres.
 
-Cela implique que les algorithmes développés en utilisant une notion de
-similarité ou distance entre individus ne fonctionnent pas nécessairement en
-grande dimension. Ainsi, réduire la dimension peut être nécessaire à la
-construction de bons modèles d'apprentissage.
+% Cela implique que les algorithmes développés en utilisant une notion de
+% similarité ou distance entre individus ne fonctionnent pas nécessairement en
+% grande dimension. Ainsi, réduire la dimension peut être nécessaire à la
+% construction de bons modèles d'apprentissage.
 
 
 \begin{plusloin}
-\item \todo{Plus de variantes de l'analyse factorielle, e.g. NMF}
-\item \todo{Representation learning}
-\item \todo{MDS, IsoMap, tSNE}
+\item Une variante populaire de l'analyse factorielle est la
+  \textbf{factorisation positive de matrice} (ou NMF pour \textit{non-negative
+    matrix factorisation}), qui permet lorsque toutes les entrées de $X$ sont
+  positives, de chercher à la décomposer sous la forme $H W$ où $H$ et $W$ ont
+  elles aussi toutes leurs entrées positives. Cela facilite leur
+  interprétation.
+\item Il existe de nombreuses approches de réduction de dimension
+  non-linéaires, c'est-à-dire qui créent des composantes qui ne sont pas des
+  composantes linéaires des variables initiales. Parmi elles, citons 
+  \begin{itemize}
+  \item le \textbf{positionnement multidimensionnel}, ou MDS pour {\it
+      multidimensional scaling}, qui cherche à préserver la distance entre les
+    individus. Dans le cas de la distance euclidienne, on se ramène à l'ACP ;
+    mais il est possible d'utiliser d'autres distances, y compris des distances
+    non-métriques.
+  \item le \textbf{t-SNE} (prononcé « ti-sni »), pour {\it t-Student
+      Neighborhood Embedding}, qui cherche à approcher la loi des distances
+    entre individus par une loi de Student.
+  \item le \textbf{UMAP}, pour {\it Uniform Manifold Approximation and
+      Projection} qui suppose les individus uniformément distribués sur une
+    variété riemanienne qu'il s'agit d'approcher.
+  \end{itemize}
+\item Enfin, nous verrons au chapitre~\ref{chap:nonlin} que la dernière couche
+  cachée d'un réseau de neurones profond peut être considérée comme une
+  nouvelle représentation des données prises en entrée par ce réseau de
+  neurones. On parle ainsi parfois d'apprentissage de représentation
+  (\textit{representation learning}) plutôt que d'apprentissage profond.
 % \item Le tutoriel de \citet{shlens2014} est une introduction détaillée à l'analyse en
 %   composantes principales.
 % \item Pour une revue des méthodes de sélection de variables, on pourra se
