@@ -94,7 +94,7 @@ figure~\ref{fig:remboursement_age_bars}.
 
 Dans le cas d'une variable continue, la constitution des classes de valeurs
 d'une série statistique est une étape importante. La \textbf{règle de Sturges}
-propose de découper les valeurs observées en $\lfloor 1 + \log_2(n)\rfloor$
+propose de découper les valeurs observées en $k = \lfloor 1 + \log_2(n)\rfloor$
 intervalles de même taille $\frac{\max(x_i) - \min(x_i)}{k}$. Cependant, cette
 règle suppose que la variable analysée suive une distribution gaussienne ; elle
 n'est pas appropriée, par exemple, si les valeurs s'étalent sur plusieurs
@@ -209,10 +209,10 @@ La  moyenne arithmétique peut être très sensible à la présence de valeurs aberra
 \begin{itemize}
 \item la \textbf{variance de la série statistique} 
 \[ s^2(x_1, x_2, \dots, x_n) = \frac1n \sum_{i=1}^n (x_i - \bar x)^2,\]
-\item la \textbf{variance d'échantillonage} 
+\item la \textbf{variance d'échantillonnage} 
   \[ s^{*2}(x_1, x_2, \dots, x_n) = \frac1{n-1} \sum_{i=1}^n (x_i - \bar
     x)^2,\]
-  La variance d'échantillonage est d'autant plus proche de la variance que le
+  La variance d'échantillonnage est d'autant plus proche de la variance que le
   nombre d'observations est grand. Nous verrons dans la
   section~\ref{sec:biais_estimateur} qu'il s'agit d'un estimateur
   \textbf{non-biaisé} de la variance de la population.
@@ -312,8 +312,8 @@ deux axes, comme sur la figure~\ref{fig:meteo_tmin_tmax}. Sinon, on préfèrera
 généralement centrer et réduire les variables au préalable, comme sur la
 figure~\ref{fig:meteo_tmin_vent} : 
 \[
-  x_i \leftarrow \frac{x_i - \bar x}{\sigma_x} \qquad \text{avec } \bar x = \sum_{i=1}^n x_i 
-  \text{ et } \sigma_x = \sqrt{\sum_{i-1}^n(x_i - \bar x)^2}.
+  x_i \leftarrow \frac{x_i - \bar x}{\sigma_x} \qquad \text{avec } \bar x = \frac{1}{n} \sum_{i=1}^n x_i 
+  \text{ et } \sigma_x = \sqrt{\frac{1}{n} \sum_{i=1}^n(x_i - \bar x)^2}.
 \]
 
 \begin{figure}[h]
