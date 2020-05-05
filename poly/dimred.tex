@@ -156,6 +156,7 @@ extraction de variables est l'\textbf{analyse en composantes principales}, ou
   Principal Component Analysis}.
 
 \subsection{Maximisation de la variance}
+\label{sec:variance_maximization}
 L'idée est de représenter les données de sorte à maximiser leur variance selon
 les nouvelles dimensions. Cela permet de pouvoir continuer à distinguer les
 individus les uns des autres dans leur nouvelle représentation
@@ -327,7 +328,7 @@ retrouve ainsi que $\ww_1$ est le vecteur propre correspondant à la plus grande
 valeur propre de $\Sigma$, et ainsi de suite. \hfill $\square$
 
 
-\subsection{Décomposition en valeurs singulières $\bigstar$}
+\subsection{Décomposition en valeurs singulières}
 \paragraph{Proposition} 
 Soit $X \in \RR^{n \times p}$ une matrice centrée. Les composantes principales
 de $X$ sont ses vecteurs singuliers à droite ordonnés par valeur singulière
@@ -349,7 +350,7 @@ En pratique, les implémentations de la décomposition en valeurs singulières (ou
 SVD) sont numériquement plus stables que celles de décomposition spectrale, et
 c'est ainsi que l'ACP est implémentée.
 
-\subsection{Choix du nombre de composantes principales $\bigstar$}
+\subsection{Choix du nombre de composantes principales}
 Réduire la dimension des données par une ACP implique de {\it choisir} un
 nombre de composantes principales à conserver. Pour ce faire, on utilise la
 \textbf{proportion de variance expliquée} par ces composantes : la variance de $X$
@@ -403,32 +404,85 @@ figure~\ref{fig:scree_plot}). % Ce graphe peut nous servir
 \end{figure}
 
 \section{Factorisation de la matrice des données $\bigstar$}
-Soit un nombre $m$ de composantes principales, calculées par une ACP,
-représentées par une matrice $W \in \RR^{p \times m}$. La représentation
-réduite des $n$ observations dans le nouvel espace de dimension $m$ s'obtient
-en projetant $X$ sur les colonnes de $W$, autrement dit en calculant
+Soit $W \in \RR^{p \times p}$ la matrice de toutes les composantes principales
+de $X \in \RR^{n \times p}$. Posons $m< p$ le nombre de composantes principales choisies,
+et $\widetilde{W} \in \RR^{p \times m}$ la matrice des $m$ premières
+composantes principales de $X$. La nouvelle représentation
+dans $\RR^m$ d'un individu $\xx \in \RR^p$ est donnée par sa projection sur
+$(\ww_1, \ww_2, \dots, \ww_m)$ :
 \begin{equation}
-  \label{eq:reduced_rep}
-  H = X W.
+  \label{eq:reduced_rep_vector}
+  \hh = \xx^\top \widetilde{W}.
 \end{equation}
 
-La matrice $H \in \RR^{n \times m}$ peut être interprétée comme une
+On obtient la représentation $m$-dimensionnelle des $n$ individus de $X$ par
+\begin{equation}
+  \label{eq:reduced_rep}
+  \widetilde{H} = X \widetilde{W}.
+\end{equation}
+
+La matrice $\widetilde{H} \in \RR^{n \times m}$ peut être interprétée comme une
 \textbf{représentation latente} (ou cachée, {\it hidden} en anglais d'où la
 notation $H$) des données. C'est cette représentation que l'on a cherché à
 découvrir grâce à l'ACP.
 
+
+\subsection{Erreur de reconstruction}
+Si on utilise toutes les composantes, la représentation latente de $X$ est donnée par 
+\[
+  H = X W; H \in \RR^{n \times p}.
+\]
 Les colonnes de $W$ étant des vecteurs orthonormés (il s'agit de vecteurs
 propres de $X X^\top$), on peut multiplier l'équation~\ref{eq:reduced_rep} à
-droite par $W$ pour obtenir une {\it factorisation} de $X$ :
+droite par $W$ pour obtenir une factorisation de $X$ :
 \begin{equation}
   \label{eq:pca_factor}
   X = H W^\top.
 \end{equation}
-Cette factorisation s'inscrit dans le cadre plus général de \textbf{l'analyse
-  factorielle}.
 
-Elle correspond en effet à considérer que les données sont les réalisation d'un
-vecteur aléatoire $(X_1, X_2, \dots, X_p)$ obtenues par
+En se restreignant à $m < p$ composantes, la multiplication à droite par
+$\widetilde{W}^\top$ de la représentation latente $H$ est une approximation de
+$X$ :
+\begin{equation}
+  \label{eq:pca_factor_approx}
+  Z = H \widetilde{W}^\top.
+\end{equation}
+$Z \in \RR^{n \times p}$ peut être interprétée comme une
+\textbf{reconstruction} des données dans $\RR^p$ à partir de leur
+représentation latente dans $\RR^m$.
+
+On peut alors calculer l'\textbf{erreur de reconstruction} comme la somme des
+carrés des distances entre les individus $\xx^i$ et leur reconstruction $\zz^i$ :
+\begin{equation}
+  \label{eq:pca_reconstruction_error}
+  \text{Err}_m = \sum_{i=1}^n \norm{\xx^i - \zz^i}^2.
+\end{equation}
+
+L'erreur de reconstruction vaut 
+\[
+  \text{Err}_m = \sum_{i=1}^n \; \bignorm{\sum_{j=1}^p H_{ij} \ww_j - \sum_{j=1}^m H_{ij} \ww_j }^2 = 
+\sum_{i=1}^n \; \bignorm{\sum_{j=m+1}^p H_{ij} \ww_j }^2 = \sum_{i=1}^n \sum_{j=m+1}^p H_{ij}^2,
+\]
+cette dernière égalité venant de ce que les vecteurs $\ww_j$ sont orthogonaux
+et de norme 1.  Ainsi, l'erreur de reconstruction est la somme des carrés des
+coefficients des dimensions qui n'ont pas été prises en compte.
+
+Comme $H = X W$, on peut réécrire l'erreur de reconstruction comme 
+\[
+  \text{Err}_m = \sum_{i=1}^n \sum_{j=m+1}^p \ww_j^\top \xx^i \xx^{i\top}\ww_j
+  = \sum_{j=m+1}^p \ww_j \Sigma \ww_j^\top.
+\]
+Ainsi, maximiser la variance $\sum_{j=1}^m \ww_j \Sigma \ww_j^\top$ est
+équivalent à minimiser l'erreur de reconstruction car
+$
+\sum_{j=1}^p \ww_j \Sigma \ww_j^\top = \text{trace}(\Sigma).
+$
+C'est une autre justification de l'ACP.
+
+\subsection{Analyse factorielle}
+L'équation \eqref{eq:pca_factor} s'inscrit dans le cadre plus général de
+\textbf{l'analyse factorielle}. Il correspond à considérer que les données sont
+les réalisation d'un vecteur aléatoire $(X_1, X_2, \dots, X_p)$ obtenues par
 % \begin{equation}
 %   \label{eq:fa_model}
 %   (X_1, X_2, \dots, X_p)^\top = (H_1, H_2, \dots, H_m)^\top W + \epsilon,
@@ -580,7 +634,7 @@ autrement dit des colonnes de $W$ dont toutes les coordonnées sont $0$.
   interprétation.
 \item Il existe de nombreuses approches de réduction de dimension
   non-linéaires, c'est-à-dire qui créent des composantes qui ne sont pas des
-  composantes linéaires des variables initiales. Parmi elles, citons 
+  composantes linéaires des variables initiales. Parmi elles :
   \begin{itemize}
   \item le \textbf{positionnement multidimensionnel}, ou MDS pour {\it
       multidimensional scaling}, qui cherche à préserver la distance entre les
@@ -613,6 +667,7 @@ autrement dit des colonnes de $W$ dont toutes les coordonnées sont $0$.
 % \item Pour plus de détails sur l'utilisation de t-SNE, on pourra se référer à
 %   la page \url{https://lvdmaaten.github.io/tsne/} ou à la publication
 %   interactive de~\citet{wattenberg2016}.
+\vspace{-13pt}
 \end{plusloin}
 
 % \section*{Bibliographie}
