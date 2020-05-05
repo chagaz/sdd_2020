@@ -1,0 +1,151 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../../poly/notations}
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE21.1: Science des données \hfill
+QCM 5 -- Réduction de dimension
+\end{center}
+
+\noindent
+\hfill 6 mai 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+
+% \paragraph{Question 1.} 
+% \begin{itemize}
+% \item[$\square$] 
+% \item[$\square$] 
+% \item[$\square$] 
+% \end{itemize}
+
+\paragraph{Question 1.} Quelle sont les coordonnées de la première composante principale des données décrites sur la figure~\ref{fig:pca_2d} ?
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.4\textwidth]{pca_2d}
+  \caption{11 individus représentés par 2 variables $x_1$ et $x_2$.}
+  \label{fig:pca_2d}
+\end{figure}
+
+\begin{itemize}
+\item[$\square$] $(1, 1)$
+\item[$\square$] $\left(\frac{\sqrt{2}}{2}, \frac{\sqrt{2}}{2}\right)$
+\item[$\square$] $(1, 0)$
+\item[$\square$] $(\sqrt{2}, 0)$ 
+\end{itemize}
+
+
+
+\paragraph{Question 2.} Parmi les affirmations ci-dessous, lesquelles sont vraies ? On considère un jeu de données $X \in \RR^{n \times p}$ de $n$ individus en $p$ dimensions.
+\begin{itemize}
+\item[$\square$] La réduction de dimension relève de l'apprentissage supervisé.
+\item[$\square$] La réduction de dimension relève de l'apprentissage non-supervisé.
+\item[$\square$] La réduction de dimension facilite la visualisation des données.
+\item[$\square$] L'analyse en composantes principales de $X$ permet de créer jusqu'à $n$ nouvelles dimensions. 
+\item[$\square$] Les nouvelles variables créées par une analyse en composantes principales sont des combinaisons linéaires des $p$ variables.
+\item[$\square$] L'analyse en composantes principales de $X$ s'obtient par une décomposition spectrale de $X$.
+\item[$\square$] La sélection de variables consiste à conserver uniquement les variables dont la variance est la plus faible.
+\end{itemize}
+
+
+\newpage
+
+\section*{Solution}
+\paragraph{Question 1.} La direction de plus grande variation des données est
+la diagonale d'équation $x_1 = x_2$. Ainsi, la première composante principale
+est le vecteur directeur de la diagonale, de norme 1, soit donc
+$\left(\frac{\sqrt{2}}2, \frac{\sqrt{2}}2\right).$
+
+
+\paragraph{Question 2.} 
+\begin{itemize}
+\item La réduction de dimension peut relever de l'apprentissage supervisé (par
+  exemple, l'élimination des variables indépendantes de l'étiquette requièrent
+  évidemment une étiquette) ou de l'apprentissage non-supervisé (par
+  exemple, l'ACP). Elle est cependant souvent plutôt classée dans
+  l'apprentissage non-supervisé car il s'agit d'analyse exploratoire des
+  données et non pas d'analyse prédictive, ce qui peut prêter à confusion.
+\item[\rlap{$\checkmark$}$\square$] La réduction de dimension facilite la visualisation des données.
+\item[$\square$] L'analyse en composantes principales de $X$ permet de créer jusqu'à $n$ nouvelles dimensions. \\
+FAUX, elle permet de créer jusqu'à $p$ nouvelles dimensions.
+\item[\rlap{$\checkmark$}$\square$] Les nouvelles variables créées par une analyse en composantes principales sont des combinaisons linéaires des $p$ variables.
+\item[$\square$] L'analyse en composantes principales de $X$ s'obtient par une décomposition spectrale de $X$.\\
+FAUX, il s'agit de la décomposition spectrale de $X^\top X$.
+\item[$\square$] La sélection de variables consiste à conserver uniquement les variables dont la variance est la plus faible. \\
+FAUX, \textit{une des techniques} de sélection de variables consiste à \textit{éliminer} les variables dont la variance est la plus faible. \\
+\end{itemize}
+
+\end{document}
+
+
+
+
+
+
+
