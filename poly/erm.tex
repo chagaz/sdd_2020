@@ -399,7 +399,7 @@ $Q$, et sa classe prédite par une distribution $P$, nous allons chercher à
 modéliser $P$ de sorte qu'elle soit la plus proche possible de $Q$. On utilise
 pour cela la {\it divergence de Kullback-Leibler}:
 \begin{align*}
-  KL(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \log \frac{Q(y=c|\xx}{P(y=c|\xx)} \\
+  KL(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \log \frac{Q(y=c|\xx)}{P(y=c|\xx)} \\
            & = - \sum_{c=0, 1} Q(y=c|\xx) \log P(y=c|\xx) + 
              \sum_{c=0, 1} Q(y=c|\xx) \log Q(y=c|\xx)
 \end{align*}
