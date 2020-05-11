@@ -102,7 +102,8 @@ variable aléatoire réelle à valeurs dans $\YY$. Supposons de plus qu'il existe
 une fonction $\Phi : \RR^p \rightarrow \YY$ et une variable aléatoire réelle
 $\epsilon$ telle que
   \begin{equation}
-  Y = \Phi(X) + \epsilon,\label{eq:probabilistic_ml}
+  Y = \Phi(X) + \epsilon,
+  \label{eq:probabilistic_ml}
 \end{equation}
 $\epsilon$ représentant un \textbf{bruit}.
 Ce bruit peut être causé
@@ -232,9 +233,10 @@ intensif en temps de calcul d'y trouver une bonne fonction de modélisation.
   Dans l'exemple de la figure~\ref{fig:simple_classif_pb}, on pourra décider de
   se restreindre à des discriminants qui soient des ellipses à axes parallèles
   aux axes de coordonnées.  Ainsi, l'espace des hypothèses sera
-  \begin{equation*}
-    \FF = \{ \xx \mapsto \alpha (x_1-a)^2 + \beta (x_2-b)^2 - 1  \}.
-  \end{equation*}
+  \begin{equation}
+    \FF = \{ \xx \mapsto \alpha (x_1-a)^2 + \beta (x_2-b)^2 - 1 \; ; (\alpha, \beta, a, b) \in \RR^4\}.
+    \label{eq:hypothesis_space_ellipsis}
+  \end{equation}
 
   Dans cet espace, il semble possible de trouver un modèle $f$ qui sépare les
   positifs des négatifs. Si nous avions choisi comme espace des hypothèses
@@ -281,9 +283,9 @@ la vraie valeur $y$.
 
 Étant donnée une fonction de coût $L$, nous cherchons donc $f$ qui minimise ce
 coût sur l'ensemble des valeurs possibles de $\xx \in \RR^p$, ce qui est
-formalisé par la notion de \textbf{risque.} En supposant que les couples
-$(\xx^i, y^i)$ soient les réalisations de $n$ vecteurs aléatoires de même loi
-qu'un couple de variables aléatoire $(X, Y),$
+formalisé par la notion de \textbf{risque.} Nous supposons que les couples
+$(\xx^i, y^i)$ sont les réalisations de $n$ vecteurs aléatoires de même loi
+qu'un couple de variables aléatoire $(X, Y).$
 
 Dans le cadre d'un problème d'apprentissage supervisé, on appelle
 \textbf{risque} d'un modèle $h$ l'espérance de son coût :
@@ -302,9 +304,10 @@ connaissons que $n$ réalisations du couple $(X, Y)$.  On approchera donc le
 risque par son estimation sur ces réalisations.
 
 On appelle \textbf{risque empirique} de $h$ l'estimée du risque de $h$ défini par
-\begin{equation*}
+\begin{equation}
+  \label{eq:empirical_risk}
   R_n(h) = \frac{1}{n} \sum_{i=1}^n L(h(\xx^i), y^i).
-\end{equation*}
+\end{equation}
 
 On appelle donc modèle obtenu par \textbf{minimisation du risque empirique} une
 fonction
@@ -461,10 +464,12 @@ Considérons maintenant que $f$ est une fonction de décision à valeurs réelles.
 \label{sec:logistic_loss}
 On appelle \textbf{fonction de coût logistique}, ou {\it logistic loss}, la
 fonction suivante :
-\begin{align*}
-  L_{\log} : \{-1, 1\} \times \RR & \rightarrow \RR \\
-  y, f(\xx) & \mapsto \log \left( 1 + \exp(-y f(\xx))\right).
-\end{align*}
+\begin{align} 
+  \nonumber
+  L_{\log} : \{-1, 1\} \times \RR & \rightarrow \RR \\ 
+  y, f(\xx) & \mapsto \log \left( 1 + \exp(-y f(\xx))\right). 
+  \label{eq:logistic_loss}
+\end{align}
 
 Si $f$ est à valeurs dans $]0, 1[$, en particulier si $f(\xx)$ est la
 probabilité que $\xx$ appartienne à la classe positive, cette fonction de coût
@@ -473,14 +478,35 @@ est équivalente à l'\textbf{entropie croisée}, définie pour $\YY = \{0, 1\}$.
 \label{sec:cross_entropy}
 Dans le cas binaire, on appelle \textbf{entropie croisée}, ou {\it cross-entropy},
 la fonction suivante :
-\begin{align*}
-  L_H : \{0, 1\} \times ]0, 1[ & \rightarrow \RR \\
+\begin{align} \nonumber
+  L_H : \{0, 1\} \times ]0, 1[ & \rightarrow \RR \\ 
   y, f(\xx) & \mapsto - y \log f(\xx) - (1-y) \log(1-f(\xx)).
-\end{align*}
+              \label{eq:cross_entropy}
+\end{align}
+La figure~\ref{fig:logistic_loss} illustre la valeur de la fonction de coût
+logistique en fonction de l'étiquette $y$ de l'individu $\xx$ et de la valeur
+de la fonction de décision $f(\xx).$
 
 \begin{figure}[h]
   \centering
-  \todo{figure}
+  \begin{subfigure}[t]{0.43\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/erm/logistic_loss_neg}
+    \caption{Fonction de coût logistique pour un individu d'étiquette négative, en
+      fonction de la valeur de la fonction de décision. Cette perte est
+      d'autant plus grande que la fonction de décision est proche de $1$.}
+    \label{fig:logistic_loss_neg}
+  \end{subfigure} \hfill
+  \begin{subfigure}[t]{0.43\textwidth}
+    \includegraphics[width=\textwidth]{figures/erm/logistic_loss_pos}  
+    \caption{Fonction de coût logistique pour un individu d'étiquette positive, en
+      fonction de la valeur de la fonction de décision. Cette perte est
+      d'autant plus grande que la fonction de décision est proche de $0$.}
+    \label{fig:logistic_loss_pos}
+  \end{subfigure}
+  \caption{Perte logistique / entropie croisée.}
+  \label{fig:logistic_loss}
+
   \caption{Valeur de l'entropie croisée en fonction de la valeur de la fonction de décision.}
   \label{fig:logistic_loss}
 \end{figure}
@@ -493,9 +519,9 @@ $Q$, et sa classe prédite par une distribution $P$, nous allons chercher à
 modéliser $P$ de sorte qu'elle soit la plus proche possible de $Q$. On utilise
 pour cela la divergence de Kullback-Leibler, définie par :
 \begin{align*}
-  KL(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \log \frac{Q(y=c|\xx)}{P(y=c|\xx)} \\
+  \text{KL}(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \log \frac{Q(y=c|\xx)}{P(y=c|\xx)} \\
            & = - \sum_{c=0, 1} Q(y=c|\xx) \log P(y=c|\xx) + 
-             \sum_{c=0, 1} Q(y=c|\xx) \log Q(y=c|\xx)
+             \sum_{c=0, 1} Q(y=c|\xx) \log Q(y=c|\xx).
 \end{align*}
 Comme $Q(y=c|\xx)$ vaut soit $0$ ($c$ n'est pas la classe de $\xx$) soit
 $1$ (dans le cas contraire), le deuxième terme de cette expression est nul
@@ -519,10 +545,10 @@ et on retrouve ainsi la définition ci-dessus de l'entropie croisée.
 \label{sec:quadratic_loss}
 On appelle \textbf{fonction de coût quadratique}, ou {\it quadratic loss}, ou
 encore {\it squared error}, la fonction suivante :
-\begin{align*}
-  L_{\text{SE}} : \RR \times \RR & \rightarrow \RR \\
-  y, f(\xx) & \mapsto \frac{1}{2} \left(y - f(\xx)\right)^2.
-\end{align*}
+\begin{align} \nonumber
+  L_{\text{SE}} : \RR \times \RR & \rightarrow \RR \\ 
+  y, f(\xx) & \mapsto \frac{1}{2} \left(y - f(\xx)\right)^2. \label{eq:quadratic_loss}  
+\end{align}
 Le coefficient $\frac{1}{2}$ permet d'éviter d'avoir des coefficients
 multiplicateurs quand on dérive le risque empirique pour le minimiser.
 
@@ -587,92 +613,139 @@ multiplicateurs quand on dérive le risque empirique pour le minimiser.
 \section{Apprentissage supervisé d'un modèle paramétrique}
 \label{sec:parametric}
 \subsection{Modèles paramétriques}
-On parle de \textbf{modèle paramétrique} quand on utilise un algorithme
-d'apprentissage dont le but est de trouver les valeurs optimales des paramètres
-d'un modèle dont on a défini la forme analytique en fonction des descripteurs.
+On parle de \textbf{modèle paramétrique} quand l'espace des hypothèses $\FF$
+est un ensemble de fonctions définies par une expression analytique
+paramétrisée par un nombre fini de paramètres. 
 
-La complexité d'un modèle paramétrique grandit avec le nombre de paramètres à
-apprendre, autrement dit avec le nombre de variables. À l'inverse, la
-complexité d'un modèle non paramétrique aura tendance à grandir avec le nombre
-d'observations.
+C'est le cas de l'espace des hypothèses défini plus haut par
+l'équation~\eqref{eq:hypothesis_space_ellipsis} : les paramètres sont au nombre
+de $4$ et il s'agit de $\alpha$, $\beta$, $a$, et $b$. Le but de
+l'apprentissage sera de déterminer les valeurs de ces paramètres.
 
-Par exemple, un algorithme d'apprentissage qui permet d'apprendre les
-coefficient $\alpha$, $\beta$, $\gamma$ dans la fonction de décision suivante :
-$f: \xx \mapsto \alpha x_1 + \beta x_2x_4^2 + \gamma e^{x_3-x_5}$ apprend un
-modèle paramétrique. Quel que soit le nombre d'observations, ce modèle ne
-change pas.
+% on utilise un algorithme
+% d'apprentissage dont le but est de trouver les valeurs optimales des paramètres
+% d'un modèle dont on a défini la forme analytique en fonction des descripteurs.
+
+% La complexité d'un modèle paramétrique grandit avec le nombre de paramètres à
+% apprendre, autrement dit avec le nombre de variables. À l'inverse, la
+% complexité d'un modèle non paramétrique aura tendance à grandir avec le nombre
+% d'observations.
+
+% Par exemple, un algorithme d'apprentissage qui permet d'apprendre les
+% coefficient $\alpha$, $\beta$, $\gamma$ dans la fonction de décision suivante :
+% $f: \xx \mapsto \alpha x_1 + \beta x_2x_4^2 + \gamma e^{x_3-x_5}$ apprend un
+% modèle paramétrique. Quel que soit le nombre d'observations, ce modèle ne
+% change pas.
 
 À l'inverse, la méthode du plus proche voisin, qui associe à $\xx$ l'étiquette
 du point du jeu d'entraînement dont il est le plus proche en distance
 euclidienne, apprend un modèle non paramétrique : on ne sait pas écrire la
-fonction de décision comme une fonction des variables prédictives. Plus il y a
-d'observations, plus le modèle pourra apprendre une frontière de décision
-complexe.
+fonction de décision comme une fonction des variables prédictives. % Plus il y a
+% d'observations, plus le modèle pourra apprendre une frontière de décision
+% complexe.
 
-Étant donné un jeu $\DD = \{\xx^i, y^i\}_{i=1, \dots, n}$ de $n$ observations
-en $p$ dimensions et leurs étiquettes réelles, nous supposons ici que la
-fonction de décision $f$ est paramétrée par le vecteur
-$\bbeta \in \mathbb{R}^{m}$.
+Nous verrons au chapitre~\ref{chap:nonlin} des exemples de modèles non
+paramétriques, et nous concentrons maintenant sur les modèles de régression
+paramétriques. 
 
-Nous allons faire l'hypothèse que les erreurs, c'est-à-dire la différence entre
-les étiquettes réelles et les valeurs correspondantes de $f$, sont normalement
-distribuées, centrées en $0:$
+Nous considérons pour la suite de ce chapitre disposer d'un jeu
+$\DD = \{\xx^i, y^i\}_{i=1, \dots, n}$ de $n$ observations en $p$ dimensions et
+leurs étiquettes réelles. Nous considérons comme espace des hypothèses un
+ensemble de modèles paramétrisés par un vecteur $\bbeta \in \mathbb{R}^{m}$.
+
+
+\subsection{Minimisation du risque empirique}
+Si nous utilisons comme fonction de coût le coût quadratique défini par
+l'équation~\eqref{eq:quadratic_loss}, la minimisation du risque empirique comme
+définie par l'équation~\eqref{eq:erm} consiste à trouver
 \begin{equation}
-  \label{eq:linreg_gaussian_error}
-  y = f(\xx|\bbeta) + \epsilon \hspace{2em} \epsilon \sim \Ncal(0, \sigma^2).
+  \label{eq:erm_parametric}
+  \bbeta^* \in \argmin_{\bbeta \in \RR^m} \frac{1}{n} \sum_{i=1}^n (f_{\bbeta}(\xx^i) - y^i)^2.
 \end{equation}
-Cette hypothèse est illustrée sur la figure~\ref{fig:linreg} dans le cas
-d'une fonction de décision linéaire.
+
+C'est ce que l'on appelle la \textbf{minimisation des moindres carrés}, une
+méthode bien connue depuis Gauss et Legendre. 
+
+
+\subsection{Formulation probabiliste des régressions paramétriques $\bigstar$}
+Nous supposons comme précédemment que les couples $(\xx^i, y^i)$ sont les
+réalisations de $n$ vecteurs aléatoires de même loi qu'un couple de variables
+aléatoire $(X, Y).$ 
+
+Cela revient à supposer que la relation entre $X$ et $Y$ peut s'écrire comme 
+\begin{equation}
+  \label{eq:param_error}
+  Y = f_{\bbeta}(X) + \epsilon. 
+\end{equation}
+
+Faisons maintenant \textbf{l'hypothèse d'un bruit gaussien centré en $0$ : } le
+terme d'erreur $\epsilon$ est normalement distribué, centré en $0$.
+\begin{equation}
+  \label{eq:param_error_gaussian}
+  \epsilon \sim \Ncal(0, \; \sigma^2).
+\end{equation}
+
+L'équation~\eqref{eq:param_error} revient alors à 
+\begin{equation}
+  \label{eq:param_bayes}
+  Y|X=\xx \sim  \Ncal\left(f_{\bbeta}(\xx), \; \sigma^2\right).
+\end{equation}
+
+
+\begin{exemple}
+  L'équation~\eqref{eq:param_bayes} est illustrée sur la
+  figure~\ref{fig:linreg} dans le cas où $p=1$ et l'espace des hypothèses est
+  l'ensemble des fonctions linéaires d'une variable :
+  $\FF = \{ x \mapsto f_{\alpha, \beta}(x) = \alpha x + \beta \; ; (\alpha,
+  \beta) \in \RR^2 \}$.
+  La distribution des valeurs de l'étiquette d'un individu $x^*$ selon le
+  modèle $f_{\alpha, \beta}$ est une gaussienne centrée en
+  $f_{\alpha, \beta}(x^*)$. Sa densité est notée $g_{Y|X=x^*}$. 
+\end{exemple}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.7\textwidth]{figures/erm/linreg}
+  \includegraphics[width=0.6\textwidth]{figures/erm/linreg}
   \caption{Pour une observation $x^*$ donnée (ici en une dimension) , la
-    distribution des valeurs possibles de l'étiquette $y^*$ correspondante est
-    une gaussienne centrée en $f(x^*)$.}
+    distribution des valeurs possibles de l'étiquette correspondante est une
+    gaussienne centrée en $f(x^*)$. La vraie valeur de l'étiquette est $y^*$.}
   \label{fig:linreg}
 \end{figure}
 
-Selon cette hypothèse, les observations $\xx$ sont la réalisation de $p$
-variables aléatoires $X_1, X_2, \dots, X_p$ à valeurs réelles, leurs étiquettes
-$y$ sont la réalisation d'une variable aléatoire $Y$ à valeurs réelles, et ces
-variables aléatoires vérifient
-\begin{equation}
-  \label{eq:linreg_bayes}
-  \PP(Y=y|X = \xx) \sim 
-  \Ncal\left(f(\xx|\bbeta), \sigma^2\right).
-\end{equation}
-On note ici $\PP(X=\xx)$ pour
-$\PP(X_1=x_1, X_2=x_2, \dots, X_p=x_p).$
 
-\subsection{Estimation par maximum de vraisemblance et méthode des
-  moindres carrés}
+\subsection{Estimation par maximum de vraisemblance $\bigstar$}
 \label{sec:least_squares}
-Sous l'hypothèse~\ref{eq:linreg_bayes}, et en supposant les $n$ observations
-indépendantes et identiquement distribuées, le log de vraisemblance du
-paramètre $\bbeta$ vaut:
+Sous l'hypothèse~\eqref{eq:param_bayes}, nous pouvons donc estimer $\bbeta$ en
+maximisant la log-vraisemblance de l'échantillon
+$\left((\xx^1, y^1), (\xx^2, y^2), \dots, (\xx^n, y^n) \right), $ considéré
+comme la réalisation de l'échantillon aléatoire\\
+$\left((X_1, Y_1), (X_2, Y_2), \dots, (X_n, Y_n) \right), $ lui même constitué
+de $n$ copies i.i.d. de $(X, Y)$.
+
+En notant $g_{X,Y}$ la densité jointe de $(X, Y)$; $g_{Y|X=x}$ la densité de
+$Y|X=x$; et $g_X$ la densité de $X$, cette log-vraisemblance s'écrit 
+
+
 \begin{align*}
-  \log \PP(\DD|\bbeta) & = \log \prod_{i=1}^n \PP(X = \xx^i|\bbeta) \\
-                       & = \log \prod_{i=1}^n \PP(y^i|\xx^i) + \log \prod_{i=1}^n
-                         \PP(X = \xx^i) \\
+  \ell\left((\xx^1, y^1), (\xx^2, y^2), \dots, (\xx^n, y^n); \bbeta  \right)
+  & = \log \prod_{i=1}^n g_{X, Y}(\xx^i, y^i) 
+                       = \log \prod_{i=1}^n g_{Y|X=\xx^i}(y^i) + \log \prod_{i=1}^n
+                         g_X(\xx^i) \\
                        & = - \log \frac1{2\sigma^2} \sum_{i=1}^n \left(y^i -
-                         f(\xx^i|\bbeta) \right)^2 + \Ccal
+                         f_{\bbeta}(\xx^i) \right)^2 + \Ccal.
 \end{align*}
 Dans cette dernière équation, $\Ccal$ est une constante par rapport à $\bbeta$,
 et provient d'une part du coefficient $\frac1{\sqrt{2\pi}}$ de la distribution
-normale et d'autre part des $\PP(X=\xx^i).$
+normale et d'autre part des $g_X(\xx^i)$.
 
-Ainsi, maximiser la vraisemblance revient à minimiser
-$\sum_{i=1}^n \left(y^i - f(\xx^i|\bbeta) \right)^2$ : c'est ce que l'on
-appelle la \textbf{minimisation des moindres carrés}, une méthode bien connue
-depuis Gauss et Legendre. Notons aussi que cela revient à minimiser le risque
-empirique quand il est défini en utilisant la fonction de coût
-quadratique~\ref{sec:quadratic_loss}.
+Ainsi, maximiser la vraisemblance dans ce contexte de bruit gaussien centré
+revient à minimiser 
+\[\sum_{i=1}^n \left(y^i - f_{\bbeta}(\xx^i) \right)^2.\]
+On retrouve ici la méthode des moindres carrés de l'équation~\eqref{eq:erm_parametric}.
 
 \section{Régression linéaire}
-Commençons par considérer des modèles \textbf{linéaires}: nous cherchons à
-expliquer la variable cible $y$ par une \textbf{combinaison linéaire} -- en
-d'autres mots une somme pondérée -- des descripteurs.
+Nous allons maintenant appliquer la minimisation des moindres carrés au cas où
+$\FF$ est l'ensemble des fonctions linéaires de $p$ variables.
 
 \subsection{Formulation}
 Nous choisissons une fonction de décision $f$ de la forme
@@ -711,37 +784,33 @@ La somme des moindres carrés s'écrit alors
 
 Il s'agit d'une forme quadratique convexe en $\bbeta$, que l'on peut donc
 minimiser en annulant son gradient
-$\nabla_{\bbeta} \text{RSS} = -2 X^\top \left(\yy - X \bbeta \right)$. On
-obtient alors
+$\nabla_{\bbeta} \text{RSS} = -2 X^\top \left(\yy - X \bbeta \right)$. La somme
+des moindres carrés est minimale si $\bbeta$ vérifie 
 \begin{equation}
   \label{eq:linreg_sol}
-  X^\top X \bbeta^* = X^\top \yy.
+  X^\top X \bbeta = X^\top \yy.
 \end{equation}
   
-Si le rang de la matrice $X$ est égal à son nombre de colonnes, alors la
-somme des moindres carrés~\ref{eq:rss_linreg} est minimisée pour
+\paragraph{Solution explicite}
+Si le rang de la matrice $X$ est égal à son nombre de colonnes, alors
+$X^\top X$ est inversible et la somme des moindres carrés de
+l'équation~\eqref{eq:rss_linreg} est minimisée pour
 \begin{equation*}
   \bbeta^* = \left(X^\top X \right)^{-1} X^\top \yy.
 \end{equation*}
 
-Preuve :  Si $X$ est de rang colonne plein, alors $X^\top X$ est inversible.\\
-  
 Si $X^\top X$ n'est pas inversible, on pourra néanmoins trouver une solution
 (non unique) pour $\bbeta$ en utilisant à la place de
 $\left(X^\top X \right)^{-1}$ un pseudo-inverse (par exemple, celui de
 Moore-Penrose) de $X^\top X$, c'est-à-dire une matrice $M$ telle que
 $X^\top X M X^\top X = X^\top X.$
 
+\paragraph{Méthode de descente}
 On peut aussi (et ce sera préférable quand $p$ est grand et que l'inversion de
 la matrice $X^\top X \in \RR^{p \times p}$ est donc coûteuse) obtenir une
 estimation de $\bbeta$ par un algorithme à directions de descente.
 
-On fera attention à ne pas confondre les \textbf{variables}, qui sont les $p$
-valeurs $x_1, x_2, \dots, x_p$ qui décrivent les données, et les
-\textbf{paramètres}, qui sont les $p+1$ valeurs
-$\beta_0, \beta_1, \dots, \beta_p$ qui paramètrent le modèle.
-
-La régression linéaire produit un modèle interprétable, au sens où les
+\paragraph{Interprétation} La régression linéaire produit un modèle interprétable, au sens où les
 $\beta_j$ permettent de comprendre l'importance relative des variables sur la
 prédiction. En effet, plus $\lvert \beta_j \rvert$ est grande, plus la $j$-ème
 variable a un effet important sur la prédiction, et le signe de $\beta_j$ nous
@@ -755,7 +824,8 @@ linéaire admet plusieurs solutions. Intuitivement, on peut passer de l'une à
 l'autre de ces solutions car une perturbation d'un des poids $\beta_j$ peut
 être compensée en modifiant les poids des variables corrélées à $x_j$.
 
-
+\paragraph{Remarque} Nous avons traité ici de problèmes de \textit{régression}
+uniquement. Nous traiterons de classification paramétrique dans la PC 6.
 
 
 
@@ -781,15 +851,15 @@ l'autre de ces solutions car une perturbation d'un des poids $\beta_j$ peut
 % \end{itemize}
 
 
-% % \begin{plusloin}
-% % \item La notion de complexité d'un modèle a été formalisée par Vladimir Vapnik et
-% %   Alexey Chervonenkis dans les années 1970, et est détaillée par exemple
-% %   dans l'ouvrage de \citet{vapnik1995}.
-% % \item Pour en savoir plus sur la théorie de l'apprentissage, on pourra se
-% %   référer au livre de \citet{kearns1994}.
-% % \item On trouvera une discussion détaillée du compromis biais-variance dans
-% %   \citet{friedman1997}.
-% % \end{plusloin}
+% \begin{plusloin}
+% \item La notion de complexité d'un modèle a été formalisée par Vladimir Vapnik et
+%   Alexey Chervonenkis dans les années 1970, et est détaillée par exemple
+%   dans l'ouvrage de \citet{vapnik1995}.
+% \item Pour en savoir plus sur la théorie de l'apprentissage, on pourra se
+%   référer au livre de \citet{kearns1994}.
+% \item On trouvera une discussion détaillée du compromis biais-variance dans
+%   \citet{friedman1997}.
+% \end{plusloin}
 
 % % \section*{Bibliographie}
 % % \vspace{-25pt}
