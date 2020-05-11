@@ -239,7 +239,7 @@ Appelons maintenant $\ww_1 \in \RR^p$ la première composante principale de $X$.
 $\ww_1$ est de norme $1$ et tel que la variance de $X \ww_1$ est maximale :
 \begin{equation}
   \label{eq:pc1}
-  \ww_1 \in \argmax_{\ww \in \RR^p} \left( \ww^\top \Sigma \ww \right)  \text{\qquad avec } \ltwonorm{\ww_1}=1.
+  \ww_1 \in \argmax_{\ww \in \RR^p} \left( \ww^\top \Sigma \ww \right)  \text{\qquad avec } \ltwonorm{\ww_1}^2=1.
 \end{equation}
 Il s'agit d'un problème d'optimisation quadratique sous contrainte d'égalité,
 que l'on peut résoudre (cf section 2.2.1 du poly d'Optimisation) en
@@ -247,7 +247,7 @@ introduisant le multiplicateur de Lagrange $\alpha_1 > 0$ et en écrivant le
 lagrangien
 \begin{equation*}
   L(\alpha_1, \ww) = \ww^\top \Sigma \ww - \alpha_1 
-  \left( \ltwonorm{\ww} - 1 \right).
+  \left( \ltwonorm{\ww}^2 - 1 \right).
 \end{equation*}
 %Par dualité forte, % $\min_{\ww \in \RR^p} w^\top \Sigma w = \max_{\alpha_1}
     % \inf_{\ww \in \RR^p} L(\alpha_1, \ww).$
@@ -270,7 +270,7 @@ ses valeurs propres sont positives.)
 La deuxième composante principale de $X$ vérifie
 \begin{equation}
   \label{eq:pc2}
-  \ww_2 = \argmax_{\ww \in \RR^p} \left( \ww^\top \Sigma \ww \right) \text{ \qquad; avec } \ltwonorm{\ww_2}=1
+  \ww_2 = \argmax_{\ww \in \RR^p} \left( \ww^\top \Sigma \ww \right) \text{ \qquad avec } \ltwonorm{\ww_2}^2=1
   \text{ et } \ww^\top\ww_1=0.
 \end{equation}
 Cette dernière contrainte nous permet de garantir que la base des composantes
@@ -339,11 +339,11 @@ Factorisons $X$ sous la forme $U D V^\top$ avec $U \in \RR^{n \times n}$ et
 $V \in \RR^{p \times p}$ orthogonales, et $D \in \RR^{n \times p}$ 
 diagonale. Alors
 \begin{equation*}
-  \Sigma = X^\top X = V D U^\top U D V^\top = V D^2 V^\top
+ n \Sigma = X^\top X = V D U^\top U D V^\top = V D^2 V^\top
 \end{equation*}
 et les valeurs singulières de $X$ (les entrées de $D$) sont les racines carrées
-des valeurs propres de $\Sigma$, tandis que les vecteurs singuliers à droite de
-$X$ (les colonnes de $V$) sont les vecteurs propres de $\Sigma$. \hfill $\square$
+des valeurs propres de $n \Sigma$, tandis que les vecteurs singuliers à droite de
+$X$ (les colonnes de $V$) sont les vecteurs propres de $n \Sigma$. \hfill $\square$
 
   
 En pratique, les implémentations de la décomposition en valeurs singulières (ou
@@ -446,7 +446,7 @@ $\widetilde{W}^\top$ de la représentation latente $H$ est une approximation de
 $X$ :
 \begin{equation}
   \label{eq:pca_factor_approx}
-  Z = H \widetilde{W}^\top.
+  Z = \widetilde{H} \widetilde{W}^\top.
 \end{equation}
 $Z \in \RR^{n \times p}$ peut être interprétée comme une
 \textbf{reconstruction} des données dans $\RR^p$ à partir de leur
