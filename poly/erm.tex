@@ -1,14 +1,6 @@
 %-*- coding: iso-latin-1 -*-
 \label{chap:erm}
 
-\todo{
-  \begin{itemize}
-  \item Cohérence des notations avec les chapitres précédents.
-  \item Lien avec le cours d'optimisation.
-  \item Alléger / élaguer.
-  \end{itemize}
-}
-
 \paragraph{Notions :} classification, régression, espace des hypothèses,
 minimisation du risque empirique, moindres carrés, modèles paramétriques
 linéaires
@@ -17,19 +9,20 @@ linéaires
   \setlength{\itemsep}{3pt}
 \item Formaliser un problème d'apprentissage supervisé.
 \item Décrire l'espace des hypothèses dans le cas d'un modèle paramétrique.
-\item Prouver l'équivalence entre maximisation de la vraisemblance et
+\item  $\bigstar$ Prouver l'équivalence entre maximisation de la vraisemblance et
   minimisation du risque empirique dans le cas gaussien.
 \item Mettre en \oe{}uvre une régression linéaire.
 \end{itemize}
 
 
 
-Nous nous intéressons maintenant aux problèmes d'apprentissage {\it supervisé}
+Nous nous intéressons maintenant aux problèmes d'apprentissage \textbf{supervisé}
 : il s'agit de développer des algorithmes qui soient capables d'apprendre des
-modèles {\it prédictifs}. À partir d'exemples étiquetés, ces modèles seront
+modèles \textbf{prédictifs}. À partir d'exemples étiquetés, ces modèles seront
 capables de prédire l'étiquette de nouveaux objets. Le but de ce chapitre est
 de développer les concepts généraux qui nous permettent de formaliser ce type
 de problèmes.
+
 
 
 % \paragraph{Compétences}
@@ -37,44 +30,50 @@ de problèmes.
 
 \section{Formalisation d'un problème d'apprentissage supervisé}
 \label{sec:sup_learn}
-Un problème d'\textit{apprentissage supervisé} peut être formalisé de la façon
-suivante : étant données $n$ {\it observations}
-$\{\xx^1, \xx^2, \dots, \xx^n\}$, où chaque observation $\xx^i$ est un élément
-de l'espace des observations $\XX$, et leurs {\it étiquettes}
-$\{y^1, y^2, \dots, y^n\}$, où chaque étiquette $y^i$ appartient à l'espace des
-étiquettes $\YY$, le but de l'apprentissage supervisé est de trouver une
-fonction $f: \XX \rightarrow \YY$ telle que $f(\xx) \approx y,$ pour toutes les
-paires $(\xx, y) \in \XX \times \YY$ ayant la même relation que les paires
-observées. L'ensemble de $\DD = \{(\xx^i, y^i)\}_{i=1, \dots, n}$ forme le
-\textit{jeu d'apprentissage}.
+% Un problème d'\textbf{apprentissage supervisé} peut être formalisé de la façon
+% suivante : étant données $n$ \textbf{observations}
+% $\{\xx^1, \xx^2, \dots, \xx^n\}$, où chaque observation $\xx^i$ est un élément
+% de l'espace des observations $\XX$, et leurs \textbf{étiquettes}
+% $\{y^1, y^2, \dots, y^n\}$, où chaque étiquette $y^i$ appartient à l'espace des
+% étiquettes $\YY$, le but de l'apprentissage supervisé est de trouver une
+% fonction $f: \XX \rightarrow \YY$ telle que $f(\xx) \approx y,$ pour toutes les
+% paires $(\xx, y) \in \XX \times \YY$ ayant la même relation que les paires
+% observées. L'ensemble de $\DD = \{(\xx^i, y^i)\}_{i=1, \dots, n}$ forme le
+% \textbf{jeu d'apprentissage}.
 
-Nous allons considérer dans ce cours deux cas particuliers pour $\YY:$
+%\subsection{Vocabulaire}
+Nous supposons maintenant disposer non seulement d'une matrice
+$X \in \RR^{n \times p}$ décrivant $n$ individus en $p$ dimensions, mais aussi
+de $n$ \textbf{étiquettes} $\{y^1, y^2, \dots, y^n\}$. Chaque étiquette $y^i$
+appartient à un espace $\YY.$ Dans ce cours, nous allons considérer deuxcas
+particuliers pour $\YY:$
 \begin{itemize}
-\item $\YY = \RR :$ on parle d'un problème de {\it régression} ;
-\item $\YY = \{0, 1\} :$ on parle d'un problème de {\it classification
-    binaire}, et les observations dont l'étiquette vaut $0$ sont appelées {\it
-    négatives} tandis que celles dont l'étiquette vaut $1$ sont appelées {\it
-    positives}. Dans certains cas, il sera mathématiquement plus simple
-  d'utiliser $\YY = \{-1, 1\}$ ;
-% \item $\YY=\{1, 2, \dots, C\},\; C>2 : $ on parle d'un problème de {\it
-%     classification multi-classe}.
+\item $\YY = \RR :$ on parle d'un problème de \textbf{régression} ;
+\item $\YY = \{0, 1\} :$ on parle d'un problème de \textbf{classification
+    binaire}, et les observations dont l'étiquette vaut $0$ sont appelées
+  \textbf{négatives} tandis que celles dont l'étiquette vaut $1$ sont appelées
+  \textbf{positives}. Dans certains cas, il sera mathématiquement plus simple
+  d'utiliser $\YY = \{-1, 1\}$.
 \end{itemize}
 
-Dans de nombreuses situations, on se ramènera au cas où $\XX = \RR^p.$ On dira
-alors que les observations sont représentées par $p$ {\it variables}.  Dans ce
-cas, la matrice $X \in \RR^{n \times p}$ telle que $X_{ij} = x^i_j$ soit la
-$j$-ème variable de la $i$-ème observation est appelée {\it matrice de données}
-ou {\it matrice de design}.
-  
+La matrice $X \in \RR^{n \times p}$ telle que $X_{ij} = x^i_j$ soit la $j$-ème
+variable du $i$-ème individu est appelée \textbf{matrice de données} ou
+\textbf{matrice de design}. 
+
+On peut aussi choisir de représenter chaque individu et son étiquette par le
+couple $(\xx^i, y^i) \in \RR^{p} \times \YY.$ L'ensemble
+$\DD = \{(\xx^i, y^i)\}_{i=1, \dots, n}$ forme alors le \textbf{jeu d'apprentissage}.
+
 Le machine learning étant issu de plusieurs disciplines et champs
 d'applications, on trouvera plusieurs noms pour les mêmes objets.  Ainsi les
-variables sont aussi appelées {\it descripteurs}, {\it attributs}, {\it
-  prédicteurs}, ou {\it caractéristiques} (en anglais, {\it variables,
-  descriptors, attributes, predictors} ou encore {\it features}).  Les {\it
-  observations} sont aussi appelées {\it exemples}, {\it échantillons} ou {\it
-  points du jeu de données} (en anglais, {\it samples} ou {\it data
-  points}). Enfin, les étiquettes sont aussi appelées {\it variables cibles}
-(en anglais, {\it labels, targets} ou {\it outcomes}).
+variables sont aussi appelées \textbf{descripteurs}, \textbf{attributs},
+\textbf{prédicteurs}, ou \textbf{caractéristiques} (en anglais,
+\textit{variables, descriptors, attributes, predictors} ou encore
+\textit{features}).  Les \textbf{individus}, ou \textbf{observations} sont
+aussi appelées \textbf{exemples}, \textbf{échantillons} ou \textbf{points du
+  jeu de données} (en anglais, \textit{samples} ou \textit{data
+  points}). Enfin, les étiquettes sont aussi appelées \textbf{variables cibles}
+(en anglais, \textit{labels, targets} ou \textit{outcomes}).
 
 % Ces concepts sont illustrés sur la figure~\ref{fig:suplearning}.
 
@@ -87,14 +86,88 @@ variables sont aussi appelées {\it descripteurs}, {\it attributs}, {\it
 %   \label{fig:suplearning}
 % \end{figure}
 
-\subsection{Décision}
+Le but de l'apprentissage supervisé est alors de trouver une fonction
+$f: \RR^p \rightarrow \YY$ telle que $f(\xx) \approx y,$ qui s'applique non
+seulement aux $n$ individus observés, mais plus généralement à tous les
+individus d'une population à laquelle on suppose que ces $n$ individus
+appartiennent. C'est cette fonction $f$ qui est le \textbf{modèle prédictif}
+appris. Un \textbf{algorithme d'apprentissage supervisé} utilise le jeu de
+données $\DD$ données pour déterminer $f$.
+
+
+Plus formellement, supposons que les couples $(\xx^i, y^i)$ soient les
+réalisations de $n$ vecteurs aléatoires de même loi qu'un couple de variables
+aléatoire $(X, Y)$, $X$ étant un vecteur aléatoire $p$-dimensionnel et $Y$ une
+variable aléatoire réelle à valeurs dans $\YY$. Supposons de plus qu'il existe
+une fonction $\Phi : \RR^p \rightarrow \YY$ et une variable aléatoire réelle
+$\epsilon$ telle que
+  \begin{equation}
+  Y = \Phi(X) + \epsilon,\label{eq:probabilistic_ml}
+\end{equation}
+$\epsilon$ représentant un \textbf{bruit}.
+Ce bruit peut être causé
+\begin{itemize}
+\item par des {\it erreurs de mesure} dues à la faillibilité des capteurs
+  utilisés pour mesurer les variables par lesquelles on représente nos
+  données, ou à la faillibilité des opérateurs humains qui ont entré ces
+  mesures dans une base de données ;
+\item par des {\it erreurs d'étiquetage} (souvent appelés {\it teacher's noise}
+  en anglais) dues à la faillibilité des opérateurs humains qui ont étiqueté
+  les données ;
+\item enfin, parce que les variables mesurées ne suffisent pas à modéliser le
+  phénomène qui nous intéresse, soit qu'on ne les connaisse pas, soit
+  qu'elles soient coûteuses à mesurer.
+\end{itemize}
+Notre but est d'approcher $\Phi$ par $f$.
+
 Dans le cas d'un problème de classification, le modèle prédictif peut prendre
 directement la forme d'une fonction $f$ à valeurs dans $\{0, 1\}$, ou utiliser
 une fonction intermédiaire $g$ à valeurs réelles, qui associe à une observation
 un score d'autant plus élevé qu'elle est susceptible d'être positive. Ce score
 peut par exemple être la probabilité que cette observation appartienne à la
-classe positive. On obtient alors $f$ en {\it seuillant} $g$ ; $g$ est appelée
-{\it fonction de décision}.
+classe positive. On obtient alors $f$ en \textbf{seuillant} $g$ ; $g$ est
+appelée \textbf{fonction de décision} \footnote{Dans la librairie
+  \texttt{scikit-learn}, on fera ainsi attention à la distinction entre les
+  méthodes \texttt{predict} et \texttt{predict\_proba}.}.
+
+\begin{exemple}
+  \paragraph{Filtrage de spam.} On peut poser le filtrage de spam comme un
+  problème de classification binaire. Les individus sont des emails. Leur
+  étiquette est binaire (positive pour « spam » et négative pour « non-spam
+  »). Les $p$ variables représentant un email peuvent être définies comme le
+  nombre d'occurrences, pour $p$ mots, de chacun de ces mots dans l'email ($p$
+  est ainsi la taille d'un dictionnaire pré-défini)\footnote{C'est ce qu'on
+    appelle une représentation \textit{bag-of-words}}. Étant donné un jeu de
+  données de $n$ emails étiquetés, un algorithme d'apprentissage retourne une
+  fonction $f$ qui, à tout email représenté par un vecteur de $\RR^p$ (en fait,
+  $\NN^p$), associe une étiquette $0$ ou $1$. Ce modèle
+  $f: \RR^p \rightarrow \{0, 1\}$ peut être obtenu en seuillant une fonction de
+  décision $g: \RR^p \rightarrow \RR$.
+
+  Le bruit peut être dû aux causes suivantes :
+  \begin{itemize}
+  \item Des erreurs de mesures peuvent être causées par des fautes
+    d'orthographe (volontaires ou non) qui empêchent de comptabiliser certains
+    mots.
+  \item Des erreurs d'étiquetage peuvent arriver quand une personne marque par
+    erreur comme courrier indésirable un email qui ne l'était pas, ou,
+    inversement, laisse dans sa boîte mail ou supprime sans étiqueter comme tel
+    un email indésirable.
+  \item Enfin, notre représentation est limitée, en particulier parce qu'elle
+    ne prend pas en compte l'ordre des mots. Nous ne disposons pas de
+    suffisamment d'information pour classifier les emails aussi efficacement
+    qu'un humain.
+  \end{itemize}
+  % \paragraph{Nombre de vélos à une borne velib.} On peut poser la prédiction du
+  % nombre de vélos retirés d'une borne velib à un instant donné comme un
+  % problème de régression. Les individus sont des triplets (borne vélib, date,
+  % tranche horaire). Ils peuvent être représentées par un nombre $p$ de
+  % variables, incluant la position géographique de la borne, si la date est en
+  % semaine ou non, si la tranche horaire est de jour ou de nuit, etc. Étant
+  % donné un jeu de $n$ bornes ainsi étiquetées, un algorithme
+  % d'apprentissage retourne une fonction $f: \RR^p \rightarrow \RR$ qui,
+  % à toute borne velib, associe le nombre de vélos y étant retirés.
+\end{exemple}
 
 % Dans le cadre d'un problème de classification binaire, on appelle {\it fonction
 %   de décision}, ou {\it fonction discriminante}, une fonction
@@ -127,14 +200,33 @@ classe positive. On obtient alors $f$ en {\it seuillant} $g$ ; $g$ est appelée
 % une seule frontière de décision ; dans le cas d'un problème multi-classe à
 % $C$ classes, il y en a $C$.
 
+
+
+
+\paragraph{Remarque.} Les notions développées jusqu'à la fin de la
+section~\ref{sec:losses} peuvent l'être en remplaçant $\RR^p$ par un espace
+quelconque $\XX$.
+
+
 \section{Espace des hypothèses}
 Pour poser un problème d'apprentissage supervisé, il nous faut décider du
-type de fonctions de modélisation que nous allons considérer. 
+type de modèles que nous allons considérer. 
 
-On appelle {\it espace des hypothèses} l'espace de fonctions
-$\FF \subseteq \YY^\XX$ décrivant les fonctions de modélisation que nous allons
-considérer. Cet espace est choisi en fonction de nos {\it convictions} par
-rapport au problème. 
+On appelle \textbf{espace des hypothèses} l'espace de fonctions $\FF$, qui est
+un sous-espace de toutes les fonctions de $\RR^p \rightarrow \YY$ décrivant les
+modèles que nous allons considérer. Cet espace est choisi en
+fonction de nos {\it convictions} par rapport au problème, ainsi que de
+considérations pratiques sur notre capacité à trouver facilement un « bon »
+modèle dans $\FF$.
+
+Le choix de l'espace des hypothèses est fondamental.  En effet, si cet espace
+ne contient pas le \og bon \fg~modèle, % , par exemple si l'on choisit comme
+% espace des hypothèses pour les données de la figure~\ref{fig:simple_classif_pb}
+% l'ensemble des droites,
+il sera impossible de trouver une bonne fonction de
+décision.  Cependant, si l'espace est trop générique, il sera plus difficile et
+intensif en temps de calcul d'y trouver une bonne fonction de modélisation.
+  
 
 \begin{exemple}
   Dans l'exemple de la figure~\ref{fig:simple_classif_pb}, on pourra décider de
@@ -143,94 +235,87 @@ rapport au problème.
   \begin{equation*}
     \FF = \{ \xx \mapsto \alpha (x_1-a)^2 + \beta (x_2-b)^2 - 1  \}.
   \end{equation*}
+
+  Dans cet espace, il semble possible de trouver un modèle $f$ qui sépare les
+  positifs des négatifs. Si nous avions choisi comme espace des hypothèses
+  l'ensemble des fonctions linéaires de $\RR^2$ dans $\RR$, ce ne serait pas
+  possible.
 \end{exemple}
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.5\textwidth]{figures/erm/simple_classif}
+  \includegraphics[width=0.45\textwidth]{figures/erm/simple_classif}
   \caption{Les exemples positifs (+) et négatifs (x) semblent être séparables
     par une ellipse.}
   \label{fig:simple_classif_pb}
 \end{figure}
 
-Étant donnés un jeu de $n$ observations étiquetées
-$\DD = \{(\xx^i, y^i)\}_{i=1, \dots, n}$ et un espace d'hypothèses $\FF$.  La
-tâche d'apprentissage supervisé consiste à supposer que les étiquettes $y^i$
-ont été calculées grâce à une fonction $\phi: \XX \rightarrow \YY$, et à
-trouver une hypothèse $f \in \FF$ qui approche au mieux la fonction cible
-$\phi$.  Pour réaliser une telle tâche, nous allons avoir alors besoin de deux
-outils supplémentaires :
+La tâche d'apprentissage supervisé consiste à déterminer une hypothèse
+$f \in \FF$ qui approche au mieux la fonction cible $\phi$ (voir
+équation~\eqref{eq:probabilistic_ml}). Pour réaliser une telle tâche, nous
+allons développer dans les sections suivantes deux outils supplémentaires :
 \begin{enumerate}
-\item Une façon de {\it quantifier la qualité d'une hypothèse}, afin de
+\item Une façon de \textbf{quantifier la qualité d'une hypothèse}, afin de
   pouvoir déterminer si une hypothèse satisfaisante (voire optimale) a été
-  trouvée.  Pour cela, nous allons définir dans la section~\ref{sec:losses}
-  la notion de {\it fonction de coût}.
-\item Une façon de {\it chercher une hypothèse optimale} dans $\FF$.  Dans
-  cet ouvrage, nous allons nous concentrer sur les méthodes
-  d'\textit{apprentissage par optimisation} : les algorithmes d'apprentissage
-  supervisé que nous allons étudier auront pour but de trouver dans $\FF$
-  l'hypothèse optimale au sens de la fonction de coût
-  (cf. section~\ref{sec:mre}). Différents algorithmes définiront différents
-  $\FF$, et selon les cas cette recherche sera exacte ou approchée.
+  trouvée.  Pour cela, nous allons définir la notion de \textbf{fonction de
+    coût}.
+\item Une façon de \textbf{chercher une hypothèse optimale} dans $\FF$.  Les
+  algorithmes d'apprentissage supervisé que nous allons étudier ont pour but de
+  trouver dans $\FF$ l'hypothèse optimale au sens de la fonction de
+  coût. Différents algorithmes correspondent à différents $\FF$, et selon les
+  cas cette recherche sera exacte ou approchée.
 \end{enumerate}
-
-Le choix de l'espace des hypothèses est fondamental.  En effet, si cet espace
-ne contient pas la \og bonne \fg~fonction % , par exemple si l'on choisit comme
-% espace des hypothèses pour les données de la figure~\ref{fig:simple_classif_pb}
-% l'ensemble des droites,
-il sera impossible de trouver une bonne fonction de
-décision.  Cependant, si l'espace est trop générique, il sera plus difficile et
-intensif en temps de calcul d'y trouver une bonne fonction de modélisation.
-  
 
 \section{Minimisation du risque empirique}
 \label{sec:mre}
 Résoudre un problème d'apprentissage supervisé revient à trouver une fonction
 $f \in \FF$ dont les prédictions soient les plus proches possibles des
-véritables étiquettes, sur tout l'espace $\XX$. On utilise pour formaliser cela
-la notion de {\it fonction de coût} :
+véritables étiquettes, sur tout l'espace $\RR^p$. On utilise pour formaliser cela
+la notion de \textbf{fonction de coût} :
 
-Une {\it fonction de coût} $L: \YY \times \YY \rightarrow \RR$, 
-aussi appelée {\it fonction de perte} ou {\it fonction d'erreur}
+Une \textbf{fonction de coût} $L: \YY \times \YY \rightarrow \RR$, 
+aussi appelée \textbf{fonction de perte} ou \textbf{fonction d'erreur}
 (en anglais : {\it cost function} ou {\it loss function})
 est une fonction utilisée pour quantifier la qualité d'une prédiction : 
 $L(y, f(\xx))$ est d'autant plus grande que l'étiquette $f(\xx)$ est éloignée de
 la vraie valeur $y$.
 
+Étant donnée une fonction de coût $L$, nous cherchons donc $f$ qui minimise ce
+coût sur l'ensemble des valeurs possibles de $\xx \in \RR^p$, ce qui est
+formalisé par la notion de \textbf{risque.} En supposant que les couples
+$(\xx^i, y^i)$ soient les réalisations de $n$ vecteurs aléatoires de même loi
+qu'un couple de variables aléatoire $(X, Y),$
 
-Étant donnée une fonction de coût $L$, nous cherchons donc $f$ qui minimise
-ce coût sur l'ensemble des valeurs possibles de $\xx \in \XX$, ce qui est
-formalisé par la notion de {\it risque.}
+Dans le cadre d'un problème d'apprentissage supervisé, on appelle
+\textbf{risque} d'un modèle $h$ l'espérance de son coût :
+\begin{equation}
+  \label{eq:risque}
+  \Rcal(h) = \EE(L(h(X), Y)).
+\end{equation}
 
-Dans le cadre d'un problème d'apprentissage supervisé, on appelle {\it
-  risque} l'espérance d'une fonction de coût :
-\begin{equation*}
-  \Rcal(h) = \EE_{\XX}[L(h(\xx), y)].
-\end{equation*}
+Nous cherchons donc un modèle $f$ tel que 
+\begin{equation}
+  \label{eq:risk_minimization}
+  f \in \argmin_{h \in \FF} \EE(L(h(X), Y)).
+\end{equation}
+Ce problème est généralement insoluble sans plus d'hypothèses : nous ne
+connaissons que $n$ réalisations du couple $(X, Y)$.  On approchera donc le
+risque par son estimation sur ces réalisations.
 
-La fonction $f$ que nous cherchons vérifie donc $f = \argmin_{h \in \FF}
-\EE[L(h(\xx), y)].$ Ce problème est généralement insoluble sans plus
-d'hypothèses : si nous connaissions les étiquettes de tous les points de
-$\XX$, nous n'aurions pas besoin d'apprentissage automatique.  Étant données
-$n$ observations étiquetées $\{(\xx^i, y^i)\}_{i=1, \dots, n}$, on approchera
-donc le risque par son estimation sur ces données observées
-
-Dans le cadre d'un problème d'apprentissage supervisé, étant données $n$
-observations étiquetées $\{(\xx^i, y^i)\}_{i=1, \dots, n}$, on appelle {\it risque
-  empirique} l'estimateur
+On appelle \textbf{risque empirique} de $h$ l'estimée du risque de $h$ défini par
 \begin{equation*}
   R_n(h) = \frac{1}{n} \sum_{i=1}^n L(h(\xx^i), y^i).
 \end{equation*}
 
-
-Le prédicteur par {\it minimisation du risque empirique} est donc
+On appelle donc modèle obtenu par \textbf{minimisation du risque empirique} une
+fonction
 \begin{equation}
   \label{eq:erm}
-  f = \argmin_{h \in \FF} \frac{1}{n} \sum_{i=1}^n L(h(\xx^i), y^i).
+  f \in \argmin_{h \in \FF} \frac{1}{n} \sum_{i=1}^n L(h(\xx^i), y^i).
 \end{equation}
 
-Selon le choix de $\FF$, l'équation~\ref{eq:erm} peut avoir une solution
+Selon le choix de $\FF$ et $L$, l'équation~\ref{eq:erm} peut avoir une solution
 analytique explicite. Cela ne sera pas souvent le cas ; cependant on choisira
-souvent une fonction de coût {\it convexe} afin de résoudre plus facilement ce
+souvent une fonction de coût convexe afin de résoudre plus facilement ce
 problème d'optimisation.
 
 La minimisation du risque empirique est généralement un problème {\it mal posé}
@@ -241,43 +326,38 @@ figure~\ref{fig:multiple_solutions}).
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.5\textwidth]{figures/erm/multiple_solutions}
+  \includegraphics[width=0.4\textwidth]{figures/erm/multiple_solutions}
   \caption{Une infinité de droites séparent parfaitement les points positifs
     (+) des points négatifs (x). Chacune d'entre elles a un risque empirique
     nul.}
   \label{fig:multiple_solutions}
 \end{figure}
-\todo{Non-convergence de l'ERM}
-% De plus, le prédicteur par minimisation du risque empirique n'est pas
-% statistiquement consistant. Rappelons qu'un estimateur $\theta_n$ (dépendant de
-% $n$ observations) d'un paramètre $\theta$ est {\it consistant} s'il converge en
-% probabilité vers $\theta$ quand $n$ croit vers l'infini :
-% \begin{equation}
-%   \label{eq:statistical_consistency}
-%   \forall \epsilon > 0, \lim_{n \rightarrow \infty} 
-%   \PP(|\theta_n - \theta| \geq \epsilon) = 0.
-% \end{equation}
-
-% La loi des grands nombres nous garantit que le risque empirique converge vers
-% le risque :
-% \begin{equation}
-%   \label{eq:risk_cvg}
-%   \forall h \in \FF, R_n(h) \xrightarrow[n \rightarrow \infty]{} \Rcal(h).
-% \end{equation}
-% Cela ne suffit cependant pas à garantir que le minimum du risque empirique
-% $\min_{h \in \FF} R_n(h)$ converge vers le minimum du risque. En effet, si
-% $\FF$ est l'espace des fonctions mesurables, $\min_{h \in \FF} R_n(h)$ vaut
-% généralement $0$, ce qui n'est pas le cas de $\Rcal(h).$ Il n'y a donc aucune
-% garantie que la fonction $f_n$ qui minimise $R_n(h)$ soit un bon estimateur du
-% minimiseur $f$ de $\Rcal(h)$.
-
-% La consistance de la minimisation du risque empirique dépend de l'espace des
-% versions $\FF$. L'étude de cette consistance est un des principaux éléments de
-% la théorie de l'apprentissage de Vapnik-Chervonenkis, qui dépasse largement le
-% cadre de ce cours.
 
 
-  
+\paragraph{Convergence} La loi des grands nombres nous garantit que le risque
+empiruqe d'un modèle $h \in \FF$ converge vers le risque quand la taille de
+l'échantillon tend vers l'infini :
+\begin{equation}
+  \label{eq:risk_cvg}
+  R_n(h) \xrightarrow[n \rightarrow \infty]{} \Rcal(h).
+\end{equation}
+Cela ne suffit cependant pas à garantir que le minimum du risque empirique
+$\min_{h \in \FF} R_n(h)$ converge vers le minimum du risque
+$\min_{h \in \FF} \Rcal(h)$. En effet, si $\FF$ est l'espace des fonctions
+mesurables, le minimiseur de $R_n(h)$ vaut généralement $0$, ce qui n'est pas
+le cas de $\Rcal(h).$ \textbf{Il n'y a donc aucune garantie qu'un modèle qui
+  minimise le risque empirique minimise le risque.} C'est une remarque très
+importante car elle signifie que le fait qu'un modèle minimise l'erreur sur nos
+$n$ observations ne donne aucune garantie quant à sa performance sur d'autres
+individus. Nous reviendrons sur ce sujet lors du prochain chapitre, en abordant
+les notions de généralisation et de surapprentissage.
+
+La convergence de la minimisation du risque empirique dépend de $\FF$. L'étude
+de cette convergence est l'un des principaux éléments de la théorie de
+l'apprentissage de Vapnik-Chervonenkis, qui dépasse largement le cadre de ce
+cours.
+
+
 \section{Fonctions de coût}
 \label{sec:losses}
 Il existe de nombreuses fonctions de coût. Le choix d'une fonction de coût
@@ -287,6 +367,8 @@ pratiques : peut-on ensuite résoudre le problème d'optimisation qui résulte de
 ce choix de façon suffisamment exacte et rapide~?%  Cette section présente les
 % fonctions de coûts les plus couramment utilisées et on pourra s'y référer tout
 % au long de la lecture de cet ouvrage.
+Cette section présente quelques-unes des fonctions de coût les plus utilisées.
+
 
 % \subsection{Fonctions de coût pour la classification binaire}
 % Pour définir des fonctions de coût pour la classification binaire, on
@@ -294,7 +376,7 @@ ce choix de façon suffisamment exacte et rapide~?%  Cette section présente les
 % classification parfaite, le produit $y f(\xx)$ est alors égal à $1$.
 
 \subsection{Coût 0/1 pour la classification binaire}
-Dans le cas d'une fonction $f$ à valeurs binaires, on appelle {\it fonction de
+Dans le cas d'une fonction $f$ à valeurs binaires, on appelle \textbf{fonction de
   coût 0/1}, ou {\it 0/1 loss}, la fonction suivante :
 \begin{align*}
   L_{0/1} : \YY \times \YY & \rightarrow \RR \\
@@ -305,12 +387,13 @@ Dans le cas d'une fonction $f$ à valeurs binaires, on appelle {\it fonction de
               \end{cases}
 \end{align*}
 
-En utilisant $\YY = \{-1, 1\}$, on peut la réécrire de la manière suivante :
-\begin{equation*}
-  L_{0/1}(y, f(\xx)) = \frac{1 - y f(\xx)}{2}.
-\end{equation*}
-Quand on utilise cette fonction de coût, le risque empirique est le nombre
-moyen d'erreurs de prédiction.% \\
+Le risque empirique d'un modèle $h$ sur un jeu de données est alors le nombre
+d'erreurs de prédiction sur ce jeu de données.
+
+% En utilisant $\YY = \{-1, 1\}$, on peut la réécrire de la manière suivante :
+% \begin{equation*}
+%   L_{0/1}(y, f(\xx)) = \frac{1 - y f(\xx)}{2}.
+% \end{equation*}
 
 % Si l'on considère pour $f$ une fonction de décision (à valeurs réelles) plutôt
 % qu'une fonction de prédiction à valeurs binaires, on peut définir la fonction
@@ -374,32 +457,43 @@ moyen d'erreurs de prédiction.% \\
 %   logistique}.
 
 \subsection{Coût logistique et entropie croisée}
+Considérons maintenant que $f$ est une fonction de décision à valeurs réelles.
 \label{sec:logistic_loss}
-On appelle {\it fonction de coût logistique}, ou {\it logistic loss}, la
+On appelle \textbf{fonction de coût logistique}, ou {\it logistic loss}, la
 fonction suivante :
 \begin{align*}
   L_{\log} : \{-1, 1\} \times \RR & \rightarrow \RR \\
   y, f(\xx) & \mapsto \log \left( 1 + \exp(-y f(\xx))\right).
 \end{align*}
 
-Si l'on préfère utiliser $\YY = \{0, 1\}$, le coût logistique est équivalent à
-l'{\it entropie croisée}.
+Si $f$ est à valeurs dans $]0, 1[$, en particulier si $f(\xx)$ est la
+probabilité que $\xx$ appartienne à la classe positive, cette fonction de coût
+est équivalente à l'\textbf{entropie croisée}, définie pour $\YY = \{0, 1\}$.
 
 \label{sec:cross_entropy}
-Dans le cas binaire, on appelle {\it entropie croisée}, ou {\it cross-entropy},
+Dans le cas binaire, on appelle \textbf{entropie croisée}, ou {\it cross-entropy},
 la fonction suivante :
 \begin{align*}
   L_H : \{0, 1\} \times ]0, 1[ & \rightarrow \RR \\
   y, f(\xx) & \mapsto - y \log f(\xx) - (1-y) \log(1-f(\xx)).
 \end{align*}
 
+\begin{figure}[h]
+  \centering
+  \todo{figure}
+  \caption{Valeur de l'entropie croisée en fonction de la valeur de la fonction de décision.}
+  \label{fig:logistic_loss}
+\end{figure}
+
+
+\paragraph{$\bigstar$ Pourquoi « entropie croisée » ?} 
 L'entropie croisée est issue de la théorie de l'information, d'où son nom. En
 considérant que la véritable classe de $\xx$ est modélisée par une distribution
 $Q$, et sa classe prédite par une distribution $P$, nous allons chercher à
 modéliser $P$ de sorte qu'elle soit la plus proche possible de $Q$. On utilise
-pour cela la {\it divergence de Kullback-Leibler}:
+pour cela la divergence de Kullback-Leibler, définie par :
 \begin{align*}
-  KL(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \log \frac{Q(y=c|\xx}{P(y=c|\xx)} \\
+  KL(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \log \frac{Q(y=c|\xx)}{P(y=c|\xx)} \\
            & = - \sum_{c=0, 1} Q(y=c|\xx) \log P(y=c|\xx) + 
              \sum_{c=0, 1} Q(y=c|\xx) \log Q(y=c|\xx)
 \end{align*}
@@ -423,7 +517,7 @@ et on retrouve ainsi la définition ci-dessus de l'entropie croisée.
 % prédiction $f$ dont la valeur est éloignée de la valeur cible $\xx$.
 \subsection{Coût quadratique pour la régression}
 \label{sec:quadratic_loss}
-On appelle {\it fonction de coût quadratique}, ou {\it quadratic loss}, ou
+On appelle \textbf{fonction de coût quadratique}, ou {\it quadratic loss}, ou
 encore {\it squared error}, la fonction suivante :
 \begin{align*}
   L_{\text{SE}} : \RR \times \RR & \rightarrow \RR \\
@@ -491,8 +585,9 @@ multiplicateurs quand on dérive le risque empirique pour le minimiser.
 
 
 \section{Apprentissage supervisé d'un modèle paramétrique}
+\label{sec:parametric}
 \subsection{Modèles paramétriques}
-On parle de {\it modèle paramétrique} quand on utilise un algorithme
+On parle de \textbf{modèle paramétrique} quand on utilise un algorithme
 d'apprentissage dont le but est de trouver les valeurs optimales des paramètres
 d'un modèle dont on a défini la forme analytique en fonction des descripteurs.
 
@@ -569,14 +664,14 @@ normale et d'autre part des $\PP(X=\xx^i).$
 
 Ainsi, maximiser la vraisemblance revient à minimiser
 $\sum_{i=1}^n \left(y^i - f(\xx^i|\bbeta) \right)^2$ : c'est ce que l'on
-appelle la {\it minimisation des moindres carrés}, une méthode bien connue
+appelle la \textbf{minimisation des moindres carrés}, une méthode bien connue
 depuis Gauss et Legendre. Notons aussi que cela revient à minimiser le risque
 empirique quand il est défini en utilisant la fonction de coût
 quadratique~\ref{sec:quadratic_loss}.
 
 \section{Régression linéaire}
-Commençons par considérer des modèles {\it linéaires}: nous cherchons à
-expliquer la variable cible $y$ par une {\it combinaison linéaire} -- en
+Commençons par considérer des modèles \textbf{linéaires}: nous cherchons à
+expliquer la variable cible $y$ par une \textbf{combinaison linéaire} -- en
 d'autres mots une somme pondérée -- des descripteurs.
 
 \subsection{Formulation}
@@ -588,7 +683,7 @@ Nous choisissons une fonction de décision $f$ de la forme
 Ici, $\bbeta \in \RR^{p+1}$ et donc $m=p+1$.
 
 \subsection{Solution}
-On appelle {\it régression linéaire} le modèle de la forme
+On appelle \textbf{régression linéaire} le modèle de la forme
 $f: \xx \mapsto \beta_0 + \sum_{j=1}^p \beta_j x_j$ dont les coefficients sont
 obtenus par minimisation de la somme des moindres carrés, à savoir :
 \begin{equation}
@@ -641,10 +736,10 @@ On peut aussi (et ce sera préférable quand $p$ est grand et que l'inversion de
 la matrice $X^\top X \in \RR^{p \times p}$ est donc coûteuse) obtenir une
 estimation de $\bbeta$ par un algorithme à directions de descente.
 
-On fera attention à ne pas confondre les {\it variables}, qui sont les $p$
-valeurs $x_1, x_2, \dots, x_p$ qui décrivent les données, et les {\it
-  paramètres}, qui sont les $p+1$ valeurs $\beta_0, \beta_1, \dots, \beta_p$
-qui paramètrent le modèle.
+On fera attention à ne pas confondre les \textbf{variables}, qui sont les $p$
+valeurs $x_1, x_2, \dots, x_p$ qui décrivent les données, et les
+\textbf{paramètres}, qui sont les $p+1$ valeurs
+$\beta_0, \beta_1, \dots, \beta_p$ qui paramètrent le modèle.
 
 La régression linéaire produit un modèle interprétable, au sens où les
 $\beta_j$ permettent de comprendre l'importance relative des variables sur la
