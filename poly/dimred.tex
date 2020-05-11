@@ -429,11 +429,12 @@ découvrir grâce à l'ACP.
 
 \subsection{Erreur de reconstruction}
 Si on utilise toutes les composantes, la représentation latente de $X$ est donnée par 
-\[
+\begin{equation}
+  \label{eq:full_rep}
   H = X W; H \in \RR^{n \times p}.
-\]
+\end{equation}
 Les colonnes de $W$ étant des vecteurs orthonormés (il s'agit de vecteurs
-propres de $X^\top X$), on peut multiplier l'équation~\ref{eq:reduced_rep} à
+propres de $X^\top X$), on peut multiplier l'équation~\eqref{eq:full_rep} à
 droite par $W$ pour obtenir une factorisation de $X$ :
 \begin{equation}
   \label{eq:pca_factor}
@@ -482,7 +483,7 @@ C'est une autre justification de l'ACP.
 \subsection{Analyse factorielle}
 L'équation \eqref{eq:pca_factor} s'inscrit dans le cadre plus général de
 \textbf{l'analyse factorielle}. Il correspond à considérer que les données sont
-les réalisation d'un vecteur aléatoire $(X_1, X_2, \dots, X_p)$ obtenues par
+les réalisations d'un vecteur aléatoire $(X_1, X_2, \dots, X_p)$ obtenues par
 % \begin{equation}
 %   \label{eq:fa_model}
 %   (X_1, X_2, \dots, X_p)^\top = (H_1, H_2, \dots, H_m)^\top W + \epsilon,
