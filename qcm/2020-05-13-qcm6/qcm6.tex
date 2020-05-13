@@ -1,0 +1,143 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../../poly/notations}
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE21.1: Science des données \hfill
+QCM 6 -- Minimisation du risque empirique
+\end{center}
+
+\noindent
+\hfill 13 mai 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+
+% \paragraph{Question 1.} 
+% \begin{itemize}
+% \item[$\square$] 
+% \item[$\square$] 
+% \item[$\square$] 
+% \end{itemize}
+
+\paragraph{Question 1.} Quand le nombre d'observations tend vers l'infini, 
+\begin{itemize}
+\item[$\square$] le risque empirique d'un modèle converge vers le risque de ce modèle ; 
+\item[$\square$] le risque empirique minimal converge vers le risque minimal ; 
+\item[$\square$] le minimiseur du risque empirique converge vers le minimiseur du risque.
+\end{itemize}
+
+\paragraph{Question 2.} Supposons un problème de classification en 2
+dimensions, avec $n$ observations. Nous considérons comme espace des hypothèses
+l'ensemble des unions de $K$ cercles ($K > 0$ est fixé) : les points intérieurs
+à ces cercles sont étiquetés positifs, les autres négatifs. Alors
+\begin{itemize}
+\item[$\square$] Il ne s'agit pas d'un modèle paramétrique.
+\item[$\square$] Il s'agit d'un modèle paramétrique à $K$ paramètres.
+\item[$\square$] Il s'agit d'un modèle paramétrique à $2K$ paramètres.
+\item[$\square$] Il s'agit d'un modèle paramétrique à $3K$ paramètres.
+\end{itemize}
+
+\paragraph{Question 3.} Quel algorithme préférer pour entraîner une régression
+linéaire sur un jeu de données contenant $n$ observations et $p$ variables :
+\begin{itemize}
+\item Si $n=10^5$ et $p=5$ ?
+  \begin{itemize}
+  \item[$\square$] Une inversion de matrice.
+  \item[$\square$] Un algorithme du gradient.
+  \end{itemize}
+\item Si $n=10^5$ et $p=10^5$ ?
+  \begin{itemize}
+  \item[$\square$] Une inversion de matrice.
+  \item[$\square$] Un algorithme du gradient.
+  \end{itemize}
+\end{itemize}
+
+
+
+\newpage
+
+\section*{Solution}
+\paragraph{Question 1.} Seule la première proposition est vraie.
+
+\paragraph{Question 2.} Il s'agit d'un modèle paramétrique et nous avons besoin
+de $3K$ paramètres pour déterminer les coordonnées de $K$ cercles (coordonnées
+du centre + rayon).
+
+\paragraph{Question 3.}  Lorsque la matrice $X^\top X$ (de dimensions
+$p \times p$) est de petite taille (peu de variables), on pourra utiliser un
+algorithme d'inversion de matrice. Sinon, un algorithme du gradient sera plus
+approprié.
+\end{document}
+
+
+
+
+
+
+
