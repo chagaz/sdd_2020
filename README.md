@@ -30,8 +30,12 @@ __Modalités pédagogiques (en confinement)__
   * le corrigé sera disponible dans les jours qui suivent.
 
 __Modalités d'évaluation__
-* mini-projet numérique à réaliser en majorité sur les séances de TP du 20 mai et du 17 juin et à rendre le 1er juillet (30%).
-* examen ~~sur table~~ avec documents autorisés à réaliser le 1er juillet (70%). 
+* ~mini-projet numérique à réaliser en majorité sur les séances de TP du 20 mai et du 17 juin et à rendre le 1er juillet (30%).~
+* ~examen sur table avec documents autorisés à réaliser le 1er juillet (70%).~
+
+Vous aurez le choix entre les deux modes d'évaluation suivant :
+* rapport de projet numérique, basé sur le mini-projet numérique des séances de PC du 20 mai et du 17 juin. Travail individuel ou en binôme sur le code + rapport individuel. Les consignes seront disponibles début juin.
+* examen avec documents autorisés à réaliser le 1er juillet. 
 
 __Emploi du temps__
 * __mercredi 22/04 :__ 
