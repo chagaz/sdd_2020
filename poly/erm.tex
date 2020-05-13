@@ -467,7 +467,7 @@ fonction suivante :
 \begin{align} 
   \nonumber
   L_{\log} : \{-1, 1\} \times \RR & \rightarrow \RR \\ 
-  y, f(\xx) & \mapsto \log \left( 1 + \exp(-y f(\xx))\right). 
+  y, f(\xx) & \mapsto \ln \left( 1 + \exp(-y f(\xx))\right). 
   \label{eq:logistic_loss}
 \end{align}
 
@@ -480,7 +480,7 @@ Dans le cas binaire, on appelle \textbf{entropie croisée}, ou {\it cross-entropy
 la fonction suivante :
 \begin{align} \nonumber
   L_H : \{0, 1\} \times ]0, 1[ & \rightarrow \RR \\ 
-  y, f(\xx) & \mapsto - y \log f(\xx) - (1-y) \log(1-f(\xx)).
+  y, f(\xx) & \mapsto - y \ln f(\xx) - (1-y) \ln(1-f(\xx)).
               \label{eq:cross_entropy}
 \end{align}
 La figure~\ref{fig:logistic_loss} illustre la valeur de la fonction de coût
@@ -519,9 +519,9 @@ $Q$, et sa classe prédite par une distribution $P$, nous allons chercher à
 modéliser $P$ de sorte qu'elle soit la plus proche possible de $Q$. On utilise
 pour cela la divergence de Kullback-Leibler, définie par :
 \begin{align*}
-  \text{KL}(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \log \frac{Q(y=c|\xx)}{P(y=c|\xx)} \\
-           & = - \sum_{c=0, 1} Q(y=c|\xx) \log P(y=c|\xx) + 
-             \sum_{c=0, 1} Q(y=c|\xx) \log Q(y=c|\xx).
+  \text{KL}(Q||P) & = \sum_{c=0, 1} Q(y=c|\xx) \ln \frac{Q(y=c|\xx)}{P(y=c|\xx)} \\
+           & = - \sum_{c=0, 1} Q(y=c|\xx) \ln P(y=c|\xx) + 
+             \sum_{c=0, 1} Q(y=c|\xx) \ln Q(y=c|\xx).
 \end{align*}
 Comme $Q(y=c|\xx)$ vaut soit $0$ ($c$ n'est pas la classe de $\xx$) soit
 $1$ (dans le cas contraire), le deuxième terme de cette expression est nul
@@ -728,10 +728,10 @@ $Y|X=x$; et $g_X$ la densité de $X$, cette log-vraisemblance s'écrit
 
 \begin{align*}
   \ell\left((\xx^1, y^1), (\xx^2, y^2), \dots, (\xx^n, y^n); \bbeta  \right)
-  & = \log \prod_{i=1}^n g_{X, Y}(\xx^i, y^i) 
-                       = \log \prod_{i=1}^n g_{Y|X=\xx^i}(y^i) + \log \prod_{i=1}^n
+  & = \ln \prod_{i=1}^n g_{X, Y}(\xx^i, y^i) 
+                       = \ln \prod_{i=1}^n g_{Y|X=\xx^i}(y^i) + \ln \prod_{i=1}^n
                          g_X(\xx^i) \\
-                       & = - \log \frac1{2\sigma^2} \sum_{i=1}^n \left(y^i -
+                       & = - \frac1{2\sigma^2} \sum_{i=1}^n \left(y^i -
                          f_{\bbeta}(\xx^i) \right)^2 + \Ccal.
 \end{align*}
 Dans cette dernière équation, $\Ccal$ est une constante par rapport à $\bbeta$,
