@@ -15,7 +15,7 @@ responsabilité.
 La science des données n'est pas uniquement une discipline technique : comme
 souvent en ingénierie, nous ne pouvons pas dissocier les calculs que nous
 faisons de la question posée ni de leur utilisation. Ce chapitre n'a pas
-vocation à être un cours d'éthique\footnote{L'éthique peut être rapidement
+vocation à être un cours d'éthique\footnote{L'éthique peut être
   définie comme l'étude de la justification d'ue action à partir de normes,
   règles juridiques ou déontologiques, valeurs morales, intuitions et
   traditions qui peuvent être multiples et contradictoires au sein d'une même
@@ -34,12 +34,12 @@ Box, ``\textit{All models are wrong, but some are useful}''.
 
 \section{Visualisation de données}
 La façon dont vous choisissez de représenter vos données ou vos résultats a un
-impact fort sur le message que vous essayez de faire passer. Mi-mai 2020, le
+impact fort sur le message que vous essayez de faire passer. 
+
+Mi-mai 2020, le
 Department of Public Health de l'État de Géorgie (États-Unis d'Amérique) a
-publié le diagramme en barres de la figure ~\ref{fig:georgia_wtf_barplot}
-. Regardez bien l'axe des abscisses : le message vous semble-t-il le même quand
-les dates sont ordonnées de manière chronologique, comme sur la version
-corrigée de ce diagramme, sur la figure~\ref{fig:georgia_fixed_barplot} ?
+publié le diagramme en barres de la figure~\ref{fig:georgia_wtf_barplot}. Regardez bien l'axe des abscisses : le message vous semble-t-il le même quand
+les dates sont ordonnées de manière chronologique, comme sur la figure~\ref{fig:georgia_fixed_barplot} ?
 
 \begin{figure}[h]
   \centering
@@ -60,9 +60,9 @@ corrigée de ce diagramme, sur la figure~\ref{fig:georgia_fixed_barplot} ?
   %\label{fig:georgia_barplot}
 \end{figure}
 
-Il existe des ouvrages entiers sur la visualisation de données (souvent appelée
-\textit{dataviz} en anglais). Nous allons ici citer quelques principes parmi
+Il est donc très important de vous assurez que vos graphiques soient lisibles et qu'ils traduisent clairement votre message sans déformer les données. La visualisation des données, ou \textit{dataviz}, est un champ d'études à part entière.  Nous nous contenterons ici de citer quelques principes parmi
 les plus importants.
+
 
 \subsection{Le choix des axes}
 %https://callingbullshit.org/tools/tools_misleading_axes.html 
@@ -115,13 +115,17 @@ pas de comparer les valeurs absolues de variables mais plutôt de présenter leur
   %\label{fig:georgia_barplot}
 \end{figure}
 
-\subsection{L'encre proportionnelle}
+\subsection{\textit{Proportional ink} ou principe de l'encre proportionnelle}
 %https://callingbullshit.org/tools/tools_proportional_ink.html
-De manière générale, il est recommandé, lorsque l'on utilise des surfaces pour représenter des nombres (par exemple, les rectangles d'un diagramme en barres), que ces surfaces soient d'aires proportionnelles aux nombres en question. 
+De manière générale, il est recommandé, lorsque l'on utilise des surfaces pour
+représenter des nombres (par exemple, les rectangles d'un diagramme en barres),
+que ces surfaces soient d'aires proportionnelles aux nombres en question. On
+retrouve d'ailleurs ici l'idée de commencer les barres d'un diagramme en
+barres à 0.
 
-On retrouve ici la notion de commencer les barres d'un diagramme en barres à 0.
+Il faut cependant faire aussi attention à ce que les surfaces en question soient faciles à comparer visuellement. Un diagramme camembert est ainsi préférable à un graphique à bulles ; mais un diagramme en barres est généralement plus lisible qu'un diagramme camembert. La figure~\ref{fig:areas} l'illustre. Il s'agit d'une variante d'une \href{https://www.jstor.org/stable/2288400?seq=1#metadata\_info\_tab\_contents}{expérience menée au début des années 1980} et souvent considérée comme fondatrice en \textit{dataviz}.
 
-Il faut cependant faire aussi attention à ce que les surfaces en question soient faciles à comparer visuellement. Un diagramme camembert est ainsi préférable à un graphique en bulles ; mais un diagramme en barres est généralement plus lisible qu'un diagramme camembert.
+Remarquez ici que le diagramme en barres serait encore plus lisible sans couleurs (elles n'apportent rien) et en ordonnant les catégories par proportion.
 \begin{figure}[h]
   \centering
   \begin{subfigure}[t]{0.20\textwidth}
@@ -129,27 +133,60 @@ Il faut cependant faire aussi attention à ce que les surfaces en question soient
     \caption{Graphique à bulles.}
     \label{fig:areas_bubbles}
   \end{subfigure}  \hfill
-  \begin{subfigure}[t]{0.37\textwidth}
+  \begin{subfigure}[t]{0.33\textwidth}
     \includegraphics[width=\textwidth]{figures/pratiques/areas_pie}  
     \caption{Diagramme camembert.}
     \label{fig:areas_pie}
   \end{subfigure} \hfill
-  \begin{subfigure}[t]{0.37\textwidth}
+  \begin{subfigure}[t]{0.33\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figures/pratiques/areas_bars}
     \caption{Diagramme en barres.}
     \label{fig:areas_bars}
   \end{subfigure} 
-  \caption{Trois façons de représenter les proportions de 8 catégories.}
-  %\label{fig:georgia_barplot}
+  \caption{Trois façons de représenter les proportions de 8 catégories. Quelle(s) représentation(s) permettent de les classer aisément par ordre croissant ?}
+  \label{fig:areas}
 \end{figure}
 
-
-
-\subsection{Boîtes à moustache}
+%\subsection{Attention aux résumés}
 %https://python-graph-gallery.com/39-hidden-data-under-boxplot/ 
 
-\subsection{Accessibilité}
+
+\subsection{Dyschromatopie}
+Nous ne percevons pas les couleurs de la même façon. Une forte proportion de la population est atteinte d'une forme ou d'une autre de dyschromatopie, la plus fréquente étant la deutéranopie (incapacité de différencier rouge et vert). 
+
+Pour assurer une accessibilité maximale, utilisez des échelles de couleurs adaptées. Il est difficile de s'adapter à \textit{toutes} les dyschromatopies ; néanmoins le cycle par défaut de \texttt{matplotlib} est supposé être relativement adapté. Pour des \textit{heatmaps}, favoriser les échelles de couleur \textit{viridis} ou \textit{cividis} (voir figure~\ref{fig:pca_plot}). Des outils comme \href{https://www.color-blindness.com/coblis-color-blindness-simulator/}{CBLIS} ou \href{https://www.funkify.org}{Funkify} vous permettent de simuler différentes dyschromatopies pour vérifier la lisibilité de vos graphiques.
+
+
+Vous pouvez aussi augmenter la lisibilité de vos graphiques en utilisant des
+indices supplémentaires (épaisseur de trait, hachures, forme des points,
+ordonner les légendes dans le même ordre que les courbes, etc.) et en doublant
+vos images d'une description textuelle alternative pour les personnes
+non-voyantes.
+
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[t]{0.30\textwidth}
+    \includegraphics[width=\textwidth]{figures/pratiques/pca_plot_magma}  
+    \caption{Magma.}
+    \label{fig:pca_plot_magma}
+  \end{subfigure}  \hfill
+  \begin{subfigure}[t]{0.30\textwidth}
+    \includegraphics[width=\textwidth]{figures/pratiques/pca_plot_viridis}  
+    \caption{Viridis.}
+    \label{fig:pca_plot_viridis}
+  \end{subfigure} \hfill
+  \begin{subfigure}[t]{0.30\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figures/pratiques/pca_plot_cividis}
+    \caption{Cividis.}
+    \label{fig:pca_plot_cividis}
+  \end{subfigure} 
+  \caption{Athlètes de la PC2, représentés selon deux composantes, et colorés en fonction de leur classement, selon trois échelles de couleur différentes.}
+  \label{fig:pca_plot}
+\end{figure}
+
 
 
 
@@ -215,9 +252,9 @@ qu'elle présente.
 Mais comment faire confiance aux modèles et algorithmes issus de la science des
 données ? Plusieurs questions se posent en plus de celle de l'équité discutée plus haut.
 
-\paragraph{Vérifiabilité :} les systèmes d'IA ont-ils le comportement attendu ?
-Les \href{https://fr.wikipedia.org/wiki/M\%C3\%A9thode\_formelle\_(informatique)}{\textbf{méthodes
-  formelles}}
+\paragraph{Vérifiabilité} les systèmes d'IA ont-ils le comportement attendu ?
+Les \href{https://fr.wikipedia.org/wiki/M\%C3\%A9thode\_formelle\_(informatique)}{méthodes
+  formelles}
 typiquement utilisées en informatique pour les programmes utilisés en avionique
 ne se prêtent guère aux modèles de l'apprentissage automatique, même si \href{https://formal-paris-saclay.fr/}{de
 récents travaux émergent sur le sujet}.
@@ -225,7 +262,7 @@ récents travaux émergent sur le sujet}.
 \paragraph{Explicabilité et interprétabilité} Il s'agit aussi de vastes champs
 d'étude. Si une régression linéaire est relativement interprétable (cf. PC 3),
 des modèles paramétriques plus complexes tels que ceux produits par des réseaux
-de neurones artificiels (que nous évoquerons au chapitre~\ref{chap:nonlin}) le
+de neurones artificiels (voir chapitre~\ref{chap:nonlin}) le
 sont beaucoup moins. 
 
 \paragraph{Spécification} La description précise du comportement attendu
@@ -255,7 +292,7 @@ adversariales. \href{http://proceedings.mlr.press/v97/simon-gabriel19a.html}{De
   récents travaux} montrent même qu'en raison du fléau de la dimension, les
 attaques adversariales sont inévitables en grande dimension.
 
-\paragraph{Reproductibilité :} La démarche scientifique repose sur la
+\paragraph{Reproductibilité} La démarche scientifique repose sur la
 reproductibilité des expériences. Au problème du \textit{p-hacking} abordé au
 Chapitre~\ref{chap:tests} s'ajoute celui de la disponibilité des données, qui
 peut être limitée pour des raisons de confidentialité, ainsi que la question
@@ -266,7 +303,7 @@ financières importantes (on rejoint ici des questions de coût énergétique et
 écologique abordées dans la section~\ref{sec:ecology}).
 
 
-\paragraph{Responsabilité :} Qui est responsable en cas de faillite d'un
+\paragraph{Responsabilité} Qui est responsable en cas de faillite d'un
 système d'IA : l'IA est-elle responsable ? Ou bien la personne qui l'utilise ?
 Ou encore celle qui l'a construite ? La question s'est par exemple posée
 lorsqu'un véhicule autonome
@@ -278,14 +315,13 @@ lorsqu'un véhicule autonome
 \section{Confidentialité des données}
 Une grande partie des données utilisées en science des données sont des données
 personnelles, c'est-à-dire que les individus qu'elles décrivent sont des
-personnes. Comment s'assurer que les données qui nous concernent, qu'elles
-soient médicales, de localisation géographique, ou concernent notre activité
-numérique, soient utilisées à bon escient ? 
+personnes. Nombre d'entre nous s'inquiètent de ce que les données qui nous
+concernent, qu'elles soient médicales, de localisation géographique, ou
+concernent notre activité numérique, soient utilisées à bon escient.
 
-Les discussions autour des applications de traçage de contacts dans la lutte
-contre la propagation du coronavirus vont
-\href{https://risques-tracage.fr/}{actuellement bon train}, illustrant cette
-préoccupation.
+Les \href{https://risques-tracage.fr/}{discussions autour des applications de
+  traçage de contacts} dans la lutte contre la propagation du coronavirus vont
+actuellement bon train, illustrant cette préoccupation.
 
 
 En tant que \textit{data scientists}, comment nous assurer que nous ne
@@ -298,8 +334,7 @@ identifiantes pour empêcher la réidentification. Ces informations peuvent être
 \textbf{directement identifiantes} s'il s'agit de caractéristiques personnelles
 uniques (nom, numéro de sécurité sociale, numéro de téléphone, etc.) ou
 \textbf{indirectement identifiantes} si elles permettent d'identifier la
-personne de manière unique quand elles sont croisées avec d'autres données (par
-exemple, code postal, date de naissance et lieu de travail pris ensembles
+personne de manière unique quand elles sont croisées avec d'autres données (code postal, date de naissance et lieu de travail pris ensemble
 peuvent être indirectement identifiants).  Par contraste, la
 \textbf{confidentialité différentielle}, ou \textit{differential privacy} en
 anglais cherche plutôt à garantir que les résultats d'une analyse sur une base de
@@ -312,7 +347,6 @@ l'accès aux données chiffrées, des solutions de calcul distribué sécurisées, ou
 encore du matériel cryptographique permettant d'exécuter du code sans que les
 données ne soient visibles.
 
-
 En France, la \href{https://www.cnil.fr/}{Commission Nationale de
   l'Informatique et des Libertés (CNIL)} encadre l'utilisation des données
 personnelles, qui est notamment encadré par la loi du 14 mai 2018 transposant
@@ -324,7 +358,6 @@ le
 \section{Enjeux écologiques}
 \label{sec:ecology}
 Enfin, le bilan écologique du numérique n'est pas négligeable. 
-
 \href{https://www.ademe.fr/sites/default/files/assets/documents/guide-pratique-face-cachee-numerique.pdf}{Selon
   l'ADEME} (anciennement Agence De l'Environnement et de la Maîtrise
 Énergétique et actuelle Agence de la Transition Écologique), le secteur du
@@ -333,37 +366,28 @@ serre, dont un quart dûs aux data centers; entraîner un réseau de neurones
 artificiels comportant 213 millions de paramètres peut générer
 \href{https://arxiv.org/abs/1906.02243}{autant d'émissions de CO2 que cinq
   voitures américaines} pendant toute leur existence, fabrication comprise.
-
 Le \href{https://mlco2.github.io/impact/}{Machine Learning Emissions
   Calculator} est un des outils qui accompagnent cette prise de conscience.
 
 
 \begin{plusloin}
-\item La question de la représentativité des données se pose dans de nombreux
-  domaines de l'ingénierie. Des
+\item Des ouvrages entiers ont étés écrits sur la \textit{dataviz}, par exemple \href{https://serialmentor.com/dataviz/}{\textit{Fundamentals of Data Vizualization} de Claus O. Wilke}, le travail d'\href{https://www.edwardtufte.com/tufte/}{Edward Tufte}, ou encore \href{https://informationisbeautiful.net/}{\textit{Information is Beautiful} by David McCandless}.
+\item La question de la représentativité se pose dans de nombreux
+  domaines de l'ingénierie. Les exemples sont nombreux, des
   \href{https://www.huffingtonpost.fr/2017/08/19/ce-distributeur-automatique-ne-distribue-pas-de-savon-aux-mains\_a\_23152387/}{distributeurs
-    de savon automatiques qui ne détectent que les peaux claires} à tous les
-  objets plutôt adaptés aux hommes qu'aux femmes recensés par Caroline Criado
+    de savon qui ne détectent que les peaux claires} à tous les
+  objets plutôt adaptés aux hommes recensés par Caroline Criado
   Perez dans
   \href{https://www.liberation.fr/france/2020/03/06/les-femmes-invisibles-dans-un-monde-cree-pour-les-hommes\_1780895}{\textit{Invisible
-      Women}}, les exemples sont nombreux.
-  \item Un épisode de La Méthode Scientifique à écouter (ou le transcrit à
-    lire) du 10 octobre 2018 intitulé « Éthique numérique, des data sous
-    serment
-    » \href{https://april.org/ethique-numerique-des-datas-sous-serment-emission-la-methode-scientifique}{ici}.
-  \item L'ouvrage en ligne (et en cours de rédaction)
-    \href{https://fairmlbook.org/}{Fairness and Machine Learning} by Solon
+      Women}}.
+  \item Un épisode de La Méthode Scientifique  intitulé \href{https://april.org/ethique-numerique-des-datas-sous-serment-emission-la-methode-scientifique}{\textit{Éthique numérique, des data sous
+    serment}}.
+  \item {Fairness and Machine Learning} by Solon
     Barocas, Moritz Hardt and Arvind Narayanan.
-  \item Quelques articles en ligne sur la justice prédictive :
-    \begin{itemize}
-    \item \href{https://www.latribune.fr/supplement/ceux-qui-transforment-la-france/la-justice-predictive-nouvel-outil-pour-les-professionnels-du-droit-837752.html}{La justice prédictive, nouvel outil pour les professionnels du droit} ;
-    \item \href{https://intelligence-artificielle.developpez.com/actu/264160/La-France-bannit-les-IA-de-prediction-des-comportements-des-juges-les-technologies-de-justice-predictive-sont-elles-une-menace-pour-la-societe/}{La France bannit les IA de prédiction des comportements} ;
-    \item
-      \href{https://www.dalloz-actualite.fr/flash/justice-et-intelligence-artificielle-preparer-demain-episode-i#.XsvEykNS8Xc}{Justice
+  \item À propos de \href{https://www.latribune.fr/supplement/ceux-qui-transforment-la-france/la-justice-predictive-nouvel-outil-pour-les-professionnels-du-droit-837752.html}{justice prédictive}, l'article \href{https://www.dalloz-actualite.fr/flash/justice-et-intelligence-artificielle-preparer-demain-episode-i#.XsvEykNS8Xc}{Justice
         et intelligence artificielle : préparer demain}.
-    \end{itemize}
-  \item \textit{The Hidden Biases in Big Data}, Kate Crawford, HBR, April 2013. \href{https://hbr.org/2013/04/the-hidden-biases-in-big-data}{https://hbr.org/2013/04/the-hidden-biases-in-big-data}
-  \item Pour en savoir plus sur la confidentialité différentielle : \href{https://salil.seas.harvard.edu/files/salil/files/differential_privacy_primer_nontechnical_audience.pdf}{\textit{Differential privacy: A primer for a non-technical audience}}, A. Wood et al., Vanderbilt Journal of Entertainment and Technology Law.
+  \item \href{https://hbr.org/2013/04/the-hidden-biases-in-big-data}{\textit{The Hidden Biases in Big Data}}, Kate Crawford, HBR, April 2013. 
+  \item \href{https://salil.seas.harvard.edu/files/salil/files/differential_privacy_primer_nontechnical_audience.pdf}{\textit{Differential privacy: A primer for a non-technical audience}}, A. Wood et al., Vanderbilt Journal of Entertainment and Technology Law.
 \end{plusloin}
 
 %%% Local Variables:
