@@ -156,11 +156,13 @@
 % \ifx#1\relax\else{\centering\bfseries\large \strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
 % \@afterheading
 % }{\par\nobreak\par\noindent\makebox[\textwidth]{\hrulefill\quad Fin  Encadr\'e\quad\hrulefill}\nobreak\bigbreak}
-\newenvironment{encadre}[1]{\par\medbreak
+  \newenvironment{encadre}[1]{\par\medbreak
   \noindent\fbox{\parbox{\linewidth}{
-\ifx#1\relax\else{\strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi
+{\ifx#1\relax\else{\strut#1\par\nobreak}\vspace*{3mm}\par\nobreak\fi}
 %\@afterheading
     }}}%{\par\nobreak\par\noindent\nobreak\bigbreak}
+
+
 
 
 % Environnement "exemple". 

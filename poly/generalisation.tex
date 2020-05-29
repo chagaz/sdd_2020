@@ -1,99 +1,56 @@
 %-*- coding: iso-latin-1 -*-    
 \label{chap:generalisation}
 
-\todo{
-  \begin{itemize}
-  \item Cohérence des notations avec les chapitres précédents.
-  \item Lien avec le cours d'optimisation.
-  \item Alléger / élaguer.
-  \end{itemize}
-}
-
-
-\paragraph{Notions :} généralisation ; sur-apprentissage ; sélection de modèle
+\paragraph{Notions :} généralisation ; surapprentissage ; sélection de modèle
 ; validation croisée ; régularisation des modèles paramétriques linéaires
 \paragraph{Objectifs pédagogiques :} 
 \begin{itemize}      
   \setlength{\itemsep}{3pt}
-\item Détecter un risque de sur-apprentissage ;
+\item Détecter un risque de surapprentissage ;
 \item Mettre en place un cadre permettant de sélectionner un modèle parmi
   plusieurs et d'estimer sa performance en généralisation ;
-\item Utiliser la régularisation pour éviter le sur-apprentissage ;
+\item Utiliser la régularisation pour éviter le surapprentissage ;
 \item Manipuler les régularisations $\ell_1$ et $\ell_2$ sur des modèles linéaires.
 \end{itemize}
 
-\section{Généralisation et sur-apprentissage}
+\section{Généralisation et surapprentissage}
 \subsection{Généralisation}
 Imaginons un algorithme qui, pour prédire l'étiquette d'une observation $\xx$,
 retourne son étiquette si $\xx$ appartient aux données dont l'étiquette est
-connue, et une valeur aléatoire sinon. Cet algorithme aura une erreur empirique
-minimale quelle que soit la fonction de coût choisie, mais fera de très
-mauvaises prédictions pour toute nouvelle observation. Ce n'est pas vraiment ce
-que l'on a en tête quand on parle d'{\it apprentissage}.
+connue, et une valeur aléatoire sinon. Ce modèle, qui en quelque sorte «
+apprend par c\oe{}ur », aura un risque empirique nul (et donc minimal) quelle
+que soit la fonction de coût choisie. Cependant, il fera de très mauvaises
+prédictions pour toute nouvelle observation.
 
-Ainsi, évaluer un algorithme de machine learning sur les données sur lesquelles
-il a appris ne nous permet absolument pas de savoir comment il se comportera
-sur de nouvelles données, en d'autres mots, sa capacité de {\it
-  généralisation}. C'est un point essentiel !
+\begin{encadre}
+{C'est pourquoi évaluer un algorithme de machine learning sur les données sur
+lesquelles il a appris ne nous permet absolument pas de savoir comment il se
+comportera sur de nouvelles données, en d'autres mots, sa capacité à \textbf{
+  généraliser}. C'est un des aspects les plus importants de l'apprentissage automatique.}
+\end{encadre}
 
-On appelle {\it généralisation} la capacité d'un modèle à faire des prédictions
-correctes sur de nouvelles données, qui n'ont pas été utilisées pour le
-construire.
-
-\subsection{Sur-apprentissage}
+\subsection{Surapprentissage}
 L'exemple, certes extrême, que nous avons pris plus haut, illustre que l'on
 peut facilement mettre au point une procédure d'apprentissage qui produise un
 modèle qui fait de bonnes prédictions sur les données utilisées pour le
-construire, mais généralise mal.  Au lieu de modéliser la vraie nature des
-objets qui nous intéressent, un tel modèle capture aussi (voire surtout) un
-bruit qui n'est pas pertinent pour l'application considérée. En effet, dans
-tout problème d'apprentissage automatique, nos données sont inévitablement
-bruitées
-\begin{itemize}
-\item par des {\it erreurs de mesure} dues à la faillibilité des capteurs
-  utilisés pour mesurer les variables par lesquelles on représente nos données,
-  ou à la faillibilité des opérateurs humains qui ont entré ces mesures dans
-  une base de données ;
-\item par des {\it erreurs d'étiquetage} (souvent appelés {\it teacher's noise}
-  en anglais) dues à la faillibilité des opérateurs humains qui ont étiqueté
-  les données ;
-\item enfin, parce que les variables mesurées ne suffisent pas à modéliser le
-  phénomène qui nous intéresse, soit qu'on ne les connaisse pas, soit qu'elles
-  soient coûteuses à mesurer.
-\end{itemize}
-
-Supposons que nous voulions classifier des photographies selon qu'elles
-représentent des pandas ou non. Chaque image est représentée par les valeurs
-RGB des pixels qui la composent.  Nous aimerions faire en sorte que le modèle
-que nous construisons capture la véritable nature d'un panda. Nous pouvons
-cependant être exposés à des erreurs de mesure (erreurs techniques des capteurs
-de l'appareil photo) ainsi que des erreurs d'étiquetage (erreurs de la personne
-qui a dû décider, pour chaque photo, s'il s'agissait ou non d'un panda, et a pu
-cliquer sur le mauvais choix, ou confondre un panda avec un ours). De plus,
-nous sommes limités par notre choix de variables : nos pixels ne capturent pas
-directement le fait qu'un panda est un animal rondouillard, avec un masque
-autour des yeux, généralement entouré de bambous.
-
-On voit ici que le choix des variables utilisées pour représenter les données
-est une étape très importante du processus de modélisation. Les techniques
-présentées de réduction de dimension que nous avons vues au
-chapitre~\ref{chap:dimred} peuvent être utilisées pour guider le choix des
-variables prédictives à utiliser.
+construire, mais généralise mal. Au lieu de modéliser la vraie nature des
+objets qui nous intéressent ($\Phi(X)$ dans
+l'équation~\eqref{eq:probabilistic_ml}), un tel modèle capture aussi (voire
+surtout) un bruit ($\epsilon$ dans l'équation~\eqref{eq:probabilistic_ml}) qui
+n'est pas pertinent pour l'application considérée.
 
 On dit d'un modèle qui, plutôt que de capturer la nature des objets à
 étiqueter, modélise aussi le bruit et ne sera pas en mesure de généraliser
-qu'il {\it sur-apprend}. En anglais, on parle d'{\it overfitting}.
-
-Un modèle qui sur-apprend est généralement un modèle {\it trop complexe}, qui
+qu'il \textbf{surapprend} (\textit{overfits} en anglais). 
+Un modèle qui surapprend est généralement un modèle \textbf{trop complexe}, qui
 \og colle \fg~trop aux données et capture donc aussi leur bruit.
   
-À l'inverse, il est aussi possible de construire un modèle {\it trop simple},
+À l'inverse, il est aussi possible de construire un modèle \textbf{trop simple},
 dont les performances ne soient bonnes ni sur les données utilisées pour le
-construire, ni en généralisation.
-
+construire, ni en généralisation. 
 On dit d'un modèle qui est trop simple pour avoir de bonnes performances même
-sur les données utilisées pour le construire qu'il {\it sous-apprend}. En
-anglais, on parle d'{\it underfitting}.
+sur les données utilisées pour le construire qu'il \textbf{sous-apprend} (\textit{underfits} en
+anglais).
 
 Ces concepts sont illustrés sur la figure~\ref{fig:overfit_class} pour un
 problème de classification binaire et la figure~\ref{fig:overfit_regr} pour un
@@ -106,7 +63,7 @@ problème de régression.
     \caption{Pour séparer les observations négatives (x) des observations
       positives (+), la droite pointillée sous-apprend. La frontière de
       séparation en trait plein ne fait aucune erreur sur les données mais est
-      susceptible de sur-apprendre. La frontière de séparation en trait
+      susceptible de surapprendre. La frontière de séparation en trait
       discontinu est un bon compromis.}
     \label{fig:overfit_class}
   \end{subfigure}
@@ -118,16 +75,75 @@ problème de régression.
       ont été générées à partir d'un polynôme de degré $d=3$. Le modèle de
       degré $d=2$ approxime très mal les données et sous-apprend, tandis que
       celui de degré $d=13$, dont le risque empirique est plus faible,
-      sur-apprend.}
+      surapprend.}
     \label{fig:overfit_regr}
   \end{subfigure}
-  \caption{Sous-apprentissage et sur-apprentissage}
+  \caption{Sous-apprentissage et surapprentissage}
 \end{figure}
 
-\subsection{Compromis biais-variance}
+\subsection{Compromis biais-variance $\bigstar$}
 \label{sec:bias_variance}
-\todo{Réécrire en lien avec le chapitre sur l'estimation.}
-% Pour mieux comprendre le risque d'un modèle $f: \XX \rightarrow \YY$, nous
+Supposons disposer d'un jeu de données $\DD = \{\xx^i, y^i\}_{i=1, \dots, n}$
+de $n$ observations en $p$ dimensions et leurs étiquettes réelles. Nous
+supposons comme au chapitre précédent que les couples $(\xx^i, y^i)$ sont les
+réalisations de $n$ vecteurs aléatoires de même loi qu'un couple de variables
+aléatoire $(X, Y)$, $X$ étant un vecteur aléatoire $p$-dimensionnel et $Y$ une
+variable aléatoire réelle à valeurs dans $\YY$, et qu'il existe une fonction
+$\Phi : \RR^p \rightarrow \YY$ et une variable aléatoire réelle $\epsilon$
+telle que
+  \begin{equation}
+  Y = \Phi(X) + \epsilon.
+\end{equation}
+Nous supposons de plus que $\epsilon$ est d'espérance nulle et de variance
+$\sigma^2$.
+
+Fixons maintenant un couple $(\xx, y) \in \RR^p \times \YY$. Nous pouvons
+considérer que la prédiction $f(\xx)$ d'un modèle $f$ appris sur $\DD$ est une
+estimation de $\Phi(x)$, autrement dit la réalisation d'une variable aléatoire
+$F_n$ qui est une fonction d'un échantillon aléatoire de $n$ copies iid de
+$(X, Y)$. Nous pouvons alors calculer l'erreur quadratique moyenne de la
+prédiction $F_n$ :
+\begin{align*}
+  & \EE\left((y-F_n)^2\right)  = \EE\left((\Phi(\xx) + \epsilon - F_n)^2   \right)
+   = \EE\left((\Phi(\xx) - \EE(F_n) + \EE(F_n) - F_n  + \epsilon )^2   \right) \\
+  & = \EE\left((\Phi(\xx) - \EE(F_n))^2 + (\EE(F_n) - F_n  + \epsilon )^2 + 2
+    (\Phi(\xx) - \EE(F_n))(\EE(F_n) - F_n  + \epsilon) \right) \\
+  & = (\Phi(\xx) - \EE(F_n))^2 + \EE\left((F_n - \EE(F_n) - \epsilon )^2  \right) + 2
+    (\Phi(\xx) - \EE(F_n))  \EE\left( \EE(F_n) - F_n  + \epsilon \right) \\
+  & =  \text{B}(F_n)^2  + 
+    \EE \left((F_n - \EE(F_n))^2 + \epsilon^2 - 2 \epsilon (F_n - \EE(F_n)) \right) + 2
+    (\Phi(\xx) - \EE(F_n))  \left( \EE(F_n) - \EE(F_n)  + \EE(\epsilon) \right) \\
+  & =  \text{B}(F_n)^2  + 
+    \EE \left((F_n - \EE(F_n))^2 \right) + \EE(\epsilon^2) - 2 \EE\left(\epsilon (F_n - \EE(F_n)) \right) \\
+    & = \text{B}(F_n)^2 + \VV(F_n) + \sigma^2.
+\end{align*}
+Le passage de la deuxième à la troisième ligne se fait par linéarité de
+l'espérance et en observant que $\Phi(\xx)$ et $\EE(F_n)$ sont déterministes
+(ce sont des nombres, pas des variables aléatoires).
+
+Le troisième terme de la somme de la quatrième ligne disparait à la cinquième
+car $\EE(\epsilon)=0$.
+
+Enfin, le passage à la dernière ligne se fait en supposant que $\epsilon$ et
+$F_n$ sont indépendants ; on a alors
+$\EE\left(\epsilon (F_n - \EE(F_n)) \right) = \EE(\epsilon) \EE(F_n -
+\EE(F_n)).$ De plus, $\EE(\epsilon^2) = \VV(\epsilon)$ car $\EE(\epsilon)=0$.
+
+Ainsi, l'erreur quadratique moyenne est la somme
+\begin{itemize}
+\item du carré du biais de l'estimateur, qui quantifie à quel point les étiquettes prédites diffèrent des vraies étiquettes ;
+\item de la variance de l'estimateur, qui quantifie à quel point les étiquettes
+  prédites pour le même individu $\xx$ diffèrent selon les données d'entrée
+  (i.e. les réalisations des n copies iid de $(X, Y)$) ;
+\item de la variance du bruit, aussi appelée \textbf{erreur irréductible} : ce terme sera là même si l'estimation de $\Phi$ est exacte.
+\end{itemize}
+
+On retrouve ici le compromis biais-variance (cf
+section~\ref{sec:precision_estimateur}) : un modèle biaisé peut, s'il a une variance plus faible, faire de meilleures prédictions qu'un modèle non-biaisé.
+
+
+
+%Pour mieux comprendre le risque d'un modèle $f: \XX \rightarrow \YY$, nous
 % pouvons le comparer à l'erreur minimale $\Rcal^*$ qui peut être atteinte par
 % n'importe quelle fonction mesurable de $\XX$ dans $\YY$ : c'est ce qu'on
 % appelle l'\textit{excès d'erreur}, et que l'on peut décomposer de la façon
@@ -160,36 +176,36 @@ problème de régression.
 % chances de se trouver dans cet espace. Cependant, puisque cet espace est plus
 % vaste, la solution optimale y est aussi généralement plus difficile à trouver :
 % l'erreur d'estimation, elle, augmente. C'est dans ce cas qu'il y a
-% sur-apprentissage. \\
+% surapprentissage. \\
 
-Un espace des hypothèses plus large permet généralement de construire des
-modèles plus complexes : par exemple, l'ensemble des droites vs. l'ensemble des
-polynômes de degré 9 (cf. figure~\ref{fig:overfit_regr}). C'est une variante du
-principe du {\it rasoir d'Ockham}, selon lequel les
-hypothèses les plus simples sont les plus vraisemblables.
+% Un espace des hypothèses plus large permet généralement de construire des
+% modèles plus complexes : par exemple, l'ensemble des droites vs. l'ensemble des
+% polynômes de degré 13 (cf. figure~\ref{fig:overfit_regr}). C'est une variante du
+% principe du \textbf{rasoir d'Ockham}, selon lequel les
+% hypothèses les plus simples sont les plus vraisemblables.
 
-Il y a donc un compromis entre erreur d'approximation et erreur d'estimation :
-il est difficile de réduire l'une sans augmenter l'autre. Ce compromis est
-généralement appelé {\it compromis biais-variance} : l'erreur d'approximation
-correspond au {\it biais} de la procédure d'apprentissage, tandis que l'erreur
-d'estimation correspond à sa {\it variance}. % On retrouvera ce compromis dans
-% l'estimation bayésienne de paramètres à la
-% section~\ref{sec:bias_variance_bayes}.
+% Il y a donc un compromis entre erreur d'approximation et erreur d'estimation :
+% il est difficile de réduire l'une sans augmenter l'autre. Ce compromis est
+% généralement appelé \textbf{compromis biais-variance} : l'erreur d'approximation
+% correspond au \textbf{biais} de la procédure d'apprentissage, tandis que l'erreur
+% d'estimation correspond à sa \textbf{variance}. % On retrouvera ce compromis dans
+% % l'estimation bayésienne de paramètres à la
+% % section~\ref{sec:bias_variance_bayes}.
 
-Considérons par exemple pour un problème de régression un espace des hypothèses
-naïf qui ne contient que des fonctions constantes. Supposons que les étiquettes
-soient générées par une distribution normale centrée en $a$. Quelles que soient
-les données observées, la procédure d'apprentissage va construire un modèle qui
-retourne $a$ quelle que soit l'observation concernée : la {\it variance} de la
-procédure par rapport au jeu de données est très faible. À l'inverse, comme la
-fonction de prédiction apprise est très peu sensible au jeu de données, il y a
-un {\it biais} très important qui conduit à construire des prédicteurs qui
-retournent $a$ pour toutes les observations.
+% Considérons par exemple pour un problème de régression un espace des hypothèses
+% naïf qui ne contient que des fonctions constantes. Supposons que les étiquettes
+% soient générées par une distribution normale centrée en $a$. Quelles que soient
+% les données observées, la procédure d'apprentissage va construire un modèle qui
+% retourne $a$ quelle que soit l'observation concernée : la \textbf{variance} de la
+% procédure par rapport au jeu de données est très faible. À l'inverse, comme la
+% fonction de prédiction apprise est très peu sensible au jeu de données, il y a
+% un \textbf{biais} très important qui conduit à construire des prédicteurs qui
+% retournent $a$ pour toutes les observations.
 
 \section{Sélection de modèle}
-Le théorème du {\it no free lunch} % de~\citet{wolpert1997}
+Le théorème du \textit{no free lunch} % de~\citet{wolpert1997}
 indique qu'aucun
-algorithme de machine learning ne peut bien fonctionner pour {\it tous} les
+algorithme de machine learning ne peut bien fonctionner pour \textbf{tous} les
 problèmes d'apprentissage : un algorithme qui fonctionne bien sur un type
 particulier de problèmes le compensera en fonctionnant moins bien sur d'autres
 types de problèmes. En d'autres termes, il n'y a pas de \og baguette magique
@@ -203,8 +219,8 @@ pratique.
 
 L'erreur empirique mesurée sur les observations qui ont permis de construire le
 modèle est un mauvais estimateur de l'erreur du modèle sur l'ensemble des
-données possibles, ou {\it erreur de généralisation} : si le modèle
-sur-apprend, cette erreur empirique peut être proche de zéro voire nulle,
+données possibles, ou \textbf{erreur de généralisation} : si le modèle
+surapprend, cette erreur empirique peut être proche de zéro voire nulle,
 tandis que l'erreur de généralisation peut être arbitrairement grande.
 
 \subsection{Jeu de test}
@@ -216,14 +232,16 @@ construire.
 
 Étant donné un jeu de données $\DD = \{(\xx^i, y^i)\}_{i=1, \dots, n}$,
 partitionné en deux jeux $\DD_{\text{tr}}$ et $\DD_{\text{te}}$, on appelle
-{\it jeu d'entraînement} ({\it training set} en anglais) l'ensemble
-$\DD_{\text{tr}}$ utilisé pour entraîner un modèle prédictif, et {\it jeu de
-  test} ({\it test set} en anglais) l'ensemble $\DD_{\text{te}}$ utilisé pour
+\textbf{jeu d'entraînement} (\textit{training set} en anglais) l'ensemble
+$\DD_{\text{tr}}$ utilisé pour entraîner un modèle prédictif, et \textbf{jeu de
+  test} (\textit{test set} en anglais) l'ensemble $\DD_{\text{te}}$ utilisé pour
 son évaluation.
 
 Comme nous n'avons pas utilisé le jeu de test pour entraîner notre modèle, il
 peut être considéré comme un jeu de données \og nouvelles \fg. La perte
 calculée sur ce jeu de test est un estimateur de l'erreur de généralisation.
+
+Cela correspond à ce que nous avons fait dans la PC3 et au début du mini-projet.
 
 \subsection{Jeu de validation}
 Considérons maintenant la situation dans laquelle nous voulons choisir entre
@@ -234,28 +252,28 @@ jeu de test. Nous pouvons ensuite choisir comme modèle celui qui a la plus
 petite erreur sur le jeu de test:
 \begin{equation}
   \hat f = \argmin_{k=1, \dots, K} \frac{1}{|\DD_{\text{te}}|} 
-  \sum_{\xx, y \in \DD_{\text{te}}} L(y, f_k(\xx))
+  \sum_{\xx, y \in \DD_{\text{te}}} L(y, f_k(\xx)).
 \end{equation}
 Mais quelle est son erreur de généralisation ? Comme nous avons utilisé
-$\DD_{\text{te}}$ pour {\it sélectionner} le modèle, il ne représente plus un
+$\DD_{\text{te}}$ pour sélectionner le modèle, il ne représente plus un
 jeu indépendant composé de données nouvelles, inutilisées pour déterminer le
 modèle.
 
-La solution est alors de découper notre jeu de données en {\it trois} parties~:
+La solution est alors de découper notre jeu de données en \textbf{trois} parties~:
 \begin{itemize}
-\item Un {\it jeu d'entraînement}
+\item Un \textbf{jeu d'entraînement}
   $\DD_{\text{tr}}$ sur lequel nous pourrons entraîner nos $K$ algorithmes
   d'apprentissage ;
-\item Un {\it jeu de validation} ({\it validation set} en anglais)
+\item Un \textbf{jeu de validation} ({\it validation set} en anglais)
   $\DD_{\text{val}}$ sur lequel nous évaluerons les $K$ modèles ainsi
-  obtenus, afin de {\it sélectionner} un modèle définitif ;
-\item Un {\it jeu de test} $\DD_{\text{te}}$ sur lequel nous évaluerons enfin
+  obtenus, afin de \textbf{sélectionner} un modèle définitif ;
+\item Un \textbf{jeu de test} $\DD_{\text{te}}$ sur lequel nous évaluerons enfin
   l'erreur de généralisation du modèle choisi.
 \end{itemize}
 
 On voit ici qu'il est important de distinguer la {\it sélection} d'un modèle de
-son {\it évaluation} : les faire sur les mêmes données peut nous conduire à
-sous-estimer l'erreur de généralisation et le sur-apprentissage du modèle
+son \textbf{évaluation} : les faire sur les mêmes données peut nous conduire à
+sous-estimer l'erreur de généralisation et le surapprentissage du modèle
 choisi.
 
 Une fois un modèle sélectionné, on peut le ré-entraîner sur l'union du jeu
@@ -268,8 +286,17 @@ est nécessairement arbitraire. Nous risquons ainsi d'avoir, par hasard, créé
 des jeux de données qui ne sont pas représentatifs. Pour éviter cet écueil, il
 est souhaitable de reproduire plusieurs fois la procédure, puis de moyenner les
 résultats obtenus afin de moyenner ces effets aléatoires. Le cadre le plus
-classique pour ce faire est celui de la {\it validation croisée}, illustré sur
+classique pour ce faire est celui de la \textbf{validation croisée}, illustré sur
 la figure~\ref{fig:crossval}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/generalisation/crossval}
+  \caption{Une validation croisée en 5 {\it folds} : Chaque observation
+    appartient à un des 5 jeux de validation (en blanc) et aux 4 autres jeux
+    d'entraînement (en noir).}
+  \label{fig:crossval}
+\end{figure}
 
 Étant donné un jeu $\DD$ de $n$ observations, et un nombre $K$, on appelle {\it
   validation croisée} la procédure qui consiste à
@@ -283,7 +310,7 @@ la figure~\ref{fig:crossval}
   \end{itemize}
 \end{enumerate}
 Chaque partition de $\DD$ en deux ensembles $\DD_k$ et $\bigcup_{l \neq
-  k} \DD_l$ est appelée un {\it fold} de la validation croisée.
+  k} \DD_l$ est appelée un \textbf{fold} de la validation croisée.
 
 Chaque observation étiquetée du jeu $\DD$ appartient à un unique jeu de test,
 et à $(K-1)$ jeux d'entraînement. Ainsi, cette procédure génère une prédiction
@@ -297,18 +324,7 @@ par observation de $\DD$. Pour conclure sur la performance du modèle, on peut :
   prédictions en fonction des données d'entraînement.
 \end{itemize}
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.5\textwidth]{figures/generalisation/crossval}
-  \caption{Une validation croisée en 5 {\it folds} : Chaque observation
-    appartient à un des 5 jeux de validation (en blanc) et aux 4 autres jeux
-    d'entraînement (en noir).}
-  \label{fig:crossval}
-\end{figure}
-
 \section{Critères de performance}
-\todo{Réécrire de manière moins exhaustive ; lien avec erreurs de première et deuxième espèce d'un test}.
-
 % Il existe de nombreuses façons d'évaluer la performance prédictive d'un modèle
 % d'apprentissage supervisé. Cette section présente les principaux critères
 % utilisés.
@@ -325,16 +341,10 @@ modèle qui prédise si oui ou non une radiographie présente une tumeur
 inquiétante : une fausse alerte, qui sera ensuite infirmée par des examens
 complémentaires, est moins problématique que de ne pas déceler la tumeur et de
 ne pas traiter la personne concernée.  Les performances d'un modèle de
-classification, binaire comme multi-classe, peuvent être résumée dans une {\it
-  matrice de confusion}.
-
-Étant donné un problème de classification, on appelle {\it matrice de
-  confusion} une matrice $M$ contenant autant de lignes que de colonnes que de
-classes, et dont l'entrée $M_{ck}$ est le nombre d'exemples de la classe $c$
+classification binaire peuvent être résumées dans une
+\textbf{matrice de confusion} : une matrice $M$ de deux lignes et deux
+colonnes, et dont l'entrée $M_{ck}$ est le nombre d'exemples de la classe $c$
 pour laquelle l'étiquette $k$ a été prédite.
-
-Dans le cas de la classification binaire, la matrice de confusion prend la
-forme suivante :
 \begin{center}
   \begin{tabular}[h]{|c|c|c|c|} \hline \multicolumn{2}{|c|}{} &
       \multicolumn{2}{|c|}{Classe réelle} \\ \hline \multicolumn{2}{|c|}{} & 0 & 1 \\ \hline 
@@ -344,85 +354,35 @@ forme suivante :
   \end{tabular}
 \end{center}
 
-On appelle {\it vrais positifs} (en anglais {\it true positives}) les exemples
-positifs correctement classifiés ; {\it faux positifs} (en anglais {\it false
-  positives}) les exemples négatifs étiquetés positifs par le modèle ; et
-réciproquement pour les {\it vrais négatifs} ({\it true negatives}) et les {\it
-  faux négatifs} ({\it false negatives}). On note généralement par {\it TP} le
-nombre de vrais positifs, {\it FP} le nombre de faux positifs, {\it TN} le
-nombre de vrais négatifs et {\it FN} le nombre de faux négatifs.
+On retrouve ici les erreurs de première et de deuxième espèce de la
+section~\ref{sec:test_errors}, qu'on appellera plutôt respectivement faux
+positifs et faux négatifs dans ce contexte.
 
-Les faux positifs sont aussi appelés {\it fausses alarmes} ou {\it erreurs de
-  type I}, par opposition aux {\it erreurs de type II} qui sont les faux
-négatifs.
+Il est possible de dériver de nombreux critères d'évaluation construits à
+partir de la matrice de confusion, comme la spécificité, la sensibilité, le
+rappel ou la F-mesure. Vous pouvez vous référer à la
+section~\ref{sec:confusion_matrix_derived} à la fin de ce chapitre, ou à la
+\href{https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics}{documentation
+  de \texttt{sklearn.metrics}}.
 
-Il est possible de dériver de nombreux critères d'évaluation à partir de la
-matrice de confusion. En voici quelques exemples :
 
-On appelle {\it rappel} ({\it recall} en anglais), ou {\it sensibilité} ({\it
-  sensitivity} en anglais), le taux de vrais positifs, c'est-à-dire la
-proportion d'exemples positifs correctement identifiés comme tels :
-\begin{equation*}
-  \text{Rappel} = \frac{\text{TP}}{\text{TP} + \text{FN}}.
-\end{equation*}
 
-Il est cependant très facile d'avoir un bon rappel en prédisant que {\it tous}
-les exemples sont positifs. Ainsi, ce critère ne peut pas être utilisé seul. On
-lui adjoint ainsi souvent la {\it précision} :
-
-On appelle {\it précision}, ou {\it valeur positive prédictive} ({\it positive
-  predictive value, PPV}) la proportion de prédictions correctes parmi les
-prédictions positives :
-\begin{equation*}
-  \text{Précision} = \frac{\text{TP}}{\text{TP} + \text{FP}}.
-\end{equation*}
-
-De même que l'on peut facilement avoir un très bon rappel au détriment de la
-précision, il est aisé d'obtenir une bonne précision (au détriment du rappel)
-en faisant très peu de prédictions positives (ce qui réduit le risque qu'elles
-soient erronées)
-
-L'anglais distingue {\it precision} (la précision ci-dessus) et {\it accuracy},
-qui est la proportion d'exemples correctement étiquetés, soit le complémentaire
-à 1 du taux d'erreur, aussi traduit par {\it précision} en français. On
-utilisera donc ces termes avec précaution.
-
-Pour résumer rappel et précision en un seul nombre, on calculera la {\it
-  F-mesure} : \\
-On appelle {\it F-mesure} ({\it F-score} ou {\it F1-score} en anglais) la
-moyenne harmonique de la précision et du rappel :
-\begin{equation*}
-  F = 2 \frac{\text{Précision . Rappel}}{\text{Précision} + \text{Rappel}} = 
-  \frac{2 \text{TP}}{2 \text{TP} + \text{FP} + \text{FN}}.
-\end{equation*}
-
-On appelle {\it spécificité} le taux de vrais négatifs, autrement dit la
-proportion d'exemples négatifs correctement identifiés comme tels.
-\begin{equation*}
-  \text{Spécificité} = \frac{\text{TN}}{\text{FP} + \text{TN}}.
-\end{equation*}
-
-\subsection{Évaluation de méthodes de classification binaire retournant un
-  score}
+\subsection{Courbe ROC $\bigstar$}
 De nombreux algorithmes de classification ne retournent pas directement une
 étiquette de classe, mais utilisent une fonction de décision qui doit ensuite
 être seuillée pour devenir une étiquette. Cette fonction de décision peut être
 un score arbitraire, ou la probabilité d'appartenir à la classe positive.
   
-Plusieurs critères permettent d'évaluer la qualité de la fonction de décision
-avant seuillage.
-  
-\subsubsection{Courbe ROC}
-On appelle {\it courbe ROC}, de l'anglais {\it Receiver-Operator
+On appelle \textbf{courbe ROC}, de l'anglais \textbf{Receiver-Operator
   Characteristic} la courbe décrivant l'évolution de la sensibilité en fonction
-du complémentaire à 1 de la spécificité, parfois appelé {\it antispécificité},
+du complémentaire à 1 de la spécificité, parfois appelé \textbf{antispécificité},
 lorsque le seuil de décision change.
 
 Le terme vient des télécommunications, où ces courbes servent à étudier si un
 système arrive à séparer le signal du bruit de fond.
 
 On peut synthétiser une courbe ROC par l'aire sous cette courbe, souvent
-abrégée {\it AUROC} pour {\it Area Under the ROC}.
+abrégée \textbf{AUROC} pour \textbf{Area Under the ROC}.
 
 Un exemple de courbe ROC est présenté sur la figure~\ref{fig:roc_curve}. Le
 point $(0, 0)$ apparaît quand on utilise comme seuil un nombre supérieur à la
@@ -460,143 +420,111 @@ On peut enfin utiliser la courbe ROC pour choisir un seuil de décision, à
 partir de la sensibilité (ou de la spécificité) que l'on souhaite garantir.
 
 \subsection{Erreurs de régression}
-Dans le cas d'un problème de régression, le nombre d'erreurs n'est pas un
-critère approprié pour évaluer la performance. D'une part, à cause des
-imprécisions numériques, il est délicat de dire d'une prédiction à valeur
-réelle si elle est correcte ou non. D'autre part, un modèle dont $50\%$ des
-prédictions sont correctes à $0.1\%$ près et les $50$ autres pourcent sont très
-éloignées des vraies valeurs vaut-il mieux qu'un modèle qui n'est correct qu'à
-$1\%$ près, mais pour $100\%$ des exemples ?
+% Dans le cas d'un problème de régression, le nombre d'erreurs n'est pas un
+% critère approprié pour évaluer la performance. D'une part, à cause des
+% imprécisions numériques, il est délicat de dire d'une prédiction à valeur
+% réelle si elle est correcte ou non. D'autre part, un modèle dont $50\%$ des
+% prédictions sont correctes à $0.1\%$ près et les $50$ autres pourcent sont très
+% éloignées des vraies valeurs vaut-il mieux qu'un modèle qui n'est correct qu'à
+% $1\%$ près, mais pour $100\%$ des exemples ?
 
-Ainsi, on préférera quantifier la performance d'un modèle de régression en
-fonction de l'écart entre les prédictions et les valeurs réelles.
+% Ainsi, on préférera quantifier la performance d'un modèle de régression en
+% fonction de l'écart entre les prédictions et les valeurs réelles.
 
-Un premier critère est donc l'erreur quadratique moyenne : \\
-Étant données $n$ étiquettes réelles $y^1, y^2, \dots, y^n$ et $n$ prédictions
-$f(\xx^1), f(\xx^2), \dots, f(\xx^n)$, on appelle {\it erreur quadratique
-  moyenne}, ou {\it MSE} de l'anglais {\it mean squared error} la valeur
+Un premier critère d'évaluation d'un modèle de régression est, nous l'avons vu
+à plusieurs reprises, l'\textbf{erreur quadratique moyenne}, ou \textbf{MSE} de
+l'anglais \textbf{mean squared error}, à savoir
 \begin{equation*}
   \text{MSE} = \frac1n \sum_{i=1}^n \left( f(\xx^i) - y^i \right)^2.
 \end{equation*}
-
-Pour mesurer l'erreur dans la même unité que la cible, on lui préfère souvent
-sa racine : \\
-Étant données $n$ étiquettes réelles $y^1, y^2, \dots, y^n$ et $n$ prédictions
-$f(\xx^1), f(\xx^2), \dots, f(\xx^n)$, on appelle {\it racine de l'erreur
-  quadratique moyenne}, ou {\it RMSE} de l'anglais {\it root mean squared
-  error} la valeur
-\begin{equation*}
-  \text{RMSE} = \sqrt{\frac1n \sum_{i=1}^n \left( f(\xx^i) - y^i \right)^2}.
-\end{equation*}
-
-L'interprétation de ces erreurs requiert néanmoins de connaître la distribution
-des valeurs cibles : une RMSE de 1 cm n'aura pas la même signification selon
-qu'on essaie de prédire la taille d'humains ou celle de drosophiles.  Pour
-répondre à cela, il est possible de normaliser la somme des carrés des résidus
-non pas en en faisant la moyenne, mais en la comparant à la somme des distances
-des valeurs cibles à leur moyenne.  Étant données $n$ étiquettes réelles
-$y^1, y^2, \dots, y^n$ et $n$ prédictions
-$f(\xx^1), f(\xx^2), \dots, f(\xx^n)$, on appelle {\it erreur carrée relative},
-ou {\it RSE} de l'anglais {\it relative squared error} la valeur
-\begin{equation*}
-  \text{RSE} = \frac{ \sum_{i=1}^n \left( f(\xx^i) - y^i \right)^2}{
-    \sum_{i=1}^n \left( y^i - \frac1n \sum_{l=1}^n y^l \right)^2}.
-\end{equation*}
-
-Le complémentaire à 1 de la RSE est le {\it coefficient de détermination}, noté
-$R^2$.
-
-On note le coefficient de détermination $R^2$ car il s'agit du carré du
-coefficient de corrélation entre $\yy$ et
-$(f(\xx^1), f(\xx^2), \dots, f(\xx^n))$ donné par
-\begin{equation}
-  \label{eq:pearson}
-  R = \frac{\sum_{i=1}^n \left( y^i -  \frac1n \sum_{l=1}^n y^l \right)
-    \left( f(\xx^i) -  \frac1n \sum_{i=1}^n f(\xx^i) \right)}{
-    \sqrt{\sum_{i=1}^n \left( y^i -  \frac1n \sum_{l=1}^n y^l \right)^2}
-    \sqrt{\sum_{i=1}^n \left( f(\xx^i) -  \frac1n \sum_{l=1}^n f(\xx^l) \right)^2}.
-  }
-\end{equation}
-Ce coefficient indique à quel point les valeurs prédites sont corrélées aux
-valeurs réelles ; attention, il sera élevé aussi si elles leur sont
-anti-corrélées.
+Des variantes sont décrites dans la section~\ref{sec:regression_errors} ainsi que dans la \href{https://scikit-learn.org/stable/modules/model_evaluation.html#regression-metrics}{Documentation de \texttt{sklearn.metrics}}.
 
 \section{Régularisation}
 \label{sec:generalization_regularization}
-Plus un modèle est simple, et moins il a de chances de sur-apprendre. Pour
-limiter le risque de sur-apprentissage, il est donc souhaitable de limiter la
-complexité d'un modèle. C'est ce que permet de faire la {\it régularisation},
-une technique qui consiste à ajouter au terme d'erreur que l'on cherche à
-minimiser un terme qui mesure la complexité du problème (par exemple, dans le
-cas précédent, le degré du polynôme ou le nombre de coefficients du
-modèle). Ainsi, un modèle complexe qui a une erreur empirique faible peut être
-défavorisé face à une modèle plus simple, même si celui-ci présente une erreur
-empirique plus élevée.
+Le compromis biais-variance nous indique qu'un modèle biaisé peut être plus
+précis qu'un modèle non-biaisé. La \textbf{régularisation} consiste ainsi à
+ajouter au risque empirique que l'on cherche à minimiser un terme, appelé
+\textbf{régulariseur}, qui va biaiser le modèle de sorte à ce que son risque
+empirique soit plus élevée, mais son erreur de généralisation plus faible.
 
-Lorsque les variables sont fortement corrélées, ou que leur nombre dépasse
-celui des observations, la matrice $X \in \RR^{p+1}$ représentant nos données
-ne peut pas être de rang colonne plein. Ainsi, la matrice $X^\top X$ n'est pas
-inversible et il n'existe pas de solution unique à une régression linéaire par
-minimisation des moindres carrés. Il y a donc un risque de sur-apprentissage :
-le modèle n'étant pas unique, comment peut-on garantir que c'est celui que l'on
-a sélectionné qui généralise le mieux ?
+Plus un modèle est simple, et moins il a de chances de surapprendre. Pour
+limiter le risque de surapprentissage, il est donc souhaitable de limiter la
+complexité d'un modèle. Ainsi, le régulariseur peut être vu comme un terme qui
+mesure la complexité du modèle. La définition de la complexité d'un modèle est
+une notion importante en théorie de l'apprentissage, mais dépasse largement le
+cadre de ce cours.
 
-Pour limiter ce risque de sur-apprentissage, nous allons chercher à contrôler
-simultanément l'erreur du modèle sur le jeu d'entraînement et les valeurs des
-coefficients de régression affectés à chacune des variables. Contrôler ces
-coefficients est une façon de contrôler la complexité du modèle : comme nous le
-verrons par la suite, ce contrôle consiste à contraindre les coefficients à
-appartenir à un sous-ensemble strict de $\RR^{p+1}$ plutôt que de pouvoir
-prendre n'importe quelle valeur dans cet espace, ce qui restreint l'espace des
-solutions possibles.
+% Lorsque les variables sont fortement corrélées, ou que leur nombre dépasse
+% celui des observations, la matrice $X \in \RR^{p+1}$ représentant nos données
+% ne peut pas être de rang colonne plein. Ainsi, la matrice $X^\top X$ n'est pas
+% inversible et il n'existe pas de solution unique à une régression linéaire par
+% minimisation des moindres carrés. Il y a donc un risque de surapprentissage :
+% le modèle n'étant pas unique, comment peut-on garantir que c'est celui que l'on
+% a sélectionné qui généralise le mieux ?
 
-On appelle {\it régularisation} le fait d'apprendre un modèle en minimisant la
-somme du risque empirique sur le jeu d'entraînement et d'un terme de contrainte
-$\Omega$ sur les solutions possibles :
+% Pour limiter ce risque de surapprentissage, nous allons chercher à contrôler
+% simultanément l'erreur du modèle sur le jeu d'entraînement et les valeurs des
+% coefficients de régression affectés à chacune des variables. Contrôler ces
+% coefficients est une façon de contrôler la complexité du modèle : comme nous le
+% verrons par la suite, ce contrôle consiste à contraindre les coefficients à
+% appartenir à un sous-ensemble strict de $\RR^{p+1}$ plutôt que de pouvoir
+% prendre n'importe quelle valeur dans cet espace, ce qui restreint l'espace des
+% solutions possibles.
+
+En appelant $\Omega$ le régulariseur, la régularisation consiste donc à
+remplacer la minimisation du risque empirique (eq.~\eqref{eq:erm}) par :
 \begin{equation}
   \label{eq:regularisation}
-  f = \argmin_{h \in \FF} \frac{1}{n} \sum_{i=1}^n L(h(\xx^i), y^i) + 
+  f \in \argmin_{h \in \FF} \frac{1}{n} \sum_{i=1}^n L(h(\xx^i), y^i) + 
   \lambda \Omega(h),
 \end{equation}
 où le coefficient de régularisation $\lambda \in \RR_+$ contrôle
 l'importance relative de chacun des termes.
- 
-Dans le cas d'un modèle de régression linéaire, nous allons utiliser comme
-fonction de perte la somme des moindres carrés. Les régulariseurs que nous
-allons voir sont fonction du vecteur de coefficients de régression $\bbeta$ :
-\begin{equation*}
-  \argmin_{\bbeta \in \RR^{p+1}} \left(\yy - X \bbeta \right)^\top 
-  \left(\yy - X \bbeta \right) + \lambda \Omega(\bbeta)
-\end{equation*}
-ou, de manière équivalente, 
-\begin{equation}
-  \label{eq:regularisation_linreg}
-  \argmin_{\bbeta \in \RR^{p+1}} \ltwonorm{\yy - X \bbeta}^2 + \lambda \Omega(\bbeta).
-\end{equation}
-Nous utilisons ici la transformation~\ref{eq:added_ones} de $\xx$ qui
-consiste à ajouter à la matrice de design $X$ une colonne de 1 pour
-simplifier les notations.
 
-Le coefficient de régularisation $\lambda$ est un hyperparamètre de la
-régression linéaire régularisée.
+
+% Dans le cas d'un modèle de régression linéaire, nous allons utiliser comme
+% fonction de perte la somme des moindres carrés. Les régulariseurs que nous
+% allons voir sont fonction du vecteur de coefficients de régression $\bbeta$ :
+% \begin{equation*}
+%   \argmin_{\bbeta \in \RR^{p+1}} \left(\yy - X \bbeta \right)^\top 
+%   \left(\yy - X \bbeta \right) + \lambda \Omega(\bbeta)
+% \end{equation*}
+% ou, de manière équivalente, 
+% \begin{equation}
+%   \label{eq:regularisation_linreg}
+%   \argmin_{\bbeta \in \RR^{p+1}} \ltwonorm{\yy - X \bbeta}^2 + \lambda \Omega(\bbeta).
+% \end{equation}
+% Nous utilisons ici la transformation~\ref{eq:added_ones} de $\xx$ qui
+% consiste à ajouter à la matrice de design $X$ une colonne de 1 pour
+% simplifier les notations.
+
+% Le coefficient de régularisation $\lambda$ est un hyperparamètre de la
+% régression linéaire régularisée.
 
 Quand $\lambda$ tend vers $+\infty$, le terme de régularisation prend de plus
 en plus d'importance, jusqu'à ce qu'il domine le terme d'erreur et que seule
-compte la minimisation du régulariseur. Dans la plupart des cas, le
-régulariseur est minimisé quand $\bbeta = \vec{0}$, et il n'y a plus
-d'apprentissage.
+compte la minimisation du régulariseur : il n'y a plus d'apprentissage. % Dans la plupart des cas, le
+% régulariseur est minimisé quand $\bbeta = \vec{0}$, et il n'y a plus
+% d'apprentissage.
   
 À l'inverse, quand $\lambda$ tend vers $0$, le terme de régularisation devient
-négligeable devant le terme d'erreur, et $\bbeta$ prendra comme valeur une
-solution de la régression linéaire non régularisée.
+négligeable devant le terme d'erreur, et la solution de
+l'équation~\eqref{eq:regularisation} est un minimiseur du risque
+empirique.% $\bbeta$ prendra comme valeur une
+% solution de la régression linéaire non régularisée.
 
 Comme tout hyperparamètre, $\lambda$ peut être choisi par validation
 croisée. On utilisera généralement une grille de valeurs logarithmique.
 
-\section{La régression ridge}
+La suite de cette section présente des exemples concrets de régularisation
+appliquée à la régression linéaire. Nous reprenons les notations de la
+section~\ref{sec:linreg}.
+
+
+\section{Régularisation $\ell_2$  : régression ridge}
 \label{sec:ridge_regression}
-Une des formes les plus courantes de régularisation, utilisée dans de
-nombreux domaines faisant intervenir des problèmes inverses mal posés,
+Une des formes les plus courantes de régularisation % , utilisée dans de
+% nombreux domaines faisant intervenir des problèmes inverses mal posés,
 consiste à utiliser comme régulariseur la norme $\ell_2$ du vecteur 
 $\bbeta$ :  
 \begin{equation}
@@ -604,22 +532,17 @@ $\bbeta$ :
   \Omega_{\text{ridge}}(\bbeta) = \ltwonorm{\bbeta}^2 = \sum_{j=0}^p \beta_j^2.
 \end{equation}
 
-\subsection{Formulation de la régression ridge}
-On appelle {\it régression ridge} le modèle $f: x \mapsto \bbeta^\top \xx$ dont
+
+On appelle \textbf{régression ridge} le modèle $f: x \mapsto \bbeta^\top \xx$ dont
 les coefficients sont obtenus par
 \begin{equation}
   \label{eq:ridgereg}
   \argmin_{\bbeta \in \RR^{p+1}} \ltwonorm{\yy - X \bbeta}^2 + 
-  \lambda \ltwonorm{\bbeta}^2.
+  \lambda \; \ltwonorm{\bbeta}^2.
 \end{equation}    
 
-% La régression ridge est un cas particulier de {\it régularisation de Tikhonov}
-% (développée pour résoudre des équations intégrales).  Elle intervient aussi
-% dans les réseaux de neurones, où elle est appelée {\it weight decay}
-% (dégradation / modération des pondérations, voir section~\ref{sec:saturation}).
-
-\subsection{Solution}
-Le problème~\ref{eq:ridgereg} est un problème d'optimisation convexe : il s'agit de minimiser une forme
+\paragraph{Solution}
+Le problème~\eqref{eq:ridgereg} est un problème d'optimisation convexe : il s'agit de minimiser une forme
 quadratique. Il se résout en annulant le gradient en $\bbeta$ de la fonction
 objective :
 \begin{equation}
@@ -642,37 +565,37 @@ est :
   \bbeta^* =  \left( \lambda I_p + X^\top X  \right)^{-1} X^\top \yy.
 \end{equation}
   
-Si l'on multiplie la variable $x_j$ par une constante $\alpha$, le coefficient
-correspondant dans la régression linéaire non régularisée est divisé par
-$\alpha.$ En effet, si on appelle $X^*$ la matrice obtenue en remplaçant $x_j$
-par $\alpha x_j$ dans $X$, la solution $\bbeta^*$ de la régression linéaire
-correspondante vérifie $X^* \left( \yy - X^* \bbeta^* \right) = 0$, tandis que
-la solution $\bbeta$ de la régression linéaire sur $X$ vérifie
-$X \left( \yy - X \bbeta \right) = 0.$ Ainsi, changer l'échelle d'une variable
-a comme seul impact sur la régression linéaire non régularisée d'ajuster le
-coefficient correspondant de manière inversement proportionnelle.
+% Si l'on multiplie la variable $x_j$ par une constante $\alpha$, le coefficient
+% correspondant dans la régression linéaire non régularisée est divisé par
+% $\alpha.$ En effet, si on appelle $X^*$ la matrice obtenue en remplaçant $x_j$
+% par $\alpha x_j$ dans $X$, la solution $\bbeta^*$ de la régression linéaire
+% correspondante vérifie $X^* \left( \yy - X^* \bbeta^* \right) = 0$, tandis que
+% la solution $\bbeta$ de la régression linéaire sur $X$ vérifie
+% $X \left( \yy - X \bbeta \right) = 0.$ Ainsi, changer l'échelle d'une variable
+% a comme seul impact sur la régression linéaire non régularisée d'ajuster le
+% coefficient correspondant de manière inversement proportionnelle.
 
-À l'inverse, dans le cas de la régression ridge, remplacer $x_j$ par
-$\alpha x_j$ affecte aussi le terme de régularisation, et a un effet plus
-complexe. L'échelle relative des différentes variables peut donc fortement
-affecter la régression ridge. Il est ainsi recommandé de {\it standardiser} les
-variables avant l'apprentissage, c'est-à-dire de toutes les ramener à avoir un
-écart-type de 1 en les divisant par leur écart-type :
-\begin{equation}
-  \label{eq:standardisation}
-  x_j^i \leftarrow \frac{x_j^i}{\sqrt{\frac1n \sum_{i=1}^n \left( x_j^i - 
-        \frac1n \sum_{i=1}^n x_j^i \right)^2}}
-\end{equation}    
-Attention : pour éviter le sur-apprentissage, il est important que cet
-écart-type soit calculé sur le jeu d'entraînement uniquement, puis appliqué
-ensuite aux jeux de test ou validation.
+% À l'inverse, dans le cas de la régression ridge, remplacer $x_j$ par
+% $\alpha x_j$ affecte aussi le terme de régularisation, et a un effet plus
+% complexe. L'échelle relative des différentes variables peut donc fortement
+% affecter la régression ridge. Il est ainsi recommandé de \textbf{standardiser} les
+% variables avant l'apprentissage, c'est-à-dire de toutes les ramener à avoir un
+% écart-type de 1 en les divisant par leur écart-type :
+% \begin{equation}
+%   \label{eq:standardisation}
+%   x_j^i \leftarrow \frac{x_j^i}{\sqrt{\frac1n \sum_{i=1}^n \left( x_j^i - 
+%         \frac1n \sum_{i=1}^n x_j^i \right)^2}}
+% \end{equation}    
+% Attention : pour éviter le surapprentissage, il est important que cet
+% écart-type soit calculé sur le jeu d'entraînement uniquement, puis appliqué
+% ensuite aux jeux de test ou validation.
 
-La régression ridge a un effet de \og regroupement \fg~sur les variables
-corrélées, au sens où des variables corrélées auront des coefficients
-similaires.
+% La régression ridge a un effet de \og regroupement \fg~sur les variables
+% corrélées, au sens où des variables corrélées auront des coefficients
+% similaires.
 
-\subsection{Chemin de régularisation}
-On appelle {\it chemin de régularisation} l'évolution de la valeur du
+\paragraph{Chemin de régularisation}
+On appelle \textbf{chemin de régularisation} l'évolution de la valeur du
 coefficient de régression d'une variable en fonction du coefficient de
 régularisation $\lambda$.
 
@@ -691,9 +614,9 @@ figure~\ref{fig:ridge_path}.
   \label{fig:ridge_path}
 \end{figure}
 
-\subsection{Interprétation géométrique}
+\paragraph{Interprétation géométrique}
 Étant donnés $\lambda \in \RR_+$, $X \in \RR^{n \times p}$ et $\yy \in \RR^n$,
-il existe un unique $t \in \RR_+$ tel que le problème~\ref{eq:ridgereg} soit
+il existe un unique $t \in \RR_+$ tel que le problème~\eqref{eq:ridgereg} soit
 équivalent à
 \begin{equation}
   \label{eq:ridgereg_dual}
@@ -712,56 +635,51 @@ cette boule, comme illustré sur la figure~\ref{fig:l2reg}.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.7\textwidth]{figures/generalisation/l2reg}
+  \includegraphics[width=0.55\textwidth]{figures/generalisation/l2reg}
   \caption{La solution du problème d'optimisation sous
-    contraintes~\ref{eq:ridgereg_dual} (ici en deux dimensions) se situe sur
+    contraintes~\eqref{eq:ridgereg_dual} (ici en deux dimensions) se situe sur
     une ligne de niveau de la somme des moindres carrés tangente à la boule
     $\ell_2$ de rayon $\sqrt{t}$.}
   \label{fig:l2reg}
 \end{figure}
   
-\section{Le lasso}
+\section{Régularisation $\ell_1$ : lasso}
 \label{sec:lasso}
 
-\subsection{Parcimonie}
+\paragraph{Parcimonie}
 Dans certaines applications, il peut être raisonnable de supposer que
 l'étiquette que l'on cherche à prédire n'est expliquée que par un nombre
 restreint de variables. Il est dans ce cas souhaitable d'avoir un modèle {\it
-  parcimonieux}, ou {\it sparse}, c'est-à-dire dans lequel un certain nombre de
+  parcimonieux}, ou \textbf{sparse}, c'est-à-dire dans lequel un certain nombre de
 coefficients sont nuls : les variables correspondantes peuvent être retirées du
 modèle.
 
-Pour ce faire, Robert Tibshirani a proposé en 1996 d'utiliser comme
+Pour ce faire, on peut utiliser comme
 régulariseur la norme $\ell_1$ du coefficient $\bbeta$ :
 \begin{equation}
   \label{eq:l1norm_reg}
   \Omega_{\text{lasso}}(\bbeta) = \lonenorm{\bbeta} = \sum_{j=0}^p \lvert \beta_j \rvert.
 \end{equation}
 
-Pour comprendre pourquoi ce régulariseur permet de \og pousser \fg~certains
-coefficients vers 0, on se reportera à la section~\ref{sec:interp_geom_lasso}
-et à la figure~\ref{fig:l1reg}.
-
-\subsection{Formulation du lasso}
-On appelle {\it lasso} le modèle $f: x \mapsto \bbeta^\top \xx$ dont les
+On appelle \textbf{lasso} le modèle $f: x \mapsto \bbeta^\top \xx$ dont les
 coefficients sont obtenus par
 \begin{equation}
   \label{eq:lasso}
   \argmin_{\bbeta \in \RR^{p+1}} \ltwonorm{\yy - X \bbeta}^2 + 
   \lambda \lonenorm{\bbeta}.
 \end{equation}    
-Le nom de lasso est en fait un acronyme, pour {\it Least Absolute Shrinkage and
+Le nom de lasso est en fait un acronyme, pour \textbf{Least Absolute Shrinkage and
   Selection Operator} : il s'agit d'une méthode qui utilise les valeurs {\it
-  absolues} des coefficients (la norme $\ell_1$) pour réduire ({\it shrink})
-ces coefficients, ce qui permet de {\it sélectionner} les variables qui
+  absolues} des coefficients (la norme $\ell_1$) pour réduire (\textbf{shrink})
+ces coefficients, ce qui permet de \textbf{sélectionner} les variables qui
 n'auront pas un coefficient nul. En traitement du signal, le lasso est aussi
-connu sous le nom de {\it poursuite de base} ({\it basis pursuit} en anglais).
+connu sous le nom de \textbf{poursuite de base} (\textbf{basis pursuit} en anglais).
 
 En créant un modèle parcimonieux et en permettant d'éliminer les variables
 ayant un coefficient nul, le lasso est une méthode de sélection de variables
 supervisée. Il s'agit donc aussi d'une méthode de réduction de dimension.
 
-\subsection{Solution}
+\paragraph{Solution}
 Le lasso~\ref{eq:lasso} n'admet pas de solution explicite. On pourra utiliser
 un algorithme à directions de descente  pour le résoudre. De plus, il ne s'agit pas
 toujours d'un problème strictement convexe (en particulier, quand $p > n$) et
@@ -777,8 +695,7 @@ ont nécessairement le même signe. Ainsi, l'effet d'une variable a la même
 direction dans toutes les solutions qui la considèrent, ce qui facilite
 l'interprétation d'un modèle appris par le lasso.
   
-\subsection{Interprétation géométrique}
-\label{sec:interp_geom_lasso}
+\paragraph{Interprétation géométrique}
 Comme précédemment, le problème~\ref{eq:lasso} peut être reformulé comme un
 problème d'optimisation quadratique sous contraintes :
 
@@ -793,11 +710,11 @@ il existe un unique $t \in \RR_+$ tel que le problème~\ref{eq:lasso} soit
 
 La solution doit maintenant être contenue dans la boule $\ell_1$ de rayon
 $t$. Comme cette boule a des \og coins \fg, les lignes de niveau de la forme
-quadratique sont plus susceptibles d'y être tangente en un point où une ou
+quadratique sont plus susceptibles d'y être tangentes en un point où une ou
 plusieurs coordonnées sont nulles (voir figure~\ref{fig:l1reg}).
 
 \begin{figure}[h]
-  \centering \includegraphics[width=0.5\textwidth]{figures/generalisation/l1reg}
+  \centering \includegraphics[width=0.55\textwidth]{figures/generalisation/l1reg}
   \caption{La solution du problème d'optimisation sous
     contraintes~\ref{eq:lasso_dual} (ici en deux dimensions) se situe sur
     une ligne de niveau de la somme des moindres carrés tangente à la boule
@@ -806,7 +723,7 @@ plusieurs coordonnées sont nulles (voir figure~\ref{fig:l1reg}).
 \end{figure}
 
 
-\subsection{Chemin de régularisation}
+\paragraph{Chemin de régularisation}
 Sur le chemin de régularisation du lasso (par exemple
 figure~\ref{fig:lasso_path}, sur les mêmes données que pour la
 figure~\ref{fig:ridge_path}), on observe que les variables sortent du modèle
@@ -831,22 +748,131 @@ parcimonieux. Cependant, le choix de cette variable est aléatoire, et peut
 changer si l'on répète la procédure d'optimisation. Le lasso a donc tendance à
 être instable.
 
-\section{Exercice : SVM linéaire pour la régression}
-\todo{}
+% \section{Exercice : SVM linéaire pour la régression}
+% \todo{}
+
+\section{Compléments}
+\subsection{Critères d'évaluation d'un modèle de classification binaire dérivés de la matrice de confusion}
+\label{sec:confusion_matrix_derived}
+
+On appelle \textbf{vrais positifs} (en anglais \textit{true positives}) les
+exemples positifs correctement classifiés ; \textbf{faux positifs} (en anglais
+\textit{false positives}) les exemples négatifs étiquetés positifs par le
+modèle ; et réciproquement pour les \textbf{vrais négatifs} (\textit{true
+  negatives}) et les \textbf{faux négatifs} (\textit{false negatives}). On note
+généralement par \textbf{TP} le nombre de vrais positifs, \textbf{FP} le nombre
+de faux positifs, \textbf{TN} le nombre de vrais négatifs et \textbf{FN} le
+nombre de faux négatifs.
+
+Il est possible de dériver de nombreux critères d'évaluation à partir de la
+matrice de confusion. En voici quelques exemples :
+
+On appelle \textbf{rappel} (\textbf{recall} en anglais), ou \textbf{sensibilité} ({\it
+  sensitivity} en anglais), le taux de vrais positifs, c'est-à-dire la
+proportion d'exemples positifs correctement identifiés comme tels :
+\begin{equation*}
+  \text{Rappel} = \frac{\text{TP}}{\text{TP} + \text{FN}}.
+\end{equation*}
+
+Il est cependant très facile d'avoir un bon rappel en prédisant que \textbf{tous}
+les exemples sont positifs. Ainsi, ce critère ne peut pas être utilisé seul. On
+lui adjoint ainsi souvent la \textbf{précision} :
+
+On appelle \textbf{précision}, ou \textbf{valeur positive prédictive} (\textbf{positive
+  predictive value, PPV}) la proportion de prédictions correctes parmi les
+prédictions positives :
+\begin{equation*}
+  \text{Précision} = \frac{\text{TP}}{\text{TP} + \text{FP}}.
+\end{equation*}
+
+De même que l'on peut facilement avoir un très bon rappel au détriment de la
+précision, il est aisé d'obtenir une bonne précision (au détriment du rappel)
+en faisant très peu de prédictions positives (ce qui réduit le risque qu'elles
+soient erronées)
+
+L'anglais distingue \textbf{precision} (la précision ci-dessus) et \textbf{accuracy},
+qui est la proportion d'exemples correctement étiquetés, soit le complémentaire
+à 1 du taux d'erreur, aussi traduit par \textbf{précision} en français. On
+utilisera donc ces termes avec précaution.
+
+Pour résumer rappel et précision en un seul nombre, on calculera la
+\textbf{F-mesure} (\textit{F-score} ou \textit{F1-score} en anglais), qui est
+la moyenne harmonique de la précision et du rappel :
+\begin{equation*}
+  F = 2 \frac{\text{Précision . Rappel}}{\text{Précision} + \text{Rappel}} = 
+  \frac{2 \text{TP}}{2 \text{TP} + \text{FP} + \text{FN}}.
+\end{equation*}
+
+Enfin, on appelle \textbf{spécificité} le taux de vrais négatifs, autrement dit la
+proportion d'exemples négatifs correctement identifiés comme tels.
+\begin{equation*}
+  \text{Spécificité} = \frac{\text{TN}}{\text{FP} + \text{TN}}.
+\end{equation*}
+
+\subsection{Erreurs de régression}
+\label{sec:regression_errors}
+Pour mesurer l'erreur dans la même unité que celle des étiquettes, on préfère
+souvent à l'erreur quadratique moyenne sa racine, généralement appelée
+\textbf{RMSE} de l'anglais \textbf{root mean squared error} :
+
+\begin{equation*}
+  \text{RMSE} = \sqrt{\frac1n \sum_{i=1}^n \left( f(\xx^i) - y^i \right)^2}.
+\end{equation*}
+
+L'interprétation de la RMSE requiert néanmoins de connaître la distribution
+des valeurs cibles : une RMSE de 1 cm n'aura pas la même signification selon
+qu'on essaie de prédire la taille d'humains ou celle de drosophiles.  Pour
+répondre à cela, il est possible de normaliser la somme des carrés des résidus
+non pas en en faisant la moyenne, mais en la comparant à la somme des distances
+des valeurs cibles à leur moyenne.  On appelle \textbf{erreur carrée relative},
+ou \textbf{RSE} de l'anglais \textbf{relative squared error} la valeur
+\begin{equation*}
+  \text{RSE} = \frac{ \sum_{i=1}^n \left( f(\xx^i) - y^i \right)^2}{
+    \sum_{i=1}^n \left( y^i - \frac1n \sum_{l=1}^n y^l \right)^2}.
+\end{equation*}
+
+Le complémentaire à 1 de la RSE est le \textbf{coefficient de détermination}, noté
+$R^2$.
+
+On note le coefficient de détermination $R^2$ car il s'agit du carré du
+coefficient de corrélation de Pearson entre les prédictions et les valeurs réelles. 
+
+
+
+
+\begin{plusloin}
+\item Au-delà des normes $\ell_1$ et $\ell_2$, il est possible d'utiliser des
+  régulariseurs de la forme $\Omega_{\ell_q}(\bbeta) = ||\bbeta||_q^q.$
+\item Une famille de régulariseurs appelés \og structurés \fg~permettent de
+  sélectionner des variables qui respectent une structure (graphe, groupes, ou
+  arbre) donnée a priori. Ces approches sont utilisées en particulier dans des
+  applications bio-informatiques, par exemple quand on cherche à construire des
+  modèles parcimonieux basés sur l'expression de gènes sous l'hypothèse que
+  seul un petit nombre de voies métaboliques (groupes de gènes) est
+  pertinent. Pour plus de détails, on se référera par exemple à
+  \textit{Learning with structured sparsity}, J. Huang, T. Zhang \& D. Metaxas,
+  Journal of Machine Learning Research 12:3371--3412 (2011).
+\item Un ouvrage entièrement consacré au lasso et ses généralisations :
+  \href{http://web.stanford.edu/~hastie/StatLearnSparsity/}{\textit{Statistical
+      learning with sparsity: the {Lasso} and generalizations}}, T. Hastie,
+  R. Tibshirani \& M. Wainwright (2015).
+\item La régularisation est une technique importante des \textit{problèmes
+    inverses} que vous pourrez découvrir dans l'ES du même nom l'an prochain. 
+\end{plusloin}
 
 % \section{Points clés}
 % \begin{itemize}
 % \item Le compromis biais-variance traduit le compromis entre l'erreur
 %   d'approximation, correspondant au biais de l'algorithme d'apprentissage, et
 %   l'erreur d'estimation, correspondant à sa variance.
-% \item La généralisation et le sur-apprentissage sont des préoccupations
+% \item La généralisation et le surapprentissage sont des préoccupations
 %   majeures en machine learning : comment s'assurer que des modèles entraînés
 %   pour minimiser leur erreur de prédiction sur les données observées seront
 %   généralisables aux données pour lesquelles il nous intéresse de faire des
 %   prédictions ?
 % \item Ajouter un terme de régularisation, fonction du vecteur des coefficients
 %   $\bbeta$, au risque empirique de la régression linéaire permet d'éviter le
-%   sur-apprentissage
+%   surapprentissage
 % \item La régression ridge utilise la norme $\ell_2$ de $\bbeta$ comme
 %   régulariseur ; elle admet toujours une unique solution analytique, et a un
 %   effet de regroupement sur les variables corrélées.
