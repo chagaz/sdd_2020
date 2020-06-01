@@ -1,0 +1,136 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../../poly/notations}
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE21.1: Science des données \hfill
+QCM 7 -- Généralisation
+\end{center}
+
+\noindent
+\hfill 3 juin 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+
+% \paragraph{Question 1.} 
+% \begin{itemize}
+% \item[$\square$] 
+% \item[$\square$] 
+% \item[$\square$] 
+% \end{itemize}
+
+\paragraph{Question 1.} Un modèle de régression régularisée est plus
+  susceptible de surapprendre si le paramètre de régularisation est
+\begin{itemize}
+\item[$\square$] élevé ;
+\item[$\square$] faible ;
+\item[$\square$] ça dépend des cas.
+\end{itemize}
+
+\paragraph{Question 2.}     Dans un lasso, il y a plus de coefficients nul quand le 
+    paramètre de régularisation est 
+\begin{itemize}
+\item[$\square$] élevé ;
+\item[$\square$] faible ;
+\item[$\square$] ça dépend des cas.
+\end{itemize}
+
+\paragraph{Question 3.} Par rapport à un modèle complexe, un modèle plus simple est
+\begin{itemize}
+\item[$\square$] plus rapide à entraîner ;
+\item[$\square$] plus susceptible de surapprendre ;
+\item[$\square$] plus susceptible de bien généraliser ;
+\item[$\square$] plus susceptible de minimiser le risque empirique.
+\end{itemize}
+
+
+\newpage
+
+\section*{Solution}
+\paragraph{Question 1.}  Quand $\lambda$ est faible, c'est le risque empirique
+qui domine et le modèle est plus susceptible de surapprendre.
+
+
+\paragraph{Question 2.} Quand $\lambda$ croît, le régulariseur prend plus
+d'importance et le nombre de coefficients nuls augmente.
+
+\paragraph{Question 3.} Le temps d'entrainement ne dépend pas toujours de la
+complexité du modèle. Un modèle plus simple sera cependant souvent plus
+rapide à entrainer.
+
+Un modèle simple est moins susceptible de surapprendre (et plus susceptible de sousapprendre) ; généralisera mieux, sauf s'il est en sous-apprentissage ; et minimisera moins bien le risque empirique.
+
+\end{document}
+
+
+
+
+
+
+
