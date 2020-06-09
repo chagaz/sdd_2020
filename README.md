@@ -34,7 +34,7 @@ __Modalités d'évaluation__
 * ~examen sur table avec documents autorisés à réaliser le 1er juillet (70%).~
 
 Vous aurez le choix entre les deux modes d'évaluation suivant :
-* rapport de projet numérique, basé sur le mini-projet numérique des séances de PC du 20 mai et du 17 juin. Travail individuel ou en binôme sur le code + rapport individuel. Les consignes seront disponibles début juin.
+* rapport de projet numérique, basé sur le mini-projet numérique des séances de PC du 20 mai et du 17 juin. Travail individuel ou en binôme sur le code + rapport individuel. Les consignes sont dans le dossier `projet/`.
 * examen avec documents autorisés à réaliser le 1er juillet. 
 
 __Emploi du temps__
@@ -67,7 +67,7 @@ __Emploi du temps__
   * __14h-15h30 :__ PC 6 — Modèles linéaires pour la classification
 
 * __mercredi 17/06 :__
-  * __11h-12h30 :__ cours 9 — Modèles d'apprentissage supervisé non-linéaires (Chapitre 9) 
-  * __14h-15h30 :__ PC 7 — Mini-projet numérique (2)
+  * __14h-15h30 :__ cours 9 — Modèles d'apprentissage supervisé non-linéaires (Chapitre 9) 
+  * __16h-17h30 :__ PC 7 — Mini-projet numérique (2)
 
 * __mercredi 1/07 9h-12h : examen écrit.__
