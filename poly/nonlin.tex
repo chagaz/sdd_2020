@@ -8,26 +8,33 @@ arbres de décision et forêts aléatoires, méthodes à noyaux.
 \begin{itemize}      
   \setlength{\itemsep}{3pt}
 \item Décrire les similarités et différences entre réseaux de neurones artificiels et modèles linéaires ; 
-\item Reconnaître les cas d'application de l'apprentissage profond ; 
-\item Mettre en \oe{}uvre un algorithme d'apprentissage ensembliste ; 
 \item Utiliser l'astuce du noyau pour apprendre des modèles non-linéaires à
-  partir des algorithmes linéaires vus précédemment.
+  partir des algorithmes linéaires vus précédemment ;
+\item Mettre en \oe{}uvre un algorithme d'apprentissage ensembliste.
 \end{itemize}
 
-\todo{Bien positionner les $\bigstar$}
+Tous les modèles d'apprentissage supervisé que nous avons vus jusqu'à présent
+utilisent une fonction linéaire des variables. Il s'agit dans ce chapitre
+d'aborder comment construire des modèles non-linéaires, dont la capacité de
+modélisation supérieure pourra permettre d'apprendre des modèles plus complexes. Attention néanmoins au surapprentissage !
+
+Dans ce chapitre, nous considérons sauf mention contraire un jeu de données
+$\DD = \{\xx^i, y^i\}_{i=1, \dots, n}$ de $n$ observations en $p$ dimensions et
+leurs étiquettes dans $\YY$, avec $\YY= \{0, 1\}$ pour un problème de
+classification binaire et $\YY = \RR$ pour un problème de régression.
 
 \section{Modèles paramétriques non-linéaires}
 
 \subsection{Régression polynomiale}
 \label{sec:polynomial_reg}
 Une première façon de construire des modèles non-linéaires, que nous avons
-brièvement abordée dans la PC 5, consiste à apprendre une fonction de
+brièvement abordée dans la PC~5, consiste à apprendre une fonction de
 décision de la forme suivante :
 \begin{equation}
   \label{eq:polynomial_decision}
   f: \xx \mapsto \beta^0_0 + \sum_{j=1}^p \beta^1_{j} x_j + 
   \sum_{j=1}^p \sum_{k=1}^p \beta^2_{jk} x_j x_k + \dots +
-  \underbrace{\sum_{j=1}^p \dots \sum_{\xi=1}^p}{d \text{ termes}} \beta^d_{jk\dots\xi} x_j x_k \dots x_{\xi}.
+  \underbrace{\sum_{j=1}^p \dots \sum_{\xi=1}^p}_{d \text{ termes}} \beta^d_{jk\dots\xi} x_j x_k \dots x_{\xi}.
 \end{equation}
 On parle alors de \textbf{régression polynomiale} de degré $d$.
 
@@ -37,7 +44,7 @@ Attention, on crée ainsi un grand nombre de variables, corrélées entre elles :
 il est alors indispensable d'utiliser un terme de régularisation pour éviter le
 surapprentissage.
 
-Le principe s'applique aussi à la régression logistique (vue dans la PC 6).
+Le principe s'applique aussi à la régression logistique (vue dans la PC~6).
 
 
 \subsection{Perceptron}
@@ -56,7 +63,6 @@ relations complexes et non linéaires qui fait leur succès.
 Le premier réseau de neurones artificiels est le \textbf{perceptron}, proposé
 par Rosenblatt en 1957. Il comporte une seule couche et a une capacité de
 modélisation limitée.
-
 Le perceptron (figure~\ref{fig:perceptron}) est formé d'une couche d'entrée de
 $p$ neurones, ou \textbf{unités}, correspondant chacune à une variable
 d'entrée. Ces neurones transmettent la valeur de leur entrée à la couche
@@ -100,7 +106,7 @@ d'activation, est historiquement le premier à avoir été traité. Ce cas est
 détaillé dans la section~\ref{sec:perceptron_binary}.  On utilisera plutôt,
 comme
 % \item Pour prédire la probabilité d'appartenir à la classe positive, comme
-dans le cas de la régression logistique (voir PC 6), une fonction logistique. Le modèle appris est donc
+dans le cas de la régression logistique (voir PC~6), une fonction logistique. Le modèle appris est donc
 \begin{equation}
   \xx \mapsto \frac1{1 + e^{- o(\xx)}} = 
   \frac1{1 + \exp \left( - \innerproduct{\ww,~\xx} \right)}.
@@ -109,36 +115,97 @@ dans le cas de la régression logistique (voir PC 6), une fonction logistique. Le
 
 \paragraph{Minimisation du risque empirique} Pour entraîner un perceptron, nous
 allons chercher, comme pour toute régresssion paramétrique, à minimiser le
-risque empirique.
-
-Cependant, nous allons supposer que les observations $(\xx^i, y^i)$ ne sont pas
-disponibles simultanément, mais qu'elles sont observées séquentiellement. Cette
-hypothèse découle de la plasticité des réseaux de neurones biologiques : ils
-s'adaptent constamment en fonction des signaux qu'ils reçoivent. Nous allons
-donc utiliser un algorithme d'entraînement \textbf{incrémental}, qui s'adapte à
-des observations arrivant les unes après les autres. En anglais, on parlera de
-\textit{online learning}. En pratique, on s'appuie sur un algorithme à
-directions de descente.
-
+risque empirique.  Cependant, nous allons supposer que les observations
+$(\xx^i, y^i)$ ne sont pas disponibles simultanément, mais qu'elles sont
+observées séquentiellement. Cette hypothèse découle de la plasticité des
+réseaux de neurones biologiques : ils s'adaptent constamment en fonction des
+signaux qu'ils reçoivent. Nous allons donc utiliser un algorithme
+d'entraînement \textbf{incrémental}, qui s'adapte à des observations arrivant
+les unes après les autres. En anglais, on parlera de \textit{online
+  learning}. Il s'agit donc d'appliquer un algorithme à directions de descente
+itérativement, observation par observation, comme décrit dans la
+section~\ref{sec:train_perceptron}, ou vous trouverez aussi lus de détails sur
+les fonctions de pertes utilisées. 
 C'est cela qui distingue un perceptron d'une régression linéaire (pour la
 régression) ou logistique (pour la classification).
 
-Vous trouverez dans la section~\ref{sec:train_perceptron} plus de détails sur
-les fonctions de pertes utilisées et sur l'algorithme utilisé pour minimiser le
-risque empirique.
+\subsection{Entrainement du perceptron $\bigstar$}
+\label{sec:train_perceptron}
+
+L'entraînement du perceptron commence par
+une initialisation aléatoire du vecteur de poids de connexion\\
+$w_0^{(0)}, w_1^{(0)}, \dots, w_p^{(0)}$, par exemple, $\ww = \vec{0}$.
+
+Puis, à chaque observation, on ajuste ce vecteur dans la direction opposée au
+gradient du risque empirique. En effet, ce gradient indique la direction de
+plus forte pente du risque empirique ; le redescendre nous rapproche d'un point
+où ce risque est minimal. Formellement, à une itération de l'algorithme, on
+tire une nouvelle observation $(\xx^i, y^i)$ et on actualise, pour tout $j$,
+les poids de connexion de la façon suivante :
+\begin{equation}
+  \label{eq:update_rule}
+  w_j \leftarrow w_j - \eta \frac{\partial L(f(\xx^i), y^i)}{\partial w_j}.
+\end{equation}
+
+Il est possible (et même recommandé dans le cas où les données ne sont pas
+extrêmement volumineuses) d'itérer plusieurs fois sur l'intégralité du jeu
+de données. Typiquement, on itère jusqu'à ce que l'algorithme converge à
+$\epsilon$ près.
+
+Cet algorithme a un hyperparamètre, $\eta > 0$, qui est le pas de l'algorithme
+du gradient et que l'on appelle la \textbf{vitesse d'apprentissage} (ou {\it
+  learning rate}) dans le contexte des réseaux de neurones artificiels. Cet
+hyperparamètre joue un rôle important : s'il est trop grand, l'algorithme
+risque d'osciller autour de la solution optimale, voire de diverger. À
+l'inverse, s'il est trop faible, l'algorithme va converger très lentement. Il
+est donc essentiel de bien choisir sa vitesse d'apprentissage.
+
+En pratique, on utilise souvent une vitesse d'apprentissage adaptative :
+relativement grande au début, puis de plus en plus faible au fur et à mesure
+que l'on se rapproche de la solution. Cette approche est à rapprocher
+d'algorithmes similaires développés dans le cas général de l'algorithme du
+gradient (comme par exemple la recherche linéaire par rebroussement
+(\textit{backtracking line search}).
+
+\paragraph{Classification probabiliste}
+Dans le cas de la classification probabiliste, visant à prédire la probabilité
+d'appartenir à la classe positive plutôt qu'une étiquette binaire, on utilise
+l'entropie croisée comme fonction de coût (cf section~\ref{sec:cross_entropy}) :
+\begin{equation*}
+  L(f(\xx^i), y^i) = 
+- y^i \ln \left( \innerproduct{\ww,~\xx} \right) - (1-y^i) \ln \left( 1 - \innerproduct{\ww,~\xx}\right) 
+\end{equation*}
+Quelques lignes de calcul montrent que la régle d'actualisation~\eqref{eq:update_rule} devient :
+\begin{equation}
+  \label{eq:update_rule_class_prob}
+  w_j \leftarrow w_j - \eta (y^i - f(\xx^i)) x_j^i.
+\end{equation}
+
+\paragraph{Régression}
+Dans le cas de la régression, on utilise comme fonction de coût le
+coût quadratique :
+\begin{equation}
+  L(f(\xx^i), y^i) = 
+  \frac12 \left(y^i - \innerproduct{\ww,~\xx}\right)^2.
+\end{equation}
+La règle d'actualisation~\eqref{eq:update_rule} devient :
+\begin{equation}
+  \label{eq:update_rule_reg}
+  w_j \leftarrow w_j - \eta (f(\xx^i) - y^i) x_j^i.
+\end{equation}
+C'est exactement la même règle que pour la classification probabiliste (équation~\eqref{eq:update_rule_class_prob}).
 
 
-\section{Apprentissage profond}
+
+\subsection{Perceptron multi-couche}
 La capacité de modélisation du perceptron est limitée car il s'agit d'un modèle
 linéaire. Après l'enthousiasme généré par les premiers modèles connexionistes,
 cette réalisation a été à l'origine d'un certain désenchantement au début des
 années 1970... qui est maintenant bien loin derrière nous.
-
-De l'annotation automatique d'images à la reconnaissance vocale, en passant par
-des ordinateurs capables de battre des champions de go et par les véhicules
-autonomes, les récents succès de l'intelligence artificielle sont nombreux à
-reposer sur les réseaux de neurones profonds, et le {\it deep learning} (ou
-\textbf{apprentissage profond}) fait maintenant beaucoup parler de lui.
+De l'annotation automatique d'images à la reconnaissance vocale, les récents
+succès de l'intelligence artificielle sont nombreux à reposer sur les réseaux
+de neurones profonds, et le {\it deep learning} (ou \textbf{apprentissage
+  profond}) fait en effet beaucoup parler de lui.
 
 On appelle \textbf{perceptron multi-couche}, ou {\it multi-layer perceptron}
 ({\it MLP}) en anglais, un réseau de neurones construit en insérant des
@@ -204,7 +271,7 @@ section~\ref{sec:universal_approx}), mais le risque de surapprentissage est
 élevé.  Les réseaux de neurones profonds requièrent ainsi souvent des quantités
 massives de données pour apprendre de bons modèles.
 
-\paragraph{Instabilité du gradient}
+\subsection{Entraînement d'un perceptron multi-couche}
 Il est important de remarquer que la minimisation du risque empirique pour un
 perceptron multi-couche n'est {\it pas} un problème d'optimisation
 convexe. Ainsi, nous n'avons pas d'autres choix que d'utiliser un algorithme à
@@ -231,7 +298,8 @@ gradient pour minimiser, à chaque nouvelle observation, le risque
 $L(f(\xx^i), y^i)$. Pour plus de détails, reportez-vous à la
 section~\ref{sec:backprop}.
   
-\paragraph{Deep learning} Le domaine de l'\textbf{apprentissage profond} repose
+\subsection{Deep learning}
+Le domaine de l'\textbf{apprentissage profond} repose
 fondamentalement sur les principes que nous venons de voir. En effet, un
 perceptron multi-couche est profond dès lors qu'il contient suffisamment de
 couches -- la définition de \og suffisamment \fg~dépendant des auteurs.  Le
@@ -283,7 +351,7 @@ Nous allons tout d'abord illustrer leur principe sur l'exemple de la régression 
 
 \paragraph{Réécriture de la régression ridge}
 Nous utilisons ici les mêmes notations qu'à la section~\ref{sec:ridge_regression}.
-a fonction de prédiction de la régression ridge est de la forme
+La fonction de prédiction de la régression ridge est de la forme
 \begin{equation}
   \label{eq:reg_ridge_pred}
   f(\xx) = \langle \xx,  \bbeta^* \rangle,
@@ -428,7 +496,7 @@ Cela signifie que nous n'avons pas besoin de faire de calculs dans $\HH$, qui
 est généralement de très grande dimension : c'est ce que l'on appelle
 \textbf{l'astuce du noyau.} Elle s'applique non seulement à la régression
 ridge, mais aussi à de nombreux autres algorithmes d'apprentissage, dont les
-SVM (vues dans la PC6), ce que vous pouvez lire en plus de détails dans la section~\ref{sec:kernel_svm}.
+SVM (vues dans la PC~6), ce que vous pouvez lire en plus de détails dans la section~\ref{sec:kernel_svm}.
 
 Quand on applique l'astuce du noyau à la régression ridge, on parle de
 \textbf{régression ridge à noyau} ou \textit{kernel ridge regression (KRR)} en
@@ -456,16 +524,309 @@ arbitrairement grand.
 Vous trouverez plus d'exemples de noyaux dans la section~\ref{sec:more_kernels}.
 
 
-\section{Arbres de décision}
+\section{Arbres et forêts}
+À l'exception de l'algorithme des $k$ plus proches voisins (cf. PC~4), les
+algorithmes d'apprentissage supervisé que nous avons vus jusqu'à présent
+permettent d'apprendre des modèles paramétriques. Les arbres de décision sont
+un autre exemple de modèle simple et non-paramétrique \footnote{Les modèles
+  appris par des méthodes à noyau sont aussi non-paramétriques : il n'y a plus
+  d'hypothèse sur la distribution de $(X, Y)$. La complexité d'un modèle à
+  noyau augmente avec le nombre d'observations.}.
+
+\subsection{Arbres de décision}
+On appelle \textbf{arbre de décision} (\textit{decision tree} en anglais) un
+modèle prédictif qui peut être représenté sous la forme d'un arbre. Chaque
+n{\oe}ud de l'arbre teste une condition sur une variable et chacun de ses
+enfants correspond à une réponse possible à cette condition. Les feuilles de
+l'arbre correspondent à une étiquette.
+
+Pour prédire l'étiquette d'une observation, on \og suit \fg~les réponses aux
+tests depuis la racine de l'arbre, et on retourne l'étiquette de la feuille à
+laquelle on arrive.
+
+Ils sont couramment utilisés en dehors du monde du machine learning, par
+exemple pour décrire les étapes d'un diagnostic ou d'un choix de traitement
+pour un médecin, ou les chemins possibles dans un \og livre dont vous êtes le
+héros \fg. La figure~\ref{fig:fruit_tree} présente un tel arbre de décision.
+
+Les arbres de décision permettent de traiter naturellement des variables
+qualitatives.
+
+Ils permettent aussi de traiter des classes
+multi-modales (comme ici pour l'étiquette \og pomme \fg, qui est affectée à un
+fruit grand et rouge ou à un fruit jaune et rond.)
 
 
-\section{Méthodes ensemblistes}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/nonlin/fruit_tree}
+  \caption{Exemple d'arbre de décision pour classifier des fruits entre pommes
+    (+) et autres (-).}
+  \label{fig:fruit_tree}
+\end{figure}
+
+
+
+\subsection{Comment faire pousser un arbre de décision (cas binaire)}
+\label{sec:grow_tree_binary}
+L'algorithme utilisé pour entraîner un arbre de décision est appelé
+\textbf{CART}, pour {\it Classification And Regression Tree}. Il s'agit d'un
+algorithme de partitionnement de l'espace par une approche gloutonne, récursive
+et divisive.
+
+Dans cette section, nous expliquons comment entraîner un arbre de décision pour
+un problème de classification binaire sur des variables binaires : on considère
+$\YY = \{0, 1\}$ et $x_j \in \{0, 1\}$ pour tout $j=1, \dots, p$.
+
+À chaque n{\oe}ud d'un arbre de décision construit par CART correspond une
+\textbf{variable séparatrice} ({\it splitting variable})
+$j \in \{1, \dots, p\}$ selon laquelle vont être partitionnées les
+données. Cette variable séparatrice définit deux régions, correspondant aux
+enfants du n{\oe}ud considéré :
+\begin{equation*}
+  R_l(j) = \{\xx~|~x_j = 0\} ; \hspace{2em} 
+  R_r(j) =  \{\xx~|~x_j = 1\}.
+\end{equation*}
+Au niveau de la racine de l'arbre, $R_l$ et $R_r$ partitionnent l'ensemble des
+observations. Ensuite, chaque n{\oe}ud partitionne uniquement les observations
+qui sont arrivées jusqu'à lui, autrement dit qui vérifient toutes les
+conditions dictées par ses parents.
+
+
+On peut alors associer, au niveau de ce n{\oe}ud, l'étiquette majoritaire de la
+région $R_l(j)$ à tous les individus de $R_l(j)$ et l'étiquette majoritaire de
+la région $R_r(j)$ à tous les individus de $R_r(j)$.
+
+\paragraph{Exemple} Sur l'exemple de la figure~\ref{fig:fruit_tree}, il
+s'agirait par exemple au n{\oe}ud « incurvé » $R_l$ l'ensemble des fruits non
+rouge et de forme incurvée, et $R_r$ l'ensemble des fruits non rouge et de
+forme non incurvée. Si la majorité des individus de $R_l$ ne sont pas des
+pommes, on associe alors l'étiquette négative à tous les individus de $R_l$. Si
+la majorité des individus de $R_r$ sont des pommes, on associe alors
+l'étiquette positive à tous les individus de $R_r$ (malgré la présence de
+citrons dans $R_r$, qui ne seront identifiés qu'au n{\oe}ud suivant).
+
+À chaque itération de CART, on itère sur toutes les valeurs possibles de $j$
+pour déterminer celle qui minimise localement l'erreur faite en attribuant à
+toutes les observations d'une région l'étiquette majoritaire dans cette région.
+Il s'agit donc bien d'un problème de minimisation du risque
+empirique. Cependant, il s'agit d'un algorithme glouton : il n'y a aucune
+garantie que cette stratégie aboutisse à l'arbre de décision dont l'erreur sur
+le jeu d'entraînement est minimale.
+
+\paragraph{Formalisation $\bigstar$} On peut formellement noter :
+\begin{equation}
+  \argmin_{j \in \{1, \dots, p\}} \left( 
+    \frac1{\abs{R_l(j)}} \sum_{i: \xx^i \in R_l(j)} L(y_l(j), y^i)  + 
+     \frac1{\abs{R_r(j)}} \sum_{i: \xx^i \in R_r(j)} L(y_r(j), y^i)
+   \right)
+   \label{eq:erm_binary_tree}
+\end{equation}
+avec $y_l(j)$ l'étiquette majoritaire dans $R_l(j)$, à savoir
+\begin{equation*}
+y_l(j) = \argmax_{c \in \{0, 1\}} \abs{\{i:\xx^i \in R_l(j) ~|~y^i=c\}},
+\end{equation*}
+et, similairement, 
+$y_r(j)$ l'étiquette majoritaire dans $R_r(j)$, à savoir
+\begin{equation*}
+y_r(j) = \argmax_{c \in \{0, 1\}} \abs{\{i:\xx^i \in R_r(j) ~|~y^i=c\}}.
+\end{equation*}
+
+
+La section~\ref{sec:impurity} donne plus de détail sur la fonction de perte $L$
+utilisée dans le cas des arbres de décision. Vous pouvez considérer qu'on
+utilise l'erreur de classification.
+
+La section~\ref{sec:grow_tree} montre comment étendre ce principe à des
+problèmes de régression et à des variables discrètes (de plus de deux
+modalités) ou continues. Il s'agit
+\begin{itemize}
+\item pour traiter les variables non-binaires, de les binariser (pour une variable continue, il s'agira de les comparer à un seuil) ;
+\item pour traiter la régression, de remplacer le vote de la majorité par une
+  moyenne.
+\end{itemize}
+
+Malheureusement, les arbres de décision ont tendance à donner des modèles trop
+simples et à avoir des performances de prédiction à peine supérieures à des
+modèles aléatoires et peu robustes aux variations dans les données. On les
+qualifie d'\textbf{apprenants faibles} ({\it weak learners} en
+anglais). Heureusement, il est possible d'y remédier grâce aux méthodes
+ensemblistes.
+
+\subsection{Comment faire pousser un arbre de décision (cas général) $\bigstar$}
+\label{sec:grow_tree}
+Dans le cas où la variable de séparation est une variable {\it discrète}
+pouvant prendre plus de deux valeurs (ou modalités), elle s'accompagne alors
+d'un sous-ensemble de ces valeurs $\Scal \subset \text{dom}(x_j).$ Les deux
+régions sont
+\begin{equation*}
+  R_l(j, \Scal) = \{\xx~|~x_j \in \Scal\} ; \hspace{2em} 
+  R_r(j, \Scal) = \{\xx~|~x_j \notin  \Scal\}.
+\end{equation*}
+
+Dans le cas où la variable de séparation est une variable {\it réelle},
+elle s'accompagne alors d'un \textbf{point de séparation} ({\it splitting
+  point}) $s$ qui est la valeur de la variable par rapport à laquelle va se
+faire la décision. Les deux régions sont alors
+\begin{equation*}
+  R_l(j, s) = \{\xx~|~x_j < s\} ; \hspace{2em} R_r(j, s) = \{\xx~|~x_j \geq s\}.
+\end{equation*}
+Si l'on suppose les valeurs prises par la variable $j$ dans $\DD$ ordonnées :
+$x_j^1 \leq x_j^2 \leq \dots, \leq x_j^n$, alors les valeurs possibles de $s$
+sont $\frac{x^{i+1}_j - x^i_j}2$ pour toutes les valeurs de $i$ telles que
+$x^{i+1}_j \neq x^i_j.$
+
+
+À chaque itération de l'algorithme CART, on itère sur toutes les valeurs
+possibles de $j$ et, le cas échéant, toutes les valeurs possibles de $s$ ou
+$\Scal$ pour déterminer celle qui minimise localement l'erreur faite en
+attribuant à toutes les observations de la région de gauche $(R_l)$ (resp. de
+droite $(R_r)$) leur étiquette majoritaire (dans le cas d'un problème de
+classification) ou moyenne (dans le cas d'un problème de régression).
+
+
+Formellement, notons $\Ical$ l'ensemble des variables de
+séparations possibles, à savoir l'union
+\begin{itemize}
+\item des indices $j$ des variables binaires ;
+\item des couples $(j, \Scal)$ de paires de variables discrètes à plus de deux
+  modalités, et de tous les sous-ensembles $\Scal$ possible de ces modalités ;
+\item des couples $(j, s)$ de paires de variables continues et des points de
+  séparation possibles.
+\end{itemize}
+Nous noterons donc ainsi $\zeta \in \Ical$ une variable de séparation,
+accompagnée si elle est discrète d'un sous-ensemble $\Scal$ de valeurs ou si
+elle est continue d'un seuil $s$, ce qui nous permet de noter $R_l(\zeta)$ et
+$R_r(\zeta)$ les deux régions définies par $\zeta$ indépendamment de sa nature
+binaire, discrète ou continue.
+
+Notons maintenant
+\begin{equation*}
+  y_l(\zeta) =
+  \begin{cases}
+    \argmax_{c \in \{0, 1\}} \abs{\{i:\xx^i \in R_l(\zeta) ~|~y^i=c\}} & \text{ pour un problème de classification binaire } \\
+    \frac1{\abs{\{i:\xx^i \in R_l(\zeta)\}}} \sum_{i:\xx^i \in R_l(\zeta)} y^i & \text{ pour un problème de régression.}
+  \end{cases}
+\end{equation*}
+
+on généralise alors l'équation~\eqref{eq:erm_binary_tree} en :
+\begin{equation}
+  \argmin_{\zeta \in \Ical} \left( 
+    \frac1{\abs{R_l(\zeta)}} \sum_{i: \xx^i \in R_l(\zeta)} L(y_l(\zeta), y^i)  + 
+     \frac1{\abs{R_r(\zeta)}} \sum_{i: \xx^i \in R_r(\zeta)} L(y_r(\zeta), y^i)
+  \right)
+\end{equation}
+
+Dans le cas d'un problème de régression, la fonction de perte $L$ est, encore
+une fois, l'erreur quadratique moyenne. Dans le cas d'un problème de
+classification, plusieurs choix sont possibles. Ces choix sont
+détaillés dans la section~\ref{sec:impurity}.
+
+Ainsi, avec beaucoup d'échantillons et beaucoup de variables continues, un
+arbre de décision peut être long à entraîner : il faut à chaque n{\oe}ud tester
+toutes les variables et chacun de leur seuils, ce qui fait de l'ordre de $np$
+opérations par n{\oe}ud.
+
+
+\subsection{Méthodes ensemblistes}
+Les méthodes ensemblistes sont des méthodes très puissantes en pratique, qui
+reposent sur l'idée que combiner de nombreux apprenants faibles permet
+d'obtenir une performance largement supérieure aux performances individuelles
+de ces apprenants faibles, car leurs erreurs se compensent les unes les autres.
+
+Les méthodes ensemblistes sont particulièrement pertinentes lorsque les modèles
+que l'on combine ont été appris par des apprenants faibles, c'est-à-dire
+simples à entraîner et peu performants.  En pratique, si les modèles
+individuels sont déjà performants et robustes au bruit, le modèle ensembliste
+ne sera pas nécessairement meilleur. On utilise le plus souvent des arbres de
+décision comme modèles individuels.
+
+% Cette idée est similaire au concept de \textbf{sagesse des foules}, ou {\it
+%   wisdom of crowd} : si je demande à mes élèves l'année de la mort de Georges
+% Pompidou, il est probable que la moyenne de leurs réponses soit assez proche de
+% la bonne (1974) ; cependant, si je demande cette date à une seule personne au
+% hasard, je n'aurais aucun moyen de savoir a priori si cette personne connaît la
+% date ou me répond au hasard.
+
+\begin{exemple}
+  Pour illustrer ce concept, imaginons une tâche de classification en deux
+  dimensions, dans laquelle les deux classes sont séparées par une diagonale,
+  mais que le seul algorithme d'apprentissage dont nous disposions ne puisse
+  apprendre qu'une frontière de décision en escalier, avec un nombre limité de
+  paliers. Combiner des dizaines voire des centaines de ces frontières de
+  décision en escalier peut nous donner une bien meilleure approximation de la
+  véritable frontière de décision. Cet exemple est illustré sur la
+  figure~\ref{fig:crowd_diagonal}.
+\end{exemple}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.4\textwidth]{figures/nonlin/crowd_diagonal}
+  \caption{Chacune des frontières de décision en escalier est une mauvaise
+    approximation de la vraie frontière qui est la diagonale en trait
+    plein. Cependant, combiner ces escalier permet une meilleure
+    approximation de la diagonale.}
+  \label{fig:crowd_diagonal}
+\end{figure}
+
+
+\subsection{Bagging} Mais comment créer {\it plusieurs} arbres de décision
+différents à partir d'un unique jeu de données ? Le \textbf{bagging} est une
+méthode parallèle, basée sur le ré-échantillonnage, qui permet de créer des
+arbres indépendants les uns des autres.
+
+Il consiste à former $B$ versions de $\DD$ par \textbf{échantillonage
+  bootstrap}, autrement dit en tirant $n$ exemples de $\DD$ {\it avec
+  remplacement}. Ainsi, chaque exemple peut apparaître plusieurs fois, ou pas
+du tout, dans $\DD_b$.
+
+La probabilité que $(\xx^i, y^i)$ apparaisse dans $\DD_b$ peut être calculée
+comme le complémentaire à 1 de la probabilité que $(\xx^i, y^i)$ ne soit tiré
+aucune des $n$ fois. La probabilité de $(\xx^i, y^i)$ soit tiré une fois vaut
+$\frac1n$. Ainsi
+\begin{equation*}
+  \PP[(\xx^i, y^i) \in \DD_b] = 1 - \left(1 - \frac1n\right)^n.
+\end{equation*}
+Quand $n$ est grand, cette probabilité vaut donc environ
+$1 - e^{-1} \approx 0.632$, car la limite en $+\infty$ de
+$\left(1 + \frac{x}{n}\right)^n$ vaut $e^x$.  Ainsi, $\DD_b$ contient environ
+deux tiers des observations de $\DD$.
+
+
+Chaque arbre est entraîné sur un de ces échantillons boostrap, ce qui peut être
+fait en parallèle. Les $B$ prédictions sont ensuite combinées
+\begin{itemize}
+\item par vote de la majorité dans le cas d'un problème de classification ; 
+\item en prenant la moyenne dans le cas d'un problème de régression.
+\end{itemize}
+
+\subsection{Forêts aléatoires}
+La puissance des méthodes ensemblistes se révèle lorsque les apprenants faibles
+sont indépendants conditionnellement aux données, autrement dit aussi
+différents les uns des autres que possible, afin que leurs erreurs puissent se
+compenser les unes les autres. Pour atteindre cet objectif, l'idée des
+\textbf{forêts aléatoires} (ou \textit{random forests}) est de construire les
+arbres individuels non seulement sur des échantillons différents (comme pour le
+bagging), mais aussi en utilisant des {\it variables} différentes.
+
+Plus précisément, les arbres construits pour former une forêt aléatoire
+diffèrent de ceux appris par CART en ce que, à chaque n{\oe}ud, on commence par
+sélectionner $q < p$ variables aléatoirement, avant de choisir la variable
+séparatrice {\it parmi celles-ci}. En classification, on utilise typiquement
+$q \approx \sqrt{p}$, ce qui permet aussi de réduire considérablement les temps
+de calculs puisqu'on ne considère que peu de variables à chaque n{\oe}ud (5
+pour un problème à 30 variables, 31 pour un problème avec 1000 variables). Pour
+la régression, le choix par défaut est plutôt de $q \approx \frac{p}3.$ Ces
+valeurs sont basées sur la pratique ; la théorie des forêts aléatoires est
+toujours très peu développée, bien que cette méthode ait été proposée il y a
+une vingtaine d'années.
 
 
 \section{Compléments $\bigstar$}
 
 \subsection{Classification binaire avec un perceptron}
 \label{sec:perceptron_binary}
+\paragraph{Modèle}
 Dans le cas d'un problème de classification binaire, on peut aussi utiliser
 directement une fonction de seuil :
 \begin{equation}
@@ -477,18 +838,21 @@ directement une fonction de seuil :
   \end{cases}
 \end{equation}
 
-On utilise alors une fonction de coût connue sous le nom de \textbf{critère du
+\paragraph{Fonction de coût} On utilise alors une fonction de coût connue sous le nom de \textbf{critère du
   perceptron} :
 \begin{equation}
   \label{eq:perceptron}
   L(f(\xx^i), y^i) = \max(0, - y^i o(\xx^i)) = 
-  \max(0, - y^i \langle \ww, \xx \rangle)
+  \max(0, - y^i \innerproduct{\ww,~\xx})
 \end{equation}
 Ce critère est proche de la fonction d'erreur hinge (voir section 2.2 de la
-PC6). Quand la combinaison linéaire des entrées a le bon signe, le critère du
+PC~6). Quand la combinaison linéaire des entrées a le bon signe, le critère du
 perceptron est nul. Quand elle a le mauvais signe, le critère du perceptron est
-d'autant plus grand que cette combinaison linéaire est éloignée de 0.  En
-utilisant ce critère, la règle d'actualisation~\eqref{eq:update_rule} devient :
+d'autant plus grand que cette combinaison linéaire est éloignée de 0.
+
+\paragraph{Entraînement}
+En utilisant ce critère, la règle d'actualisation~\eqref{eq:update_rule}
+devient :
 \begin{equation*}
   \label{eq:update_rule_binclass}
   w_j \leftarrow \begin{cases}
@@ -499,92 +863,25 @@ utilisant ce critère, la règle d'actualisation~\eqref{eq:update_rule} devient :
 Ainsi, quand le perceptron fait une erreur de prédiction, il déplace la
 frontière de décision de sorte à corriger cette erreur.
 
-Le \textbf{théorème de convergence du perceptron}\footnote{\textit{On
-    convergence proofs on perceptrons}, A.  B. J. Novikoff.  Symposium on the
-  Mathematical Theory of Automata, 615--622 (1962).} énonce que étant donné un
-jeu de $n$ observations étiquetées $\DD = \{(\xx^i, y^i)_{i=1, \dots, n}\}$ et
-$D, \gamma \in \RR_+^*$.  Si :
-\begin{itemize}
-\item $\forall i=1, \dots, n$, \; $\ltwonorm{\xx^i} \leq D$
-\item il existe $\uu \in \RR^{p+1}$ tel que 
-  \begin{itemize}
-  \item $\ltwonorm{\uu}=1$ et
-  \item $\forall i=1, \dots, n$, \;
-    $y^i \langle \uu, \xx \rangle \geq \gamma$
-  \end{itemize}
-\end{itemize}
-alors l'algorithme du perceptron converge en au plus
-$\left(\frac{D}{\gamma}\right)^2$ étapes.
+% Le \textbf{théorème de convergence du perceptron}\footnote{\textit{On
+%     convergence proofs on perceptrons}, A.  B. J. Novikoff.  Symposium on the
+%   Mathematical Theory of Automata, 615--622 (1962).} énonce que étant donné un
+% jeu de $n$ observations étiquetées $\DD = \{(\xx^i, y^i)_{i=1, \dots, n}\}$ et
+% $D, \gamma \in \RR_+^*$, si :
+% \begin{itemize}
+% \item $\forall i=1, \dots, n$, \; $\ltwonorm{\xx^i} \leq D$
+% \item il existe $\uu \in \RR^{p+1}$ tel que 
+%   \begin{itemize}
+%   \item $\ltwonorm{\uu}=1$ et
+%   \item $\forall i=1, \dots, n$, \;
+%     $y^i \langle \uu, \xx \rangle \geq \gamma$
+%   \end{itemize}
+% \end{itemize}
+% alors l'algorithme du perceptron converge en au plus
+% $\left(\frac{D}{\gamma}\right)^2$ étapes.
 
 
 
-\subsection{Entrainement du perceptron}
-\label{sec:train_perceptron}
-\subsubsection{Algorithme à directions de descente} L'algorithme commence par
-une initialisation aléatoire du vecteur de poids de connexion\\
-$w_0^{(0)}, w_1^{(0)}, \dots, w_p^{(0)}$, par exemple, $\ww = \vec{0}$.
-
-Puis, à chaque observation, on ajuste ce vecteur dans la direction opposée au
-gradient du risque empirique. En effet, ce gradient indique la direction de
-plus forte pente du risque empirique ; le redescendre nous rapproche d'un point
-où ce risque est minimal. Formellement, à une itération de l'algorithme, on
-tire une nouvelle observation $(\xx^i, y^i)$ et on actualise, pour tout $j$,
-les poids de connexion de la façon suivante :
-\begin{equation}
-  \label{eq:update_rule}
-  w_j \leftarrow w_j - \eta \frac{\partial L(f(\xx^i), y^i)}{\partial w_j}.
-\end{equation}
-
-Il est possible (et même recommandé dans le cas où les données ne sont pas
-extrêmement volumineuses) d'itérer plusieurs fois sur l'intégralité du jeu
-de données. Typiquement, on itère jusqu'à ce que l'algorithme converge à
-$\epsilon$ près.
-
-Cet algorithme a un hyperparamètre, $\eta > 0$, qui est le pas de l'algorithme
-du gradient et que l'on appelle la \textbf{vitesse d'apprentissage} (ou {\it
-  learning rate}) dans le contexte des réseaux de neurones artificiels. Cet
-hyperparamètre joue un rôle important : s'il est trop grand, l'algorithme
-risque d'osciller autour de la solution optimale, voire de diverger. À
-l'inverse, s'il est trop faible, l'algorithme va converger très lentement. Il
-est donc essentiel de bien choisir sa vitesse d'apprentissage.
-
-En pratique, on utilise souvent une vitesse d'apprentissage adaptative :
-relativement grande au début, puis de plus en plus faible au fur et à mesure
-que l'on se rapproche de la solution. Cette approche est à rapprocher
-d'algorithmes similaires développés dans le cas général de l'algorithme du
-gradient (comme par exemple la recherche linéaire par rebroussement
-(\textit{backtracking line search}).
-
-
-
-\subsubsection{Classification probabiliste}
-Dans le cas de la classification probabiliste, visant à prédire la probabilité
-d'appartenir à la classe positive plutôt qu'une étiquette binaire, on utilise
-l'entropie croisée comme fonction de coût (cf section~\ref{sec:cross_entropy}) :
-\begin{equation*}
-  L(f(\xx^i), y^i) = 
-- y^i \ln \left( \innerproduct{\ww,~\xx} \right) - (1-y^i) \ln \left( 1 - \innerproduct{\ww,~\xx}\right) 
-\end{equation*}
-Quelques lignes de calcul montrent que l'on obtient alors la même règle
-d'actualisation que pour la régression~(\eqref{eq:update_rule_reg}) :
-\begin{equation*}
-  \label{eq:update_rule_class_prob}
-  w_j \leftarrow w_j - \eta (y^i - f(\xx^i)) x_j^i.
-\end{equation*}
-
-\subsubsection{Régression}
-Dans le cas de la régression, on utilise pour le coût empirique la fonction de
-coût quadratique :
-\begin{equation}
-  L(f(\xx^i), y^i) = 
-  \frac12 \left(y^i - \innerproduct{\ww,~\xx}\right)^2.
-\end{equation}
-La règle d'actualisation~\eqref{eq:update_rule} devient :
-\begin{equation}
-  \label{eq:update_rule_reg}
-  w_j \leftarrow w_j - \eta (f(\xx^i) - y^i) x_j^i.
-\end{equation}
-C'est exactement la même règle que pour la classification probabiliste (équation~\eqref{eq:update_rule_class_prob}).
 
 \subsection{Approximation universelle}
 \label{sec:universal_approx}
@@ -817,23 +1114,23 @@ efficace en itérant uniquement sur les $(|x|+1-k)$ chaînes de longueur $k$
 présentes dans $x$, les autres termes de la somme valant nécessairement 0. Il
 s'agit alors d'un calcul en $\mathcal{O}(|x| +|x'|)$.
 
-\begin{exemple}
+
   Dans le cas des protéines humaines, si l'on choisit $k=8,$ on remplace
   ainsi un calcul dans un espace de redescription de dimension supérieure à
   37 milliards ($21^8$) par une somme sur moins de 500 termes (la longueur
   moyenne d'une protéine humaine étant de 485 acides aminés.)
-\end{exemple}
 
-Ces idées peuvent aussi être appliquées à la définition de {\it noyaux pour
-  graphes}, en remplaçant les sous-chaînes de caractères par des
-sous-graphes. Cependant, le problème de l'isomorphisme de sous-graphes est
-NP-complet dans le cas général, ce qui limite le type de sous-graphes que l'on
-peut considérer.
+
+% Ces idées peuvent aussi être appliquées à la définition de {\it noyaux pour
+%   graphes}, en remplaçant les sous-chaînes de caractères par des
+% sous-graphes. Cependant, le problème de l'isomorphisme de sous-graphes est
+% NP-complet dans le cas général, ce qui limite le type de sous-graphes que l'on
+% peut considérer.
 
 \subsection{SVM à noyau}
 \label{sec:kernel_svm}
 Reprenons la formulation duale de la SVM à marge souple (à savoir la
-formulation donnée à la question 2 de la section 2.2 de la PC 6) :
+formulation donnée à la question 2 de la section 2.2 de la PC~6) :
 \begin{align}
   \label{eq:soft-margin-dual-pb}
   \max_{\aalpha \in \RR^n} & 
@@ -874,18 +1171,16 @@ le temps de calcul. Attention, ce temps de calcul dépend maintenant du nombre
 d'observations, qui peut être très élevé à l'ère du Big Data...
 
 Enfin, la fonction de décision est donnée dans le cas linéaire par
-\begin{equation*}
-  f: \xx \mapsto \innerproduct{\ww, \xx} + b, 
-\end{equation*}
+$  f: \xx \mapsto \innerproduct{\ww, \xx} + b$ et 
 peut être réécrite comme 
 \begin{equation*}
   f: \xx \mapsto \sum_{i=1}^n \alpha_i^* y^i \innerproduct{\xx^i, \xx} + b,
 \end{equation*}
 d'après la correspondance entre $\ww$ et $\alpha$ donnée dans cette même
-question 2 de la partie 2.2 de la PC 6, à savoir
-\begin{equation*}
-  \ww^* = \sum_{i=1}^n \alpha_i^* y^i \xx^i.
-\end{equation*}
+question 2 de la partie 2.2 de la PC~6, à savoir
+% \begin{equation*}
+$\ww^* = \sum_{i=1}^n \alpha_i^* y^i \xx^i.$
+% \end{equation*}
 
 Dans le cas à noyau, la fonction de décision est donc donnée par 
 \begin{equation*}
@@ -893,12 +1188,93 @@ Dans le cas à noyau, la fonction de décision est donc donnée par
 \end{equation*}
 
 
+
+\subsection{Critères d'impureté pour les arbres de décision}
+\label{sec:impurity}
+Dans le cas d'un problème de classification, on utilise pour apprendre un arbre
+de décision un \textbf{critère d'impureté}, ainsi appelé car il quantifie à
+quel point la région considérée est \og polluée \fg~par des éléments des
+classes qui n'y sont pas majoritaires. % En notant Imp ce critère, on choisit
+% donc la variable et le point de séparation comme
+% \begin{equation*}
+%   \argmin_{\zeta} \left( 
+%     \frac{\lvert  R_l(\zeta) \rvert}{n} \text{Imp}(R_l(\zeta)) +
+%     \frac{\lvert  R_r(\zeta) \rvert}{n} \text{Imp}(R_r(\zeta)).
+%   \right)
+% \end{equation*}
+
+Il existe plusieurs critères d'impureté, que nous détaillons dans cette section
+: l'\textbf{erreur de classification}, l'\textbf{entropie croisée} et
+l'\textbf{impureté de Gini}. Pour les définir, nous allons utiliser la notation
+$p_c(R)$ pour indiquer la proportion d'exemples d'entraînement de la région $R$
+qui appartiennent à la classe $c$ :
+\begin{equation*}
+  p_c(R) = \frac1{\lvert R \rvert} \sum_{i : \xx^i \in R} \delta(y^i, c).       
+\end{equation*}
+
+Tout d'abord, l'\textbf{erreur de classification} permet de définir l'impureté
+d'une région $R$ comme la proportion d'exemples de cette région qui
+n'appartiennent pas à la classe majoritaire.
+\begin{equation}
+  \label{eq:impurity_error}
+  \text{Imp}(R) = 1 - \max_{c=1, \dots, C} p_c(R).
+\end{equation}
+Si tous les exemples d'une région appartiennent à la même classe, l'erreur de
+classification de cette région vaut $0$ ; à l'inverse, si une région contient
+autant d'exemples de chacune des $C$ classes, $p_c(R) \approx \frac1C$ quelle
+que soit la classe $c$, et l'erreur de classification vaut $1 - \frac1C$, soit
+$\frac12$ dans le cas d'une classification binaire.
+
+Ensuite, l'\textbf{entropie croisée} permet de définir l'impureté d'une région
+$R$ de sorte à choisir la séparation qui maximise le gain d'information : le
+but de la construction est alors de minimiser la quantité d'information
+supplémentaire nécessaire pour étiqueter correctement les exemples
+d'entraînement de $R$.
+\begin{equation}
+  \label{eq:impurity_entropy}
+  \text{Imp}(R) = - \sum_{c=1}^C p_c(R) \log_2 p_c(R).
+\end{equation}
+Si tous les exemples d'une région appartiennent à la même classe, l'entropie
+croisée de cette région vaut $0$ ; à l'inverse, si une région contient autant
+d'exemples de chacune des $C$ classes, l'entropie croisée vaut $\log_2(C)$,
+soit $1$ dans le cas d'une classification binaire.
+  
+Enfin, la définition la plus utilisée de l'impureté est l'\textbf{impureté de
+  Gini}, qui permet de quantifier la probabilité qu'un exemple du jeu
+d'entraînement soit mal étiqueté s'il était étiqueté aléatoirement en fonction
+de la distribution des étiquettes dans $R$.
+L'impureté de Gini d'une région $R$ est définie comme
+\begin{equation*}
+  \text{Imp}(R) = \sum_{c=1}^C p_c(R) \left(1 - p_c(R)\right).
+\end{equation*}
+Si tous les exemples d'une région appartiennent à la même classe, l'impureté de
+Gini de cette région vaut $0$ ; à l'inverse, si une région contient autant
+d'exemples de chacune des $C$ classes, l'impureté de Gini vaut $1 - \frac1C$,
+soit $\frac12$ dans le cas d'une classification binaire.
+
+
+
+
 \begin{plusloin}
-\item Plusieurs cours de 2A et 3A aux Mines traitent d'apprentissage profond.
-\item Nous n'avons dans ce chapitre qu'esquissé les briques de bases du \textit{deep
-  learning.} Pour aller plus loin, plongez-vous dans \href{http://www.deeplearningbook.org}{\textit{Deep learning} de I. Goodfellow, Y. Bengio et A. Courville (2016)}.
-\item \href{http://playground.tensorflow.org/}{http://playground.tensorflow.org/} permet de jouer avec
-  l'architecture et l'entraînement d'un réseau de neurones profond.
+\item Plusieurs cours de 2A et 3A aux Mines traitent d'apprentissage profond et
+  de machine learning non-linéaire.
+\item Nous n'avons dans ce chapitre qu'esquissé les briques de bases du
+  \textit{deep learning.} Pour aller plus loin, plongez-vous dans
+  \href{http://www.deeplearningbook.org}{\textit{Deep learning} de
+    I. Goodfellow, Y. Bengio et A. Courville (2016)}.
+\item
+  \href{http://playground.tensorflow.org/}{http://playground.tensorflow.org/}
+  permet de jouer avec l'architecture et l'entraînement d'un réseau de neurones
+  profond.
+\item Le domaine des méthodes à noyaux est très vaste. De nombreux ouvrages ont
+  été dédiés au sujet, en particulier \textit{Learning with Kernels: Support
+    Vector Machines, Regularization, Optimization, and Beyond}, B. Schölkopf et
+  A.~J. Smola (2002).
+\item Une autre façon de construire plusieurs apprenants faibles à partir du
+  même jeu de données est le \textbf{boosting}, une méthode {\it séquentielle}
+  dans laquelle chaque nouvel apprenant est construit en fonction des
+  performances du précédent. Le \textbf{boosting de gradient}, ou GBOOST, en est
+  l'exemple le plus populaire.
 \end{plusloin}
 
 
