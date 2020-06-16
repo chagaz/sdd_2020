@@ -281,13 +281,8 @@ global.
 L'initialisation des poids de connexion, la standardisation des variables, le
 choix de la vitesse d'apprentissage et celui des fonctions d'activation ont
 tous un impact sur la capacité du perceptron multi-couche à converger vers une
-bonne solution.
-
-C'est pour cela que l'entraînement d'un réseau de neurones à plusieurs couches
-est délicat. Il a ainsi fallu attendre 2006 pour que les travaux de Geoff
-Hinton et d'autres, ainsi que l'amélioration de la puissance de calcul des
-ordinateurs, permettent de commencer à surmonter cette difficulté, remettant
-les réseaux de neurones sur le devant de la scène.
+bonne solution. Entraîner un réseau de neurones multi-couche n'est pas chose
+aisée.
 
 \paragraph{Rétropropagation} Néanmoins, le principe fondamental de
 l'apprentissage d'un perceptron multi-couche, connu sous le nom de
@@ -321,15 +316,26 @@ facile. Cette tâche est d'autant plus difficile que le réseau est complexe, et
 les progrès dans ce domaine ne sont possibles que grâce au développement de
 méthodes pour la rendre plus aisée.
 
+Une des techniques les plus importantes dans ce domaine est le
+\textbf{pré-entraînement}, ou \textit{pretraining} : il s'agit d'utiliser un
+réseau de neurones profond entraîné sur une très grosse base de données de même
+nature que le problème que l'on cherche à résoudre pour initialiser
+l'optimisation sur notre jeu de données. Par exemple, pour une tâche de
+classification sur un jeu de données de quelques milliers d'images médicales,
+on partira d'un réseau de neurones entraîné sur une base de données d'images
+naturelles telle que ImageNet, qui contient des millions d'images appartenant à
+plus de 20\,000 classes.
+
 De plus, les réseaux de neurones profonds ont de nombreux paramètres, et
 requièrent donc l'utilisation de grands volumes de données pour éviter le
 sur-apprentissage. Il est donc généralement nécessaire de les déployer sur des
 architectures distribuées.
 
-Ainsi, malgré son succès dans certains domaines d'application, le \textit{deep
-  learning} est délicat à mettre en place et n'est pas toujours la meilleure
-solution pour résoudre un problème de \textit{machine learning}, en particulier
-face à un petit jeu de données.
+Ainsi, malgré son succès dans certains domaines d'application (notamment
+images, texte, et séries temporelles), le \textit{deep learning} est délicat à
+mettre en place et n'est pas toujours la meilleure solution pour résoudre un
+problème de \textit{machine learning}, en particulier face à un petit jeu de
+données.
 
 \paragraph{Apprentissage de représentations $\bigstar$}
 On associe souvent aux réseaux de neurones profond la notion de {\it
@@ -1191,10 +1197,11 @@ Dans le cas à noyau, la fonction de décision est donc donnée par
 
 \subsection{Critères d'impureté pour les arbres de décision}
 \label{sec:impurity}
-Dans le cas d'un problème de classification, on utilise pour apprendre un arbre
-de décision un \textbf{critère d'impureté}, ainsi appelé car il quantifie à
-quel point la région considérée est \og polluée \fg~par des éléments des
-classes qui n'y sont pas majoritaires. % En notant Imp ce critère, on choisit
+Dans le cas d'un problème de classification, on appelle la fonction de perte
+utilisée pour apprendre un arbre de décision son \textbf{critère d'impureté} :
+il quantifie à quel point la région considérée est \og polluée \fg~par des
+éléments des classes qui n'y sont pas
+majoritaires. % En notant Imp ce critère, on choisit
 % donc la variable et le point de séparation comme
 % \begin{equation*}
 %   \argmin_{\zeta} \left( 
@@ -1212,45 +1219,40 @@ qui appartiennent à la classe $c$ :
   p_c(R) = \frac1{\lvert R \rvert} \sum_{i : \xx^i \in R} \delta(y^i, c).       
 \end{equation*}
 
-Tout d'abord, l'\textbf{erreur de classification} permet de définir l'impureté
-d'une région $R$ comme la proportion d'exemples de cette région qui
-n'appartiennent pas à la classe majoritaire.
+L'\textbf{erreur de classification} définit l'impureté
+d'une région $R$ comme la proportion d'individus de cette région qui
+n'appartiennent pas à la classe majoritaire :
 \begin{equation}
   \label{eq:impurity_error}
-  \text{Imp}(R) = 1 - \max_{c=1, \dots, C} p_c(R).
+  \text{Imp}(R) = 1 - \max (p_0(R),~p_1(R)).
 \end{equation}
-Si tous les exemples d'une région appartiennent à la même classe, l'erreur de
-classification de cette région vaut $0$ ; à l'inverse, si une région contient
-autant d'exemples de chacune des $C$ classes, $p_c(R) \approx \frac1C$ quelle
-que soit la classe $c$, et l'erreur de classification vaut $1 - \frac1C$, soit
-$\frac12$ dans le cas d'une classification binaire.
+Si tous les individus de $R$ appartiennent à la même classe, l'erreur de
+classification vaut $0$ ; à l'inverse, si $R$ contient autant d'exemples de
+chacune des 2 classes, $p_0(R) \approx \frac12$ quelle que soit la classe
+$c$, et l'erreur de classification vaut $\frac12.$
 
-Ensuite, l'\textbf{entropie croisée} permet de définir l'impureté d'une région
-$R$ de sorte à choisir la séparation qui maximise le gain d'information : le
-but de la construction est alors de minimiser la quantité d'information
-supplémentaire nécessaire pour étiqueter correctement les exemples
-d'entraînement de $R$.
+L'\textbf{entropie croisée} définit l'impureté d'une région $R$ de
+sorte à choisir la séparation qui maximise le gain d'information : le but de la
+construction est alors de minimiser la quantité d'information supplémentaire
+nécessaire pour étiqueter correctement les exemples d'entraînement de $R$.
 \begin{equation}
   \label{eq:impurity_entropy}
-  \text{Imp}(R) = - \sum_{c=1}^C p_c(R) \log_2 p_c(R).
+  \text{Imp}(R) = - \left(p_0(R) \log_2 p_0(R) + p_1(R) \log_2 p_1(R)\right).
 \end{equation}
 Si tous les exemples d'une région appartiennent à la même classe, l'entropie
 croisée de cette région vaut $0$ ; à l'inverse, si une région contient autant
-d'exemples de chacune des $C$ classes, l'entropie croisée vaut $\log_2(C)$,
-soit $1$ dans le cas d'une classification binaire.
+d'exemples de chacune des 2 classes, l'entropie croisée vaut $\log_2(2)=1.$
   
 Enfin, la définition la plus utilisée de l'impureté est l'\textbf{impureté de
-  Gini}, qui permet de quantifier la probabilité qu'un exemple du jeu
-d'entraînement soit mal étiqueté s'il était étiqueté aléatoirement en fonction
-de la distribution des étiquettes dans $R$.
-L'impureté de Gini d'une région $R$ est définie comme
+  Gini}, qui permet de quantifier la probabilité qu'une observation du jeu
+d'entraînement soit mal étiquetée si elle était étiquetée aléatoirement en
+fonction de la distribution des étiquettes dans $R$ :
 \begin{equation*}
-  \text{Imp}(R) = \sum_{c=1}^C p_c(R) \left(1 - p_c(R)\right).
+  \text{Imp}(R) = p_0(R) \left(1 - p_0(R)\right) + p_1(R) \left(1 - p_1(R)\right).
 \end{equation*}
-Si tous les exemples d'une région appartiennent à la même classe, l'impureté de
-Gini de cette région vaut $0$ ; à l'inverse, si une région contient autant
-d'exemples de chacune des $C$ classes, l'impureté de Gini vaut $1 - \frac1C$,
-soit $\frac12$ dans le cas d'une classification binaire.
+Si tous les exemples de $R$ appartiennent à la même classe, l'impureté de
+Gini de $R$ vaut $0$ ; à l'inverse, si une région contient autant
+d'exemples de chacune des 2 classes, l'impureté de Gini vaut $\frac12.$ 
 
 
 
@@ -1261,18 +1263,17 @@ soit $\frac12$ dans le cas d'une classification binaire.
 \item Nous n'avons dans ce chapitre qu'esquissé les briques de bases du
   \textit{deep learning.} Pour aller plus loin, plongez-vous dans
   \href{http://www.deeplearningbook.org}{\textit{Deep learning} de
-    I. Goodfellow, Y. Bengio et A. Courville (2016)}.
-\item
-  \href{http://playground.tensorflow.org/}{http://playground.tensorflow.org/}
-  permet de jouer avec l'architecture et l'entraînement d'un réseau de neurones
-  profond.
+    I. Goodfellow, Y. Bengio et A. Courville (2016)} ou visitez
+    \href{http://playground.tensorflow.org/}{http://playground.tensorflow.org/}
+    pour jouer avec
+  l'architecture et l'entraînement d'un réseau de neurones profond.
 \item Le domaine des méthodes à noyaux est très vaste. De nombreux ouvrages ont
   été dédiés au sujet, en particulier \textit{Learning with Kernels: Support
     Vector Machines, Regularization, Optimization, and Beyond}, B. Schölkopf et
   A.~J. Smola (2002).
 \item Une autre façon de construire plusieurs apprenants faibles à partir du
-  même jeu de données est le \textbf{boosting}, une méthode {\it séquentielle}
-  dans laquelle chaque nouvel apprenant est construit en fonction des
+  même jeu de données est le \textbf{boosting}, 
+  dans lequel chaque nouvel apprenant est construit en fonction des
   performances du précédent. Le \textbf{boosting de gradient}, ou GBOOST, en est
   l'exemple le plus populaire.
 \end{plusloin}
