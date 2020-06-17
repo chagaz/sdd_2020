@@ -1,0 +1,164 @@
+%-*- coding: iso-latin-1 -*-
+\documentclass[french,11pt]{article}
+\usepackage{babel}
+\DecimalMathComma
+% Emacs: to save in encoding iso-latin-1:
+% C-x C-m f
+% iso-latin-1
+
+% aspell --lang=fr --encoding='iso-8859-1' -t check selection-modele.tex
+
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+
+
+% Fonts
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{gentium}
+
+% SI units
+\usepackage{siunitx}
+
+% Table becomes Tableau
+\usepackage{caption}
+\captionsetup{labelfont=sc}
+\def\frenchtablename{Tableau}
+
+% % List management
+\usepackage{enumitem}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{%
+  frame=single,                    % adds a frame around the code
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  columns=flexible,                % doesn't add spaces to make the line fit the whole column
+  basicstyle=\ttfamily,             % use monospace
+  keywordstyle=\color{MidnightBlue},
+  commentstyle=\color{Gray},
+  stringstyle=\color{BurntOrange},
+  showstringspaces=false,
+}
+
+
+%%%% GEOMETRY AND SPACING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % List management
+% \usepackage{enumitem}
+% \setlist{label=\textemdash,
+%   itemsep=0pt, topsep=3pt, partopsep=0pt} 
+% \setenumerate{itemsep=3pt,topsep=3pt,partopsep=0pt}
+
+\usepackage{etex}
+\usepackage[tmargin=2cm,bmargin=2cm,lmargin=2cm,footnotesep=1cm]{geometry}
+
+\parskip=1ex\relax % space between paragraphs (incl. blank lines)
+
+% % Headers and footers
+% \pagestyle{myheadings}
+% \markright{ECUE2.1 Science des données \hfill PC 1 (6 mai 2020) \hfill} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../../poly/notations}
+
+\begin{document}
+
+\begin{center}
+\bf\large ECUE21.3: Science des données \hfill
+QCM 8 -- Modèles non linéaires
+\end{center}
+
+\noindent
+\hfill 17 juin 2020
+
+\noindent
+\rule{\textwidth}{.4pt}
+
+\medskip
+
+
+% \paragraph{Question 1.} 
+% \begin{itemize}
+% \item[$\square$] 
+% \item[$\square$] 
+% \item[$\square$] 
+% \end{itemize}
+
+\paragraph{Question 1.} Vous disposez d'un jeu de données contenant un millier
+d'observations. Les performances des modèles linéaires que vous avez essayés ne
+sont pas satisfaisantes. Vous décidez d'utiliser un réseau de neurones
+artificiels. Vaut-il mieux essayer
+\begin{itemize}
+\item[$\square$] un perceptron ;
+\item[$\square$] un perceptron multi-couche avec une couche intermédiaire d'une dizaine de neurones ;
+\item[$\square$] un perceptron multi-couche avec 4 couches intermédiaires d'une centaine de neurones chacune ?
+\end{itemize}
+
+\paragraph{Question 2.} La qualité du modèle appris par un réseau de neurones artificiel dépend
+\begin{itemize}
+\item[$\square$] de l'architecture de ce réseau ;
+\item[$\square$] des fonctions d'activations ;
+\item[$\square$] de la vitesse d'apprentissage (c'est-à-dire le pas de la descente de gradient) ;
+\item[$\square$] de la quantité de données utilisées. 
+\end{itemize}
+
+\paragraph{Question 3.} L'astuce du noyau s'applique
+\begin{itemize}
+\item[$\square$] à la régression ridge ;
+\item[$\square$] à la régression lasso ;
+\item[$\square$] aux arbres de décision.
+\end{itemize}
+
+\paragraph{Question 4.} Considérons un arbre de décision appris sur un jeu de
+données contenant $n$ observations décrites par $p$ variables. Sa profondeur
+est au plus
+\begin{itemize}
+\item[$\square$] $p$.
+\item[$\square$] $\log_2(p)$.
+\item[$\square$] $n$.
+\item[$\square$] $\log_2(n)$.
+\item[$\square$] $\min(n, p)$.
+\item[$\square$] $\min(\log_2(n), \log_2(p))$.
+\end{itemize}
+
+\paragraph{Question 5.} Le bagging permet de
+\begin{itemize}
+\item[$\square$] Combiner plusieurs jeux de données en un seul pour créer un meilleur modèle.
+\item[$\square$] Créer plusieurs jeux de données à partir d'un seul, en sélectionnant aléatoirement les observations.
+\item[$\square$] Créer plusieurs jeux de données à partir d'un seul, en sélectionnant aléatoirement les variables.
+\item[$\square$] Combiner plusieurs modèles simples en un meilleur modèle.
+\end{itemize}
+
+
+\newpage
+
+\section*{Solution}
+\paragraph{Question 1.}  Le perceptron est un modèle linéaire, il n'aura pas
+une meilleure performance. Le perceptron multi-couche avec 4 couches
+intermédiaires d'une centaine de neurones chacune contient beaucoup de
+paramètres pour 1\,000 observations seulement et risque de surapprendre.
+
+\paragraph{Question 2.} Toutes les réponses sont valides.
+
+\paragraph{Question 3.} Ni le lasso (à cause de la norme $\ell_1$) ni les
+arbres de décision (non paramétriques) ne peuvent s'écrire en faisant
+apparaitre les observations uniquement au sein de produits scalaires entre
+observations. Seule la régression ridge est donc \textit{kernelizable}.
+
+\paragraph{Question 4.} Dans le pire des cas, chaque niveau de l'arbre de
+décision met un seul échantillon dans la branche de gauche, et tous les autres
+dans la branche de droite. On obtient donc une profondeur de $n$.
+
+\paragraph{Question 5.} Le bagging consiste à créer plusieurs jeux de données à
+partir d'un seul, en sélectionnant aléatoirement les observations, afin de
+créer autant de modèles simples combinés en un modèle robuste.
+
+\end{document}
+
+
+
+
+
+
+
