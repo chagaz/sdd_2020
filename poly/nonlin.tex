@@ -178,7 +178,7 @@ l'entropie croisée comme fonction de coût (cf section~\ref{sec:cross_entropy}) :
 Quelques lignes de calcul montrent que la régle d'actualisation~\eqref{eq:update_rule} devient :
 \begin{equation}
   \label{eq:update_rule_class_prob}
-  w_j \leftarrow w_j - \eta (y^i - f(\xx^i)) x_j^i.
+  w_j \leftarrow w_j - \eta (f(\xx^i) - y^i) x_j^i.
 \end{equation}
 
 \paragraph{Régression}
@@ -489,7 +489,7 @@ Le \textbf{théorème de Moore-Aronszajn}\footnote{Démontré dans \textit{Theory
 garantit alors l'existence d'un espace de Hilbert $\HH$ et d'une application
 $\phi: \XX \rightarrow \HH$ telle que pour tout
 $(\xx, \xx^\prime) \in \XX \times \XX,$
-$\phi(\xx,~\xx^\prime) = \innerproduct{\phi(\xx),~\phi(\xx^\prime)}_\HH.$\\
+$k(\xx,~\xx^\prime) = \innerproduct{\phi(\xx),~\phi(\xx^\prime)}_\HH.$\\
 Nous
 appellerons $\HH$ l'\textbf{espace de redescription}, car il permet de décrire les éléments de $\XX$ avec de nouvelles variables.
 
